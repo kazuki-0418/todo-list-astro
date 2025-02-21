@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.main-container {
+  margin-top: 1em;
+}
+.main-container .Board {
+  margin: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.main-container .Board .column {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  background-color: #DCDCDC;
+}
+.main-container .Board .column .header-board {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6em;
+}
+.main-container .Board .column .header-board .add {
+  width: 3em;
+  height: 1.4em;
+  background-color: #000;
+  color: #fff;
+}
+
+/*# sourceMappingURL=style.css.map */

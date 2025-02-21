@@ -2,24 +2,25 @@
 import TodoCard from "./TodoCard.astro";
 ---
 
-<section class="main-conatiner">
-    <div class="Board">
-        <div class="Todo">
-            <div>
+<section class="main-container">
+    <h2>Codebreakers</h2>
+    <div class="Board column">
+        <div class="Todo column">
+            <div class="header-board">
                 <h4>Todo</h4>
-                <button id="add-todo">Add</button>
+                <button class="add" id="add-todo">Add</button>
             </div>
         </div>
-        <div class="In-progress">
-            <div>
+        <div class="In-progress column">
+            <div class="header-board">
                 <h4>In Progress</h4>
-                <button id="add-inprogress">Add</button>
+                <button class="add" id="add-inprogress">Add</button>
             </div>
         </div>
-        <div class="Done">
-            <div>
+        <div class="Done column">
+            <div class="header-board">
                 <h4>Done</h4>
-                <button id="add-done">Add</button>
+                <button class="add" id="add-done">Add</button>
             </div>
         </div>
     </div>   
