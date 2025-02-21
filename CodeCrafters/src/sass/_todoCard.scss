@@ -1,0 +1,29 @@
+@import "variables";
+
+.TodoCard{
+    width: 22em;
+    margin: 1em auto;
+    background-color: $white;
+    border-radius: 10px;
+    height: auto;
+    .todocard-container{
+        padding: 1em;
+        height: auto; 
+        .title{
+            margin: .3em 0;
+        }
+    }
+    .options-TodoCard{
+        width: 100%;
+        padding: .5em 0;
+        .options{
+            width: 20%;
+            margin: 0 70%;
+            padding-bottom: .5em;
+            text-align: center;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}

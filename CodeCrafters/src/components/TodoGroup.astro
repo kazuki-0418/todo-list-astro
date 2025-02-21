@@ -8,19 +8,31 @@ import TodoCard from "./TodoCard.astro";
         <div class="Todo column">
             <div class="header-board">
                 <h4>Todo</h4>
-                <button class="add" id="add-todo">Add</button>
+                <div class="options-board">
+                    <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
+                    <p class="options">...</p>
+                </div>
+            </div>
+            <div>
+                <TodoCard>
             </div>
         </div>
         <div class="In-progress column">
             <div class="header-board">
                 <h4>In Progress</h4>
-                <button class="add" id="add-inprogress">Add</button>
+                <div class="options-board">
+                    <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
+                    <p class="options">...</p>
+                </div>
             </div>
         </div>
         <div class="Done column">
             <div class="header-board">
                 <h4>Done</h4>
-                <button class="add" id="add-done">Add</button>
+                <div class="options-board">
+                    <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
+                    <p class="options">...</p>
+                </div>
             </div>
         </div>
     </div>   

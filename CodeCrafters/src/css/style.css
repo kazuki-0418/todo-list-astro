@@ -4,32 +4,84 @@
   margin: 0;
 }
 
+.TodoCard {
+  width: 22em;
+  margin: 1em auto;
+  background-color: #fff;
+  border-radius: 10px;
+  height: auto;
+}
+.TodoCard .todocard-container {
+  padding: 1em;
+  height: auto;
+}
+.TodoCard .todocard-container .title {
+  margin: 0.3em 0;
+}
+.TodoCard .options-TodoCard {
+  width: 100%;
+  padding: 0.5em 0;
+}
+.TodoCard .options-TodoCard .options {
+  width: 20%;
+  margin: 0 70%;
+  padding-bottom: 0.5em;
+  text-align: center;
+}
+.TodoCard .options-TodoCard .options:hover {
+  cursor: pointer;
+}
+
 .main-container {
-  margin-top: 1em;
+  margin-top: 3em;
+}
+.main-container h2 {
+  padding-left: 1em;
 }
 .main-container .Board {
-  margin: 1em;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  margin: 2em 1em;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
 }
 .main-container .Board .column {
+  width: 100%;
+  border-radius: 5px;
   padding: 1em;
   display: flex;
   flex-direction: column;
   background-color: #DCDCDC;
 }
 .main-container .Board .column .header-board {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 6em;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 16em 1em;
+  grid-row: 1;
+}
+.main-container .Board .column .header-board .options-board {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.7em;
+  margin-left: 4em;
+}
+.main-container .Board .column .header-board .options-board .options {
+  margin: 0 auto;
+}
+.main-container .Board .column .header-board .options-board .options:hover {
+  cursor: pointer;
 }
 .main-container .Board .column .header-board .add {
-  width: 3em;
-  height: 1.4em;
-  background-color: #000;
-  color: #fff;
+  border: none;
+  background-color: #DCDCDC;
+  width: 2em;
+  height: 1em;
+}
+.main-container .Board .column .header-board .add:hover {
+  cursor: pointer;
+}
+.main-container .Board .column .header-board .add img {
+  max-width: 100%;
+  width: auto;
 }
 
 /*# sourceMappingURL=style.css.map */
