@@ -7,7 +7,7 @@
         {
         "format": "expanded",
         "extensionName": ".css",
-        "savePath": "/CodeCrafters/src/css"
+        "savePath": "/CodeCrafters/src/styles"
         }
     ],
     "liveSassCompile.settings.includeItems": [
