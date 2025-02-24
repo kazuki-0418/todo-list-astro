@@ -8,11 +8,11 @@ import TodoCard from "./TodoCard.astro";
 <section class="main-container">
   <div class="Board">
     <div>
-      <h2>Todo List</h2>
+      <h2>Task List</h2>
       <div id="todoList"></div>
-      <button id="add-todo">Add Todo</button>
+      <button id="add-todo">Add Task</button>
     </div>
-    <BaseModal title={"Create Todo"}>
+    <BaseModal title={"Create Task"}>
       <CreateTodo />
     </BaseModal>
   </div>
@@ -87,7 +87,7 @@ import TodoCard from "./TodoCard.astro";
     }
 
     function handleDelete(todoId: string) {
-      if (confirm("このTodoを削除しますか？")) {
+      if (confirm("このTaskを削除しますか？")) {
         todoService.deleteTodo(todoId);
         renderTodos();
       }
