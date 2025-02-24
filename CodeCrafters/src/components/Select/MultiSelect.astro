@@ -1,0 +1,249 @@
+---
+import "@styles/style.css";
+
+type Props = {
+  name: string;
+  options: { value: string; label: string }[];
+};
+
+const { options, name } = Astro.props;
+---
+
+<div class="multi-select-container" data-multi-select data-name={name}>
+  <div class="selected-tags" data-selected-tags></div>
+  <div data-hidden-inputs></div>
+
+  <div class="dropdown">
+    <input
+      type="text"
+      class="search-box"
+      placeholder="Search..."
+      data-search-box
+    />
+    <div class="options" data-options-list>
+      {
+        options.map((option) => {
+          const uniqueId = `${name}-${option.value}`;
+          return (
+            <div class="option">
+              <input
+                type="checkbox"
+                id={uniqueId}
+                value={option.value}
+                data-checkbox
+              />
+              <label for={uniqueId}>{option.label}</label>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  class MultiSelect {
+    private container: HTMLElement;
+    private selectedTags: HTMLElement;
+    private searchBox: HTMLInputElement;
+    private optionsList: HTMLElement;
+    private checkboxes: NodeListOf<HTMLInputElement>;
+    private hiddenInputsContainer: HTMLElement;
+    private name: string;
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.selectedTags = container.querySelector(
+        "[data-selected-tags]"
+      ) as HTMLElement;
+      this.searchBox = container.querySelector(
+        "[data-search-box]"
+      ) as HTMLInputElement;
+      this.optionsList = container.querySelector(
+        "[data-options-list]"
+      ) as HTMLElement;
+      this.checkboxes = this.optionsList.querySelectorAll("[data-checkbox]");
+      this.hiddenInputsContainer = container.querySelector(
+        "[data-hidden-inputs]"
+      ) as HTMLElement;
+      this.name = container.dataset.name || "";
+
+      this.initialize();
+    }
+
+    private initialize() {
+      this.container.addEventListener(
+        "click",
+        this.handleContainerClick.bind(this)
+      );
+
+      this.checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", this.updateSelectedTags.bind(this));
+      });
+
+      this.optionsList.querySelectorAll(".option").forEach((option) => {
+        option.addEventListener("click", this.handleOptionClick.bind(this));
+      });
+
+      this.searchBox.addEventListener("input", this.handleSearch.bind(this));
+
+      document.addEventListener("click", this.handleOutsideClick.bind(this));
+
+      const form = this.container.closest("form");
+      if (form) {
+        form.addEventListener("reset", this.handleReset.bind(this));
+      }
+
+      const closeButton = document.getElementById("closeModal");
+      if (closeButton) {
+        closeButton.addEventListener("click", this.handleReset.bind(this));
+      }
+
+      const modalOverlay = document.getElementById("modalOverlay");
+      if (modalOverlay) {
+        modalOverlay.addEventListener("click", this.handleReset.bind(this));
+      }
+
+      if (!window.multiSelects) {
+        window.multiSelects = new Map();
+      }
+      window.multiSelects.set(this.name, this);
+    }
+
+    private handleContainerClick(event: Event) {
+      const target = event.target as Node | null;
+      if (
+        event.target === this.searchBox ||
+        this.optionsList.contains(target as Node)
+      )
+        return;
+
+      this.searchBox.value = "";
+      this.resetSearchResults();
+      this.container.classList.toggle("active");
+    }
+
+    private handleOptionClick(event: Event) {
+      const option = event.currentTarget as HTMLElement;
+      const checkbox = option.querySelector(
+        "input[type='checkbox']"
+      ) as HTMLInputElement;
+      const target = event.target as Element;
+
+      if (target.tagName === "LABEL" || target.tagName === "INPUT") return;
+
+      checkbox.checked = !checkbox.checked;
+      checkbox.dispatchEvent(new Event("change"));
+    }
+
+    private handleSearch() {
+      const searchTerm = this.searchBox.value.toLowerCase();
+      this.optionsList.querySelectorAll(".option").forEach((option) => {
+        const label = option.querySelector("label") as HTMLElement;
+        if (!label) return;
+        const labelText = label.innerText.toLowerCase();
+        (option as HTMLElement).style.display = labelText.includes(searchTerm)
+          ? "flex"
+          : "none";
+      });
+    }
+
+    private handleOutsideClick(event: Event) {
+      const target = event.target as Node;
+      if (
+        this.container.contains(target) ||
+        this.searchBox.contains(target) ||
+        this.optionsList.contains(target)
+      ) {
+        return;
+      }
+      this.container.classList.remove("active");
+    }
+
+    private updateHiddenInputs() {
+      this.hiddenInputsContainer.innerHTML = "";
+      this.checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          const hiddenInput = document.createElement("input");
+          hiddenInput.type = "hidden";
+          hiddenInput.name = `${this.name}[]`;
+          hiddenInput.value = checkbox.value;
+          this.hiddenInputsContainer.appendChild(hiddenInput);
+        }
+      });
+    }
+
+    private updateSelectedTags() {
+      this.selectedTags.innerHTML = "";
+      this.checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          const tag = document.createElement("div");
+          tag.classList.add("tag");
+          tag.innerHTML = `${checkbox.value} <span class="remove">&times;</span>`;
+
+          tag.querySelector(".remove")?.addEventListener("click", () => {
+            checkbox.checked = false;
+            checkbox.dispatchEvent(new Event("change"));
+          });
+
+          this.selectedTags.appendChild(tag);
+        }
+      });
+      this.updateHiddenInputs();
+    }
+
+    private resetSearchResults() {
+      this.optionsList.querySelectorAll(".option").forEach((option) => {
+        (option as HTMLElement).style.display = "flex";
+      });
+    }
+
+    private handleReset() {
+      this.reset();
+    }
+
+    public reset() {
+      this.checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      this.selectedTags.innerHTML = "";
+      this.hiddenInputsContainer.innerHTML = "";
+      this.searchBox.value = "";
+      this.resetSearchResults();
+      this.container.classList.remove("active");
+    }
+  }
+
+  declare global {
+    interface Window {
+      multiSelects?: Map<string, MultiSelect>;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[data-multi-select]").forEach((container) => {
+      new MultiSelect(container as HTMLElement);
+    });
+
+    const cancelButton = document.querySelector(
+      ".cancel-button"
+    ) as HTMLButtonElement;
+    if (cancelButton) {
+      const originalClickHandler = cancelButton.onclick;
+      cancelButton.onclick = (event) => {
+        if (originalClickHandler) {
+          originalClickHandler.call(cancelButton, event);
+        }
+        window.multiSelects?.forEach((select) => select.reset());
+      };
+    }
+
+    const originalCloseModal = window.closeModal;
+    window.closeModal = () => {
+      if (originalCloseModal) {
+        originalCloseModal();
+      }
+      window.multiSelects?.forEach((select) => select.reset());
+    };
+  });
+</script>

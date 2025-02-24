@@ -1,0 +1,156 @@
+---
+import MultiSelect from "@components/Select/MultiSelect.astro";
+import SingleSelect from "@components/Select/SingleSelect.astro";
+import "@styles/style.css";
+---
+
+<form class="form-container" id="add-todo-form">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <div class="name-inputs">
+      <input type="text" id="title" placeholder="" name="title" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="status">Status</label>
+    <SingleSelect
+      name="status"
+      options={[
+        { value: "todo", label: "To Do" },
+        { value: "in-progress", label: "In Progress" },
+        { value: "done", label: "Done" },
+      ]}
+      category="Status"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="dueDate">Due Date</label>
+    <div class="due-date-input">
+      <input type="date" id="dueDate" name="dueDate" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="tags">Tags</label>
+    <MultiSelect
+      options={[
+        { value: "desktop-design", label: "Desktop Design" },
+        { value: "mobile-design", label: "Mobile Design" },
+        { value: "backend", label: "Backend" },
+        { value: "frontend", label: "Frontend" },
+      ]}
+      name="tags"
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="assignTo">Assign To</label>
+    <MultiSelect
+      options={[
+        { value: "Alana", label: "Alana" },
+        { value: "Chris", label: "Chris" },
+        { value: "Nana", label: "Nana" },
+        { value: "Kazuki", label: "Kazuki" },
+      ]}
+      name="assignTo"
+    />
+  </div>
+
+  <div class="form-footer">
+    <button type="button" class="cancel-button">Cancel</button>
+    <button type="submit" class="submit-button">Add</button>
+  </div>
+</form>
+
+<script>
+  import { TodoService } from "@services/todoService";
+  import type { Todo } from "src/types/todo";
+  const todoService = new TodoService();
+
+  const addTodo = async (event: SubmitEvent) => {
+    event.preventDefault();
+
+    const form = document.getElementById("add-todo-form") as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const title = formData.get("title") as string;
+    const status = formData.get("status") as Todo["status"];
+    const dueDate = formData.get("dueDate");
+    const tags = formData.getAll(`tags[]`) as string[];
+
+    const assignedTo = formData.getAll("assignTo[]") as string[];
+
+    if (!title.trim()) return;
+
+    const newTodo = {
+      id: Math.random().toString(36),
+      title: title.trim(),
+      status,
+      dueDate,
+      tags,
+      assignedTo,
+      notes: "",
+    } as Todo;
+
+    const updatedTodos = todoService.addTodo(newTodo);
+
+    renderTodos(updatedTodos);
+
+    formReset();
+    closeModal();
+  };
+
+  const form = document.getElementById("add-todo-form") as HTMLFormElement;
+  form.addEventListener("submit", addTodo);
+
+  const formReset = () => {
+    const form = document.getElementById("add-todo-form") as HTMLFormElement;
+    form.reset();
+  };
+
+  const renderTodos = (todos: Todo[]) => {
+    const todoList = document.getElementById("todoList") as HTMLDivElement;
+    todoList.innerHTML = "";
+
+    todos.forEach((todo) => {
+      const todoCard = document.createElement("todo-card") as HTMLElement;
+      todoCard.innerHTML = `
+        <div class="todo-card">
+          <div class="todo-container">
+            <div class="title">${todo.title}</div>
+            <div class="status">${todo.status}</div>
+            <div class="due-date">${new Date(todo.dueDate).toLocaleDateString()}</div>
+            <div class="tags">${todo.tags.join(", ") || "None"}</div>
+            <div class="assigned-to">${todo.assignedTo.join(", ") || "None"}</div>
+            ${todo.notes ? `<div class="notes">${todo.notes}</div>` : ""}
+          </div>
+          <div class="todo-actions">
+            <button class="edit-button" data-todo-id="${todo.title}">Edit</button>
+            <button class="delete-button" data-todo-id="${todo.id}">Delete</button>
+          </div>
+        </div>
+      `;
+      todoList.appendChild(todoCard);
+    });
+  };
+
+  const cancelButton = document.querySelector(
+    ".cancel-button"
+  ) as HTMLButtonElement;
+  cancelButton.addEventListener("click", () => {
+    closeModal();
+    formReset();
+  });
+
+  const closeModal = () => {
+    const modal = document.querySelector(".modal") as HTMLDivElement;
+    const modalOverlay = document.querySelector(
+      ".modal-overlay"
+    ) as HTMLDivElement;
+
+    modal.style.display = "none";
+    modalOverlay.style.display = "none";
+  };
+</script>
