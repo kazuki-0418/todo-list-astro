@@ -25,14 +25,14 @@ const { options, name } = Astro.props;
         options.map((option) => {
           const uniqueId = `${name}-${option.value}`;
           return (
-            <div class="option">
+            <div class="option" id={uniqueId}>
               <input
                 type="checkbox"
                 id={uniqueId}
                 value={option.value}
                 data-checkbox
               />
-              <label for={uniqueId}>{option.label}</label>
+              <label>{option.label}</label>
             </div>
           );
         })
@@ -72,22 +72,35 @@ const { options, name } = Astro.props;
     }
 
     private initialize() {
-      this.container.addEventListener(
-        "click",
-        this.handleContainerClick.bind(this),
-      );
+      this.container.addEventListener("click", (event) => {
+        event.stopPropagation();
+        this.handleContainerClick(event);
+      });
 
       this.checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", this.updateSelectedTags.bind(this));
+        checkbox.addEventListener("change", (event) => {
+          event.stopPropagation();
+          this.updateSelectedTags();
+        });
       });
 
       this.optionsList.querySelectorAll(".option").forEach((option) => {
-        option.addEventListener("click", this.handleOptionClick.bind(this));
+        option.addEventListener("click", (event) => {
+          event.stopPropagation();
+          this.handleOptionClick(event);
+        });
+      });
+
+      this.searchBox.addEventListener("click", (event) => {
+        event.stopPropagation();
       });
 
       this.searchBox.addEventListener("input", this.handleSearch.bind(this));
-
-      document.addEventListener("click", this.handleOutsideClick.bind(this));
+      document.addEventListener("click", (event) => {
+        if (!this.container.contains(event.target as Node)) {
+          this.container.classList.remove("active");
+        }
+      });
 
       const form = this.container.closest("form");
       if (form) {
@@ -130,7 +143,7 @@ const { options, name } = Astro.props;
       ) as HTMLInputElement;
       const target = event.target as Element;
 
-      if (target.tagName === "LABEL" || target.tagName === "INPUT") return;
+      if (target.tagName === "INPUT") return;
 
       checkbox.checked = !checkbox.checked;
       checkbox.dispatchEvent(new Event("change"));

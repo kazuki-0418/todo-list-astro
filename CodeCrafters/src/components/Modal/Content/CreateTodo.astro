@@ -6,14 +6,14 @@ import "@styles/style.css";
 
 <form class="form-container" id="add-todo-form">
   <div class="form-group">
-    <label for="title">Title</label>
+    <label>Title</label>
     <div class="name-inputs">
       <input type="text" id="title" placeholder="" name="title" />
     </div>
   </div>
 
   <div class="form-group">
-    <label for="status">Status</label>
+    <label>Status</label>
     <SingleSelect
       name="status"
       options={[
@@ -26,14 +26,14 @@ import "@styles/style.css";
   </div>
 
   <div class="form-group">
-    <label for="dueDate">Due Date</label>
+    <label>Due Date</label>
     <div class="due-date-input">
       <input type="date" id="dueDate" name="dueDate" />
     </div>
   </div>
 
   <div class="form-group">
-    <label for="tags">Tags</label>
+    <label>Tags</label>
     <MultiSelect
       options={[
         { value: "desktop-design", label: "Desktop Design" },
@@ -46,7 +46,7 @@ import "@styles/style.css";
   </div>
 
   <div class="form-group">
-    <label for="assignTo">Assign To</label>
+    <label>Assign To</label>
     <MultiSelect
       options={[
         { value: "Alana", label: "Alana" },
@@ -59,13 +59,15 @@ import "@styles/style.css";
   </div>
 
   <div class="form-footer">
-    <button type="button" class="cancel-button">Cancel</button>
+    <button type="reset" class="cancel-button">Cancel</button>
     <button type="submit" class="submit-button">Add</button>
   </div>
 </form>
 
 <script>
+  import { TodoCard } from "@components/TodoCard";
   import { TodoService } from "@services/todoService";
+  import { handleEdit } from "@utils/handleEdit";
   import type { Todo } from "src/types/todo";
   const todoService = new TodoService();
 
@@ -98,8 +100,8 @@ import "@styles/style.css";
 
     renderTodos(updatedTodos);
 
-    formReset();
     closeModal();
+    formReset();
   };
 
   const form = document.getElementById("add-todo-form") as HTMLFormElement;
@@ -114,29 +116,31 @@ import "@styles/style.css";
     const todoList = document.getElementById("todoList") as HTMLDivElement;
     todoList.innerHTML = "";
 
-    todos.forEach((todo) => {
-      const todoCard = document.createElement("todo-card") as HTMLElement;
-      todoCard.innerHTML = `
-        <div class="todo-card">
-          <div class="todo-container">
-            <div class="title">${todo.title}</div>
-            <div class="status">${todo.status}</div>
-            <div class="due-date">${new Date(todo.dueDate).toLocaleDateString()}</div>
-            <div class="tags">${todo.tags.join(", ") || "None"}</div>
-            <div class="assigned-to">${todo.assignedTo.join(", ") || "None"}</div>
-            ${todo.notes ? `<div class="notes">${todo.notes}</div>` : ""}
-          </div>
-          <div class="todo-actions">
-            <button class="edit-button" data-todo-id="${todo.title}">Edit</button>
-            <button class="delete-button" data-todo-id="${todo.id}">Delete</button>
-          </div>
-        </div>
-      `;
-      todoList.appendChild(todoCard);
-    });
+    const todoElements = todos.map((todo) => TodoCard(todo)).join("");
+    todoList.innerHTML = todoElements;
+    addEventListeners();
   };
 
-  const cancelButton = document.querySelector(
+  function addEventListeners() {
+    const editButtons = document.querySelectorAll(".edit-button");
+    const deleteButtons = document.querySelectorAll(".delete-button");
+
+    editButtons.forEach((button) => {
+      button.replaceWith(button.cloneNode(true));
+    });
+
+    document.querySelectorAll(".edit-button").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
+        if (todoId) {
+          handleEdit(todoId);
+        }
+      });
+    });
+  }
+
+  const cancelButton = form.querySelector(
     ".cancel-button",
   ) as HTMLButtonElement;
   cancelButton.addEventListener("click", () => {
@@ -145,12 +149,8 @@ import "@styles/style.css";
   });
 
   const closeModal = () => {
-    const modal = document.querySelector(".modal") as HTMLDivElement;
-    const modalOverlay = document.querySelector(
-      ".modal-overlay",
-    ) as HTMLDivElement;
-
-    modal.style.display = "none";
-    modalOverlay.style.display = "none";
+    const modalControls = window.modalControls;
+    if (!modalControls) return;
+    modalControls["create-todo-modal"].close();
   };
 </script>

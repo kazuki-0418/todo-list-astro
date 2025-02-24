@@ -14,152 +14,175 @@
   }
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999; // モーダルの下に配置
+.modal-wrapper {
   display: none;
-  align-items: center;
-  justify-content: center;
-}
 
-.modal {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  background: white;
-  width: 400px;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: sans-serif;
-  display: none;
-  z-index: 1000;
+  &.is-open {
+    display: block;
 
-  .modal-container {
-    max-width: 800px;
-    width: 100%;
-    margin: auto;
-    padding: 20px;
-    border-radius: 12px;
-    background: white;
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-
-      h2 {
-        font-size: 24px;
-        font-weight: 600;
-        color: #333;
-      }
-
-      .modal-header-close {
-        cursor: pointer;
-        color: #333;
-        font-size: 20px;
-        transition: color 0.2s;
-        border: none;
-        background: none;
-        &:hover {
-          color: #007bff;
-        }
-      }
+    .modal {
+      display: block;
     }
 
-    .form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      max-width: 500px;
-      margin: auto;
+    .modal-overlay {
+      display: block;
+    }
+  }
 
-      .form-group {
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+  }
+
+  .modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    width: 400px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    display: none;
+
+    .modal-container {
+      width: 100%;
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .modal-header-title {
+          h2 {
+            margin: 0;
+            font-size: 1.5rem;
+          }
+        }
+
+        .modal-header-close {
+          .modal-close-button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 4px;
+
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+        }
+      }
+
+      .form-container {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 16px;
+        max-width: 500px;
+        margin: auto;
 
-        label {
-          font-size: 14px;
-          font-weight: 600;
-          color: #333;
-        }
-      }
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
 
-      .name-inputs {
-        display: flex;
-        gap: 8px;
-
-        > input {
-          @include input-style;
-          flex: 1;
-        }
-      }
-
-      .due-date-input {
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-
-        .icon {
-          padding: 10px;
-          background: #f1f1f1;
-          border-right: 1px solid #ccc;
+          label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+          }
         }
 
-        > input {
-          @include input-style;
-        }
-      }
+        .name-inputs {
+          display: flex;
+          gap: 8px;
 
-      .username-input {
-        display: flex;
-        align-items: center;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        overflow: hidden;
-
-        .prefix {
-          padding: 10px;
-          background: #f1f1f1;
-          border-right: 1px solid #ccc;
+          > input {
+            @include input-style;
+            flex: 1;
+          }
         }
 
-        input {
-          flex: 1;
-          border: none;
-          padding: 10px;
-          @include input-style;
+        .due-date-input {
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+
+          .icon {
+            padding: 10px;
+            background: #f1f1f1;
+            border-right: 1px solid #ccc;
+          }
+
+          > input {
+            @include input-style;
+          }
         }
 
-        .verified-icon {
-          padding: 10px;
-          color: #007bff;
-        }
-      }
-
-      .form-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-
-        .submit-button {
-          padding: 10px;
-          border: none;
+        .username-input {
+          display: flex;
+          align-items: center;
+          border: 1px solid #ccc;
           border-radius: 6px;
-          background: color.adjust($primary, $lightness: -20%);
-          color: white;
-          font-size: 16px;
-          cursor: pointer;
-          &:hover {
-            background: color.adjust($primary,$lightness: -30%);
+          overflow: hidden;
+
+          .prefix {
+            padding: 10px;
+            background: #f1f1f1;
+            border-right: 1px solid #ccc;
+          }
+
+          input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            @include input-style;
+          }
+
+          .verified-icon {
+            padding: 10px;
+            color: #007bff;
+          }
+        }
+
+        .form-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 8px;
+
+          .submit-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: color.adjust($primary, $lightness: -20%);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: color.adjust($primary, $lightness: -30%);
+            }
+          }
+
+          .cancel-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #f1f1f1;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: #e1e1e1;
+            }
           }
         }
 

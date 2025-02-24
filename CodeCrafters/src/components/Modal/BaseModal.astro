@@ -5,68 +5,119 @@ import CloseIcon from "../../assets/close.svg";
 
 type Props = {
   title: string;
+  id: string;
 };
+declare global {
+  interface Window {
+    modalControls?: {
+      [key: string]: {
+        show: () => void;
+        close: () => void;
+      };
+    };
+  }
+}
 
-const { title } = Astro.props;
+const { title, id } = Astro.props;
 ---
 
-<div class="modal-overlay" id="modalOverlay"></div>
-
-<div class="modal" id="modal">
-  <div class="modal-container">
-    <div class="modal-header">
-      <div class="modal-header-title">
-        <h2>{title}</h2>
+<div class="modal-wrapper" data-modal-id={id}>
+  <div class="modal-overlay"></div>
+  <div class="modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-header-title">
+          <h2>{title}</h2>
+        </div>
+        <div class="modal-header-close">
+          <button class="modal-close-button">
+            <Image src={CloseIcon} alt="close" />
+          </button>
+        </div>
       </div>
-      <div class="modal-header-close">
-        <button class="modal-header-close" id="closeModal">
-          <Image src={CloseIcon} alt="close" />
-        </button>
-      </div>
+      <slot />
     </div>
-    <slot />
   </div>
 </div>
 
 <script>
+  class ModalController {
+    private wrapper: HTMLElement;
+    private modal: HTMLElement;
+    private overlay: HTMLElement;
+    private closeButton: HTMLElement;
+    private modalId: string;
+
+    constructor(wrapper: HTMLElement) {
+      this.wrapper = wrapper;
+      this.modalId = wrapper.dataset.modalId || "";
+      this.modal = wrapper.querySelector(".modal") as HTMLElement;
+      this.overlay = wrapper.querySelector(".modal-overlay") as HTMLElement;
+      this.closeButton = wrapper.querySelector(
+        ".modal-close-button",
+      ) as HTMLElement;
+
+      this.initialize();
+    }
+
+    private initialize() {
+      this.closeButton.addEventListener("click", () => {
+        this.close();
+      });
+
+      this.overlay.addEventListener("click", () => {
+        this.close();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && this.isOpen()) {
+          this.close();
+        }
+      });
+    }
+
+    private isOpen(): boolean {
+      return this.wrapper.classList.contains("is-open");
+    }
+
+    show() {
+      document.querySelectorAll(".modal-wrapper").forEach((wrapper) => {
+        if (wrapper !== this.wrapper) {
+          wrapper.classList.remove("is-open");
+        }
+      });
+
+      this.wrapper.classList.add("is-open");
+      this.modal.style.display = "block";
+      this.overlay.style.display = "block";
+    }
+
+    close() {
+      this.wrapper.classList.remove("is-open");
+      this.modal.style.display = "none";
+      this.overlay.style.display = "none";
+
+      const event = new CustomEvent("modalClose", {
+        detail: { modalId: this.modalId },
+      });
+      document.dispatchEvent(event);
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
-    const modal = document.getElementById("modal") as HTMLDivElement;
-    const modalOverlay = document.getElementById(
-      "modalOverlay",
-    ) as HTMLDivElement;
-    const closeModalButton = document.getElementById(
-      "closeModal",
-    ) as HTMLButtonElement;
+    window.modalControls = {};
 
-    closeModalButton.addEventListener("click", () => {
-      formReset();
-      closeModal();
-    });
-
-    window.addEventListener("click", (event) => {
-      if (event.target === modalOverlay) {
-        formReset();
-        closeModal();
+    document.querySelectorAll(".modal-wrapper").forEach((wrapper) => {
+      const modalId = (wrapper as HTMLElement).dataset.modalId;
+      if (modalId) {
+        const controller = new ModalController(wrapper as HTMLElement);
+        const modalControls = window.modalControls;
+        if (!modalControls) return;
+        modalControls[modalId] = {
+          show: () => controller.show(),
+          close: () => controller.close(),
+        };
       }
     });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        formReset();
-        closeModal();
-      }
-    });
-
-    const closeModal = () => {
-      modal.style.display = "none";
-      modalOverlay.style.display = "none";
-    };
-
-    const formReset = () => {
-      const form = document.getElementById("add-todo-form") as HTMLFormElement;
-      if (form) {
-        form.reset();
-      }
-    };
   });
 </script>

@@ -30,6 +30,10 @@ export class TodoContext {
     localStorage.setItem(this.storageKey, JSON.stringify(this.todos));
   }
 
+  getTodoById(id: string): Todo | undefined {
+    return this.todos.find((todo) => todo.id === id);
+  }
+
   /** 🔹 Get all todos (always returns the latest stored data) */
   getTodos(): Todo[] {
     return this.todos;
