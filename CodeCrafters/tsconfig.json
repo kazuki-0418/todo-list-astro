@@ -6,16 +6,16 @@
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"
-      },
+      }
     ],
+
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
-      "@css/*": ["src/css/*"],
+      "@styles/*": ["src/styles/*"],
       "@assets/*": ["src/assets/*"],
       "@utils/*": ["src/utils/*"],
-      "@types/*": ["src/types/*"],
       "@contexts/*": ["src/contexts/*"],
       "@services/*": ["src/services/*"],
     }

@@ -1,26 +1,128 @@
 ---
+// TodoGroup.astro
+import BaseModal from "./Modal/BaseModal.astro";
+import CreateTodo from "./Modal/Content/CreateTodo.astro";
 import TodoCard from "./TodoCard.astro";
 ---
 
-<section class="main-conatiner">
-    <div class="Board">
-        <div class="Todo">
-            <div>
-                <h4>Todo</h4>
-                <button id="add-todo">Add</button>
-            </div>
-        </div>
-        <div class="In-progress">
-            <div>
-                <h4>In Progress</h4>
-                <button id="add-inprogress">Add</button>
-            </div>
-        </div>
-        <div class="Done">
-            <div>
-                <h4>Done</h4>
-                <button id="add-done">Add</button>
-            </div>
-        </div>
-    </div>   
+<section class="main-container">
+  <div class="Board">
+    <div>
+      <h2>Todo List</h2>
+      <div id="todoList"></div>
+      <button id="add-todo">Add Todo</button>
+    </div>
+    <BaseModal title={"Create Todo"}>
+      <CreateTodo />
+    </BaseModal>
+  </div>
 </section>
+
+<script>
+  import type { Todo } from "src/types/todo";
+  import { TodoContext } from "@contexts/todoContext";
+  import { TodoService } from "@services/todoService";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const todoContext = TodoContext.getInstance();
+    const todoList = document.getElementById("todoList");
+
+    const todoService = new TodoService();
+
+    // Todoリストの表示を更新する関数
+    function renderTodo(todo: Todo): string {
+      return `
+        <div class="todo-card">
+          <div class="todo-container">
+            <div class="title">${todo.title}</div>
+            <div class="status">${todo.status}</div>
+            <div class="due-date">${new Date(todo.dueDate).toLocaleDateString()}</div>
+            <div class="tags">${todo.tags.join(", ") || "None"}</div>
+            <div class="assigned-to">${todo.assignedTo.join(", ") || "None"}</div>
+            ${todo.notes ? `<div class="notes">${todo.notes}</div>` : ""}
+          </div>
+          <div class="todo-actions">
+            <button class="edit-button" data-todo-id="${todo.title}">Edit</button>
+            <button class="delete-button" data-todo-id="${todo.id}">Delete</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Todoリスト全体を更新する関数
+    function renderTodos() {
+      if (!todoList) return;
+
+      // LocalStorageからデータを読み込む
+      const todos = todoContext.getTodos();
+
+      // 各Todoをレンダリング
+      const todoElements = todos.map((todo) => renderTodo(todo)).join("");
+      todoList.innerHTML = todoElements;
+
+      // イベントリスナーを追加
+      addEventListeners();
+    }
+
+    // ボタンのイベントリスナーを設定
+    function addEventListeners() {
+      const editButtons = document.querySelectorAll(".edit-button");
+      const deleteButtons = document.querySelectorAll(".delete-button");
+
+      editButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const todoId = (e.target as HTMLButtonElement).dataset.todoId;
+          if (todoId) {
+            handleEdit(todoId);
+          }
+        });
+      });
+
+      deleteButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const todoId = (e.target as HTMLButtonElement).dataset.todoId;
+          if (todoId) {
+            handleDelete(todoId);
+          }
+        });
+      });
+    }
+
+    // 編集処理
+    function handleEdit(todoId: string) {
+      console.log("Edit todo:", todoId);
+      // 編集モーダルを表示するなどの処理
+    }
+
+    // 削除処理
+    function handleDelete(todoId: string) {
+      if (confirm("このTodoを削除しますか？")) {
+        todoService.deleteTodo(todoId);
+        renderTodos(); // リストを再レンダリング
+      }
+    }
+
+    // 初期レンダリング
+    renderTodos();
+
+    // TodoContextの更新イベントをリッスン
+    document.addEventListener("todosUpdated", () => {
+      renderTodos();
+    });
+
+    // Add Todoボタンのイベントリスナー
+    const addTodoButton = document.getElementById("add-todo");
+    if (addTodoButton) {
+      addTodoButton.addEventListener("click", () => {
+        const modal = document.querySelector(".modal") as HTMLDivElement;
+        const modalOverlay = document.querySelector(
+          ".modal-overlay"
+        ) as HTMLDivElement;
+        if (modal && modalOverlay) {
+          modal.style.display = "flex";
+          modalOverlay.style.display = "block";
+        }
+      });
+    }
+  });
+</script>

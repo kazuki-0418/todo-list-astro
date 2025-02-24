@@ -1,0 +1,164 @@
+---
+import "@styles/style.css";
+
+type Props = {
+  name: string;
+  category: string;
+  options: { value: string; label: string }[];
+};
+
+const { name, category, options } = Astro.props;
+const defaultPlaceholder = `Select an ${category}`;
+---
+
+<div class="single-select" data-name={name}>
+  <div
+    class="select-box"
+    id={`select-box-${name}`}
+    data-default-text={defaultPlaceholder}
+  >
+    {defaultPlaceholder}
+  </div>
+  <ul class="options" id={`options-list-${name}`}>
+    {
+      options.map((option) => (
+        <li class="option" data-value={option.value} data-label={option.label}>
+          {option.label}
+        </li>
+      ))
+    }
+  </ul>
+  <input type="hidden" id={`hidden-input-${name}`} name={name} />
+</div>
+
+<script>
+  class SingleSelect {
+    private selectBox: HTMLDivElement;
+    private optionsList: HTMLUListElement;
+    private hiddenInput: HTMLInputElement;
+    private container: HTMLElement;
+    private defaultText: string;
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.selectBox = container.querySelector(".select-box") as HTMLDivElement;
+      this.optionsList = container.querySelector(
+        ".options"
+      ) as HTMLUListElement;
+      this.hiddenInput = container.querySelector(
+        "input[type='hidden']"
+      ) as HTMLInputElement;
+      this.defaultText =
+        this.selectBox.dataset.defaultText || "Select an option";
+
+      this.initialize();
+    }
+
+    private initialize() {
+      this.selectBox.addEventListener(
+        "click",
+        this.handleSelectBoxClick.bind(this)
+      );
+
+      const options = this.optionsList.querySelectorAll(".option");
+      options.forEach((option) => {
+        option.addEventListener("click", this.handleOptionClick.bind(this));
+      });
+
+      // form.resetイベントの監視
+      const form = this.container.closest("form");
+      if (form) {
+        form.addEventListener("reset", this.handleReset.bind(this));
+      }
+
+      const closeButton = document.getElementById("closeModal");
+      if (closeButton) {
+        closeButton.addEventListener("click", this.handleReset.bind(this));
+      }
+
+      const modalOverlay = document.getElementById("modalOverlay");
+      if (modalOverlay) {
+        modalOverlay.addEventListener("click", this.handleReset.bind(this));
+      }
+
+      // SingleSelectインスタンスをグローバルに保存
+      if (!window.singleSelects) {
+        window.singleSelects = new Map();
+      }
+
+      const name = this.container.dataset.name || "";
+      window.singleSelects.set(name, this);
+    }
+
+    private handleSelectBoxClick() {
+      this.optionsList.classList.toggle("active");
+    }
+
+    private handleOptionClick(event: Event) {
+      const option = event.currentTarget as HTMLElement;
+      const value = option.dataset.value;
+      const label = option.dataset.label;
+
+      if (value && label) {
+        this.selectBox.textContent = label;
+        this.hiddenInput.value = value;
+      }
+
+      this.optionsList.classList.remove("active");
+    }
+
+    private handleReset() {
+      this.reset();
+    }
+
+    public reset() {
+      this.selectBox.textContent = this.defaultText;
+      this.hiddenInput.value = "";
+      this.optionsList.classList.remove("active");
+    }
+  }
+
+  // グローバル型定義
+  declare global {
+    interface Window {
+      singleSelects?: Map<string, SingleSelect>;
+      closeModal?: () => void;
+    }
+  }
+
+  // DOMContentLoadedイベントで初期化
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".single-select").forEach((container) => {
+      new SingleSelect(container as HTMLElement);
+    });
+
+    // モーダルのキャンセル処理を拡張
+    const cancelButton = document.querySelector(
+      ".cancel-button"
+    ) as HTMLButtonElement;
+    if (cancelButton) {
+      const originalClickHandler = cancelButton.onclick;
+      cancelButton.onclick = (event) => {
+        // 元のクリックハンドラを実行
+        if (originalClickHandler) {
+          originalClickHandler.call(cancelButton, event);
+        }
+
+        // すべてのSingleSelectをリセット
+        window.singleSelects?.forEach((select) => select.reset());
+      };
+    }
+
+    // closeModal関数を拡張
+    const originalCloseModal = window.closeModal;
+    window.closeModal = () => {
+      // 元のcloseModal関数を実行
+      if (originalCloseModal) {
+        originalCloseModal();
+      }
+
+      // すべてのSingleSelectをリセット
+      window.singleSelects?.forEach((select) => select.reset());
+    };
+  });
+</script>
