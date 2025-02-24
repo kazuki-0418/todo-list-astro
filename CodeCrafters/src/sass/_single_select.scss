@@ -1,0 +1,39 @@
+.single-select {
+  position: relative;
+  font-family: Arial, sans-serif;
+
+  .select-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #fff;
+    text-align: left;
+  }
+
+  .options {
+    position: absolute;
+    width: 100%;
+    margin-top: 5px;
+    padding: 0;
+    list-style: none;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: none; // Hide options by default
+  }
+
+  .options.active {
+    display: block;
+  }
+
+  .option {
+    padding: 10px;
+    cursor: pointer;
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+}

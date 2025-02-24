@@ -1,0 +1,16 @@
+{
+    // Default path for terminal
+    "terminal.integrated.cwd": "CodeCrafters",
+
+    // Live Sass Compiler settings
+    "liveSassCompile.settings.formats": [
+        {
+        "format": "expanded",
+        "extensionName": ".css",
+        "savePath": "/CodeCrafters/src/styles"
+        }
+    ],
+    "liveSassCompile.settings.includeItems": [
+        "/CodeCrafters/src/sass/style.scss"
+    ],
+}
