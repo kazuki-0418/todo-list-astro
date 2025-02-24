@@ -38,6 +38,7 @@
                     border: none;
                     background-color: $TodoGroup;
                     width: 2em;
+                    height: 100%;
                     &:hover{
                         cursor: pointer;
                     }
@@ -46,6 +47,9 @@
                         width: auto;
                     }
                 }
+            }
+            .column-add{
+                height: 100%;
             }
         }
     }

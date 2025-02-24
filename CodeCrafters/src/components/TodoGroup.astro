@@ -1,36 +1,82 @@
----
-import TodoCard from "./TodoCard.astro";
----
-
 <section class="main-container">
     <h2>Codebreakers</h2>
     <div class="Board column">
-        <div class="Todo column">
+        <div class="todo column">
             <div class="header-board">
-                <h4>Todo</h4>
+                <h3>Todo</h3>
                 <div class="options-board">
-                    <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
+                    <button class="add" id="add-todo"><img src="../../public/add.svg"></button>
                 </div>
             </div>
-            <div>
-                <TodoCard>
+            <div id="todo-add"  class="column-add todo-add" ondrop="dropMe(event)" ondragover="allowDrop(event)">
             </div>
         </div>
         <div class="In-progress column">
             <div class="header-board">
-                <h4>In Progress</h4>
+                <h3>In Progress</h3>
                 <div class="options-board">
                     <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
                 </div>
+            </div>
+            <div id="in-progress" class="column-add in-progress" ondrop="dropMe(event)" ondragover="allowDrop(event)">
             </div>
         </div>
         <div class="Done column">
             <div class="header-board">
-                <h4>Done</h4>
+                <h3>Finished</h3>
                 <div class="options-board">
                     <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
                 </div>
             </div>
+            <div id="todo-done" class="column-add done" ondrop="dropMe(event)" ondragover="allowDrop(event)">
+            </div>
         </div>
-    </div>   
+    </div>  
 </section>
+
+
+<script is:inline>
+    function allowDrop(ev){
+        ev.preventDefault();
+        console.log("drop")
+    }
+
+    function drag(ev){
+        console.log(ev.target.id)
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function dropMe(ev) {
+        ev.preventDefault();
+        console.log("hey drop me")
+        var data = ev.dataTransfer.getData("text");
+        console.log(data)
+        ev.target.appendChild(document.getElementById(data));
+    }
+
+    const addBtns = document.querySelectorAll(".add")
+    addBtns.forEach(btn => {
+        btn.addEventListener("click",()=>{
+            // colum where we are goin to add the new element
+            const columnToAddNewTodo = btn.parentElement?.parentElement?.parentElement?.querySelector(".column-add")
+            let newTodo = document.createElement("div")
+            // random id
+            newTodo.id = `item-${Math.floor(Math.random() * 9999)}`
+            newTodo.draggable = true
+            newTodo.ondragstart = drag
+            newTodo.innerHTML = `
+                    <div class="todocard">
+                        <div class="todocard-container">
+                            <h4 class="title">Title</h4>
+                            <p>Description</p>
+                        </div>
+                        <div class="options-TodoCard">
+                            <img class="options" src="../../public/opts.svg" alt="">
+                        </div>
+                    <div>
+                                `
+            columnToAddNewTodo?.append(newTodo)
+        })
+
+    });
+</script> 
