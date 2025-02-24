@@ -77,7 +77,6 @@ declare global {
         button.addEventListener("click", (e) => {
           e.preventDefault();
           const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-          console.log("Edit clicked for:", todoId);
           if (todoId) {
             handleEdit(todoId);
           }

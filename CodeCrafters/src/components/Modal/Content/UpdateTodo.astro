@@ -86,7 +86,6 @@ import "@styles/style.css";
     const tags = formData.getAll(`tags[]`) as string[];
 
     const assignedTo = formData.getAll("assignTo[]") as string[];
-    console.log("Updating todo with ID:", id); // デバッグ用
 
     if (!title.trim()) return;
 

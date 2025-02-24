@@ -81,14 +81,12 @@ const { title, id } = Astro.props;
     }
 
     show() {
-      // 他のすべてのモーダルを閉じる
       document.querySelectorAll(".modal-wrapper").forEach((wrapper) => {
         if (wrapper !== this.wrapper) {
           wrapper.classList.remove("is-open");
         }
       });
 
-      // モーダルとオーバーレイを表示
       this.wrapper.classList.add("is-open");
       this.modal.style.display = "block";
       this.overlay.style.display = "block";
@@ -99,7 +97,6 @@ const { title, id } = Astro.props;
       this.modal.style.display = "none";
       this.overlay.style.display = "none";
 
-      // フォームリセットのカスタムイベントを発火
       const event = new CustomEvent("modalClose", {
         detail: { modalId: this.modalId },
       });
@@ -107,12 +104,9 @@ const { title, id } = Astro.props;
     }
   }
 
-  // DOMContentLoadedイベントで初期化
   document.addEventListener("DOMContentLoaded", () => {
-    // modalControlsオブジェクトを初期化
     window.modalControls = {};
 
-    // 全てのモーダルを初期化
     document.querySelectorAll(".modal-wrapper").forEach((wrapper) => {
       const modalId = (wrapper as HTMLElement).dataset.modalId;
       if (modalId) {
