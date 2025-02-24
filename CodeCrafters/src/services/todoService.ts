@@ -50,6 +50,18 @@ export class TodoService {
     return updatedTodos;
   }
 
+  updateTodo(todo: Omit<Todo, "createdAt" | "updatedAt">): Todo[] {
+    const updatedTodos = this.todoContext
+      .getTodos()
+      .map((t) => (t.id === todo.id ? { ...t, ...todo } : t));
+
+    this.todoContext.setTodos(updatedTodos);
+    this.saveTodosToStorage(updatedTodos);
+    this.notifyUpdate();
+
+    return updatedTodos;
+  }
+
   /** Toggle status of a Todo */
   toggleTodoStatus(title: string, newStatus: Todo["status"]): Todo[] {
     const updatedTodos = this.todoContext

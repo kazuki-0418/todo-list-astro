@@ -1,5 +1,162 @@
-<dev class="modal" class:open={open}>
-  <div class="modal-content">
-    <slot />
+---
+import MultiSelect from "@components/Select/MultiSelect.astro";
+import SingleSelect from "@components/Select/SingleSelect.astro";
+import "@styles/style.css";
+---
+
+<form class="form-container" id="update-todo-form">
+  <input type="hidden" name="id" id="todo-id" />
+
+  <div class="form-group">
+    <label>Title</label>
+    <div class="name-inputs">
+      <input type="text" id="title" placeholder="" name="title" />
+    </div>
   </div>
-</dev>
+
+  <div class="form-group">
+    <label>Status</label>
+    <SingleSelect
+      name="status"
+      options={[
+        { value: "todo", label: "To Do" },
+        { value: "in-progress", label: "In Progress" },
+        { value: "done", label: "Done" },
+      ]}
+      category="Status"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Due Date</label>
+    <div class="due-date-input">
+      <input type="date" id="dueDate" name="dueDate" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Tags</label>
+    <MultiSelect
+      options={[
+        { value: "desktop-design", label: "Desktop Design" },
+        { value: "mobile-design", label: "Mobile Design" },
+        { value: "backend", label: "Backend" },
+        { value: "frontend", label: "Frontend" },
+      ]}
+      name="tags"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Assign To</label>
+    <MultiSelect
+      options={[
+        { value: "Alana", label: "Alana" },
+        { value: "Chris", label: "Chris" },
+        { value: "Nana", label: "Nana" },
+        { value: "Kazuki", label: "Kazuki" },
+      ]}
+      name="assignTo"
+    />
+  </div>
+
+  <div class="form-footer">
+    <button type="reset" class="cancel-button">Cancel</button>
+    <button type="submit" class="submit-button">Update</button>
+  </div>
+</form>
+
+<script>
+  import { TodoService } from "@services/todoService";
+  import type { Todo } from "src/types/todo";
+  import { handleEdit } from "@utils/handleEdit";
+  import { TodoCard } from "@components/TodoCard";
+  const todoService = new TodoService();
+
+  const updateTodo = async (event: SubmitEvent) => {
+    event.preventDefault();
+
+    const form = document.getElementById("update-todo-form") as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const status = formData.get("status") as Todo["status"];
+    const dueDate = formData.get("dueDate");
+    const tags = formData.getAll(`tags[]`) as string[];
+
+    const assignedTo = formData.getAll("assignTo[]") as string[];
+    console.log("Updating todo with ID:", id); // デバッグ用
+
+    if (!title.trim()) return;
+
+    const newTodo = {
+      id,
+      title: title.trim(),
+      status,
+      dueDate,
+      tags,
+      assignedTo,
+      notes: "",
+    } as Todo;
+
+    const updatedTodos = todoService.updateTodo(newTodo);
+    renderTodos(updatedTodos);
+
+    closeModal();
+    formReset();
+  };
+
+  const form = document.getElementById("update-todo-form") as HTMLFormElement;
+  form.addEventListener("submit", updateTodo);
+
+  const formReset = () => {
+    const form = document.getElementById("update-todo-form") as HTMLFormElement;
+    form.reset();
+  };
+
+  const renderTodos = (todos: Todo[]) => {
+    const todoList = document.getElementById("todoList") as HTMLDivElement;
+    todoList.innerHTML = "";
+
+    const todoElements = todos.map((todo) => TodoCard(todo)).join("");
+    todoList.innerHTML = todoElements;
+
+    addEventListeners();
+  };
+
+  function addEventListeners() {
+    const editButtons = document.querySelectorAll(".edit-button");
+    const deleteButtons = document.querySelectorAll(".delete-button");
+
+    editButtons.forEach((button) => {
+      button.replaceWith(button.cloneNode(true));
+    });
+
+    document.querySelectorAll(".edit-button").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
+        if (todoId) {
+          handleEdit(todoId);
+        }
+      });
+    });
+  }
+
+  const cancelButton = form.querySelector(
+    ".cancel-button"
+  ) as HTMLButtonElement;
+  if (cancelButton) {
+    cancelButton.addEventListener("click", () => {
+      closeModal();
+      formReset();
+    });
+  }
+
+  const closeModal = () => {
+    const modalControls = window.modalControls;
+    if (!modalControls) return;
+    modalControls["update-todo-modal"].close();
+  };
+</script>

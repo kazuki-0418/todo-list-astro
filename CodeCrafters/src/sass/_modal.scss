@@ -12,65 +12,76 @@
   }
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999; // モーダルの下に配置
+.modal-wrapper {
   display: none;
-  align-items: center;
-  justify-content: center;
-}
 
-.modal {
-  position:fixed;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  background: white;
-  width: 400px;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: sans-serif;
-  display: none;
-  z-index: 1000; 
+  &.is-open {
+    display: block;
 
-  .modal-container {
-    max-width: 800px;
-    width: 100%;
-    margin: auto;
+    .modal {
+      display: block;
+    }
+
+    .modal-overlay {
+      display: block;
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+  }
+
+
+
+  .modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    width: 400px;
     padding: 20px;
     border-radius: 12px;
-    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    display: none;
 
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
+    .modal-container {
+      width: 100%;
 
-      h2 {
-        font-size: 24px;
-        font-weight: 600;
-        color: #333;
-      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
 
-      .modal-header-close {
-        cursor: pointer;
-        color: #333;
-        font-size: 20px;
-        transition: color 0.2s;
-        border: none;
-        background: none;
-        &:hover {
-          color: #007bff;
+        .modal-header-title {
+          h2 {
+            margin: 0;
+            font-size: 1.5rem;
+          }
+        }
+
+        .modal-header-close {
+          .modal-close-button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 4px;
+
+            &:hover {
+              opacity: 0.8;
+            }
+          }
         }
       }
-    }
 
     .form-container {
       display: flex;
@@ -178,6 +189,7 @@
       }
     }
 
+  }
     }
   }
 }
