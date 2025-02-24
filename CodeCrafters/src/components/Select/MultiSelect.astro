@@ -72,35 +72,28 @@ const { options, name } = Astro.props;
     }
 
     private initialize() {
-      // ドロップダウンの開閉
       this.container.addEventListener(
         "click",
         this.handleContainerClick.bind(this)
       );
 
-      // チェックボックスの変更イベント
       this.checkboxes.forEach((checkbox) => {
         checkbox.addEventListener("change", this.updateSelectedTags.bind(this));
       });
 
-      // オプションクリックのイベント
       this.optionsList.querySelectorAll(".option").forEach((option) => {
         option.addEventListener("click", this.handleOptionClick.bind(this));
       });
 
-      // 検索機能
       this.searchBox.addEventListener("input", this.handleSearch.bind(this));
 
-      // 外部クリックで閉じる
       document.addEventListener("click", this.handleOutsideClick.bind(this));
 
-      // form.resetイベントの監視
       const form = this.container.closest("form");
       if (form) {
         form.addEventListener("reset", this.handleReset.bind(this));
       }
 
-      // モーダル関連のイベント監視
       const closeButton = document.getElementById("closeModal");
       if (closeButton) {
         closeButton.addEventListener("click", this.handleReset.bind(this));
@@ -111,7 +104,6 @@ const { options, name } = Astro.props;
         modalOverlay.addEventListener("click", this.handleReset.bind(this));
       }
 
-      // MultiSelectインスタンスをグローバルに保存
       if (!window.multiSelects) {
         window.multiSelects = new Map();
       }
@@ -222,20 +214,17 @@ const { options, name } = Astro.props;
     }
   }
 
-  // グローバル型定義
   declare global {
     interface Window {
       multiSelects?: Map<string, MultiSelect>;
     }
   }
 
-  // DOMContentLoadedイベントで初期化
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("[data-multi-select]").forEach((container) => {
       new MultiSelect(container as HTMLElement);
     });
 
-    // モーダルのキャンセル処理を拡張
     const cancelButton = document.querySelector(
       ".cancel-button"
     ) as HTMLButtonElement;
@@ -249,7 +238,6 @@ const { options, name } = Astro.props;
       };
     }
 
-    // closeModal関数を拡張
     const originalCloseModal = window.closeModal;
     window.closeModal = () => {
       if (originalCloseModal) {

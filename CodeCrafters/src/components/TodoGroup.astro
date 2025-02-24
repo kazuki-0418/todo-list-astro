@@ -29,7 +29,6 @@ import TodoCard from "./TodoCard.astro";
 
     const todoService = new TodoService();
 
-    // Todoリストの表示を更新する関数
     function renderTodo(todo: Todo): string {
       return `
         <div class="todo-card">
@@ -49,22 +48,17 @@ import TodoCard from "./TodoCard.astro";
       `;
     }
 
-    // Todoリスト全体を更新する関数
     function renderTodos() {
       if (!todoList) return;
 
-      // LocalStorageからデータを読み込む
       const todos = todoContext.getTodos();
 
-      // 各Todoをレンダリング
       const todoElements = todos.map((todo) => renderTodo(todo)).join("");
       todoList.innerHTML = todoElements;
 
-      // イベントリスナーを追加
       addEventListeners();
     }
 
-    // ボタンのイベントリスナーを設定
     function addEventListeners() {
       const editButtons = document.querySelectorAll(".edit-button");
       const deleteButtons = document.querySelectorAll(".delete-button");
@@ -88,29 +82,23 @@ import TodoCard from "./TodoCard.astro";
       });
     }
 
-    // 編集処理
     function handleEdit(todoId: string) {
       console.log("Edit todo:", todoId);
-      // 編集モーダルを表示するなどの処理
     }
 
-    // 削除処理
     function handleDelete(todoId: string) {
       if (confirm("このTodoを削除しますか？")) {
         todoService.deleteTodo(todoId);
-        renderTodos(); // リストを再レンダリング
+        renderTodos();
       }
     }
 
-    // 初期レンダリング
     renderTodos();
 
-    // TodoContextの更新イベントをリッスン
     document.addEventListener("todosUpdated", () => {
       renderTodos();
     });
 
-    // Add Todoボタンのイベントリスナー
     const addTodoButton = document.getElementById("add-todo");
     if (addTodoButton) {
       addTodoButton.addEventListener("click", () => {

@@ -5,7 +5,6 @@ import "@styles/style.css";
 ---
 
 <form class="form-container" id="add-todo-form">
-  <!-- Name -->
   <div class="form-group">
     <label for="title">Title</label>
     <div class="name-inputs">
@@ -26,7 +25,6 @@ import "@styles/style.css";
     />
   </div>
 
-  <!-- Due Date -->
   <div class="form-group">
     <label for="dueDate">Due Date</label>
     <div class="due-date-input">
@@ -34,29 +32,27 @@ import "@styles/style.css";
     </div>
   </div>
 
-  <!-- Tags -->
   <div class="form-group">
     <label for="tags">Tags</label>
     <MultiSelect
       options={[
-        { value: "product-design", label: "Product Design" },
+        { value: "desktop-design", label: "Desktop Design" },
         { value: "mobile-design", label: "Mobile Design" },
-        { value: "ux-design", label: "UX Design" },
-        { value: "web-design", label: "Web Design" },
+        { value: "backend", label: "Backend" },
+        { value: "frontend", label: "Frontend" },
       ]}
       name="tags"
     />
   </div>
 
-  <!-- Assign To -->
   <div class="form-group">
     <label for="assignTo">Assign To</label>
     <MultiSelect
       options={[
-        { value: "Alice", label: "Alice" },
-        { value: "Bob", label: "Bob" },
-        { value: "Charlie", label: "Charlie" },
-        { value: "David", label: "David" },
+        { value: "Alana", label: "Alana" },
+        { value: "Chris", label: "Chris" },
+        { value: "Nana", label: "Nana" },
+        { value: "Kazuki", label: "Kazuki" },
       ]}
       name="assignTo"
     />
