@@ -67,9 +67,11 @@ import "@styles/style.css";
 <script>
   import { TodoCard } from "@components/TodoCard";
   import { TodoService } from "@services/todoService";
+import { handleDelete } from "@utils/handleDelete";
   import { handleEdit } from "@utils/handleEdit";
   import type { Todo } from "src/types/todo";
   const todoService = new TodoService();
+  const todoList = document.getElementById("todoList") as HTMLDivElement;
 
   const addTodo = async (event: SubmitEvent) => {
     event.preventDefault();
@@ -113,7 +115,6 @@ import "@styles/style.css";
   };
 
   const renderTodos = (todos: Todo[]) => {
-    const todoList = document.getElementById("todoList") as HTMLDivElement;
     todoList.innerHTML = "";
 
     const todoElements = todos.map((todo) => TodoCard(todo)).join("");
@@ -122,14 +123,10 @@ import "@styles/style.css";
   };
 
   function addEventListeners() {
-    const editButtons = document.querySelectorAll(".edit-button");
-    const deleteButtons = document.querySelectorAll(".delete-button");
+    const editButtons = todoList.querySelectorAll(".edit-button");
+    const deleteButtons = todoList.querySelectorAll(".delete-button");
 
     editButtons.forEach((button) => {
-      button.replaceWith(button.cloneNode(true));
-    });
-
-    document.querySelectorAll(".edit-button").forEach((button) => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
         const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
@@ -138,6 +135,18 @@ import "@styles/style.css";
         }
       });
     });
+
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
+        if (todoId) {
+          handleDelete(todoId);
+        }
+      });
+    });
+
+
   }
 
   const cancelButton = form.querySelector(

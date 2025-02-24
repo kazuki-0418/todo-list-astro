@@ -80,10 +80,10 @@ export class TodoService {
   }
 
   /** Delete a Todo */
-  deleteTodo(title: string): Todo[] {
+  deleteTodo(id: string): Todo[] {
     const updatedTodos = this.todoContext
       .getTodos()
-      .filter((todo) => todo.title !== title);
+      .filter((todo) => todo.id !== id);
 
     this.todoContext.setTodos(updatedTodos);
     this.saveTodosToStorage(updatedTodos);
