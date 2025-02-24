@@ -17,21 +17,21 @@ export const handleEdit = (todoId: string) => {
     showModal("update-todo-modal");
 
     const updateTodoForm = document.getElementById(
-      "update-todo-form"
+      "update-todo-form",
     ) as HTMLFormElement;
 
     const idInput = updateTodoForm.querySelector(
-      "#todo-id"
+      "#todo-id",
     ) as HTMLInputElement;
     if (idInput) {
       idInput.value = todo.id;
     }
     const titleInput = updateTodoForm.querySelector(
-      '[name="title"]'
+      '[name="title"]',
     ) as HTMLInputElement;
     if (titleInput) titleInput.value = todo.title;
     const dueDateInput = updateTodoForm.querySelector(
-      '[name="dueDate"]'
+      '[name="dueDate"]',
     ) as HTMLInputElement;
 
     const date = new Date(todo.dueDate);
@@ -42,7 +42,7 @@ export const handleEdit = (todoId: string) => {
     if (todo.tags) {
       todo.tags.forEach((tag) => {
         const checkbox = updateTodoForm.querySelector(
-          `[data-checkbox][value="${tag}"]`
+          `[data-checkbox][value="${tag}"]`,
         ) as HTMLInputElement;
 
         if (checkbox) {
@@ -55,7 +55,7 @@ export const handleEdit = (todoId: string) => {
     if (todo.assignedTo) {
       todo.assignedTo.forEach((assignee) => {
         const checkbox = updateTodoForm.querySelector(
-          `[data-checkbox][value="${assignee}"]`
+          `[data-checkbox][value="${assignee}"]`,
         ) as HTMLInputElement;
 
         if (checkbox) {
@@ -65,18 +65,18 @@ export const handleEdit = (todoId: string) => {
       });
     }
     const statusInput = updateTodoForm.querySelector(
-      '[name="status"]'
+      '[name="status"]',
     ) as HTMLInputElement;
 
     const statusSelectBox = updateTodoForm.querySelector(
-      "#select-box-status"
+      "#select-box-status",
     ) as HTMLDivElement;
 
     if (statusInput && statusSelectBox) {
       statusInput.value = todo.status;
 
       const selectedOption = updateTodoForm.querySelector(
-        `.option[data-value="${todo.status}"]`
+        `.option[data-value="${todo.status}"]`,
       ) as HTMLElement;
 
       if (selectedOption) {

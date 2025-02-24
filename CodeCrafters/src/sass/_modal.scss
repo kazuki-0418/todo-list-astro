@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @mixin input-style {
   width: -webkit-fill-available;
   padding: 10px;
@@ -37,8 +39,6 @@
     z-index: 1000;
     display: none;
   }
-
-
 
   .modal {
     position: fixed;
@@ -83,114 +83,122 @@
         }
       }
 
-    .form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      max-width: 500px;
-      margin: auto;
-    
-      .form-group {
+      .form-container {
         display: flex;
         flex-direction: column;
-        gap: 4px;
-    
-        label {
-          font-size: 14px;
-          font-weight: 600;
-          color: #333;
-        }
-    
-      }
-    
-      .name-inputs {
-        display: flex;
-        gap: 8px;
-    
-      >  input {
-          @include input-style; 
-          flex: 1;
-        }
-      }
-    
-      .due-date-input {
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-    
-        .icon {
-          padding: 10px;
-          background: #f1f1f1;
-          border-right: 1px solid #ccc;
-        }
-    
-       > input {
-          @include input-style; 
+        gap: 16px;
+        max-width: 500px;
+        margin: auto;
 
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+          }
         }
-      }
-    
-      .username-input {
-        display: flex;
-        align-items: center;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        overflow: hidden;
-    
-        .prefix {
+
+        .name-inputs {
+          display: flex;
+          gap: 8px;
+
+          > input {
+            @include input-style;
+            flex: 1;
+          }
+        }
+
+        .due-date-input {
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+
+          .icon {
+            padding: 10px;
+            background: #f1f1f1;
+            border-right: 1px solid #ccc;
+          }
+
+          > input {
+            @include input-style;
+          }
+        }
+
+        .username-input {
+          display: flex;
+          align-items: center;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          overflow: hidden;
+
+          .prefix {
+            padding: 10px;
+            background: #f1f1f1;
+            border-right: 1px solid #ccc;
+          }
+
+          input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            @include input-style;
+          }
+
+          .verified-icon {
+            padding: 10px;
+            color: #007bff;
+          }
+        }
+
+        .form-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 8px;
+
+          .submit-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: color.adjust($primary, $lightness: -20%);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: color.adjust($primary, $lightness: -30%);
+            }
+          }
+
+          .cancel-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #f1f1f1;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: #e1e1e1;
+            }
+          }
+        }
+
+        .cancel-button {
           padding: 10px;
-          background: #f1f1f1;
-          border-right: 1px solid #ccc;
-        }
-    
-        input {
-          flex: 1;
           border: none;
-          padding: 10px;
-          @include input-style; 
-
-        }
-    
-        .verified-icon {
-          padding: 10px;
-          color: #007bff;
-        }
-      }
-
-      .form-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-
-      .submit-button {
-        padding: 10px;
-        border: none;
-        border-radius: 6px;
-        background: darken($primary, 20%);
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-        &:hover {
-          background: darken($primary, 30%);
+          border-radius: 6px;
+          background: #f1f1f1;
+          color: #333;
+          font-size: 16px;
+          cursor: pointer;
+          &:hover {
+            background: #e1e1e1;
+          }
         }
       }
-
-      .cancel-button {
-        padding: 10px;
-        border: none;
-        border-radius: 6px;
-        background: #f1f1f1;
-        color: #333;
-        font-size: 16px;
-        cursor: pointer;
-        &:hover {
-          background: #e1e1e1;
-        }
-      }
-    }
-
-  }
     }
   }
 }
-  

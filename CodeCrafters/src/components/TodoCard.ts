@@ -7,7 +7,7 @@ export const TodoCard = (todo: Todo) => {
         <div class="title">${todo.title}</div>
         <div class="status">${todo.status}</div>
         <div class="due-date">${new Date(
-          todo.dueDate
+          todo.dueDate,
         ).toLocaleDateString()}</div>
         <div class="tags">${todo.tags.join(", ") || "None"}</div>
         <div class="assigned-to">${todo.assignedTo.join(", ") || "None"}</div>
