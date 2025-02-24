@@ -1,4 +1,4 @@
-import type { Todo } from "../types/todo";
+import type { Todo } from "src/types/todo";
 
 export class TodoContext {
   private static instance: TodoContext;

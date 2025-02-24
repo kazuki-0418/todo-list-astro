@@ -1,9 +1,9 @@
 ---
 // TodoGroup.astro
-import BaseModal from "./Modal/BaseModal.astro";
-import CreateTodo from "./Modal/Content/CreateTodo.astro";
-import DeleteTodo from "./Modal/Content/DeleteTodo.astro";
-import UpdateTodo from "./Modal/Content/UpdateTodo.astro";
+import BaseModal from "@components/Modal/BaseModal.astro";
+import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
+import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
+import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
 
 // Global type declaration for modalControls
 declare global {
@@ -38,10 +38,8 @@ declare global {
 </section>
 
 <script>
-  import { TodoCard } from "./TodoCard";
+  import { addEventListeners, TodoCard } from "./TodoCard";
   import { TodoContext } from "@contexts/todoContext";
-  import { handleDelete } from "@utils/handleDelete";
-  import { handleEdit } from "@utils/handleEdit";
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
@@ -55,7 +53,7 @@ declare global {
       const todoElements = todos.map((todo) => TodoCard(todo)).join("");
       todoList.innerHTML = todoElements;
 
-      addEventListeners();
+      addEventListeners(todoList);
     }
 
     function showModal(modalId: string) {
@@ -66,34 +64,6 @@ declare global {
       }
       modalControls[modalId].show();
     }
-
-    function addEventListeners() {
-      if(!todoList) return;
-      const editButtons = todoList.querySelectorAll(".edit-button");
-      const deleteButtons = todoList.querySelectorAll(".delete-button");
-
-      editButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-          e.preventDefault();
-          const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-          if (todoId) {
-            handleEdit(todoId);
-          }
-        });
-      });
-
-      deleteButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-          e.preventDefault();
-          const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-          if (todoId) {
-            handleDelete(todoId);
-          }
-        });
-      });
-    }
-
-   
 
     renderTodos();
 

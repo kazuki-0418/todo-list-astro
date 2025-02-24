@@ -1,5 +1,5 @@
 import { TodoContext } from "@contexts/todoContext";
-import type { Todo } from "../types/todo";
+import type { Todo } from "src/types/todo";
 
 export class TodoService {
   private todoContext: TodoContext;

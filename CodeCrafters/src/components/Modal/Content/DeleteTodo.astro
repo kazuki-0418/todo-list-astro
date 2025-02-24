@@ -6,7 +6,9 @@ import "@styles/style.css";
   <input type="hidden" name="id" id="todo-id" />
 
   <div class="delete-form-body">
-    <label class="delete-form-message">Are you sure you want to delete this task?</label>
+    <label class="delete-form-message"
+      >Are you sure you want to delete this task?</label
+    >
     <p id="todo-title" class="todo-title"></p>
   </div>
 
@@ -20,7 +22,7 @@ import "@styles/style.css";
   import { TodoService } from "@services/todoService";
   import type { Todo } from "src/types/todo";
   import { handleEdit } from "@utils/handleEdit";
-  import { TodoCard } from "@components/TodoCard";
+  import { addEventListeners, TodoCard } from "@components/TodoCard";
   import { handleDelete } from "@utils/handleDelete";
   const todoService = new TodoService();
   const todoList = document.getElementById("todoList") as HTMLDivElement;
@@ -52,37 +54,8 @@ import "@styles/style.css";
     const todoElements = todos.map((todo) => TodoCard(todo)).join("");
     todoList.innerHTML = todoElements;
 
-    addEventListeners();
+    addEventListeners(todoList);
   };
-
-  function addEventListeners() {
-    if(!todoList) return;
-    const editButtons = todoList.querySelectorAll(".edit-button");
-    const deleteButtons = todoList.querySelectorAll(".delete-button");
-
-    editButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-        if (todoId) {
-          handleEdit(todoId);
-        }
-      });
-    });
-
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-        if (todoId) {
-          handleDelete(todoId);
-        }
-      });
-    });
-    
-  }
-
-
 
   const cancelButton = form.querySelector(
     ".cancel-button",

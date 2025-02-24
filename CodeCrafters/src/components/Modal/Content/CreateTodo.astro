@@ -65,10 +65,8 @@ import "@styles/style.css";
 </form>
 
 <script>
-  import { TodoCard } from "@components/TodoCard";
+  import { addEventListeners, TodoCard } from "@components/TodoCard";
   import { TodoService } from "@services/todoService";
-import { handleDelete } from "@utils/handleDelete";
-  import { handleEdit } from "@utils/handleEdit";
   import type { Todo } from "src/types/todo";
   const todoService = new TodoService();
   const todoList = document.getElementById("todoList") as HTMLDivElement;
@@ -119,35 +117,8 @@ import { handleDelete } from "@utils/handleDelete";
 
     const todoElements = todos.map((todo) => TodoCard(todo)).join("");
     todoList.innerHTML = todoElements;
-    addEventListeners();
+    addEventListeners(todoList);
   };
-
-  function addEventListeners() {
-    const editButtons = todoList.querySelectorAll(".edit-button");
-    const deleteButtons = todoList.querySelectorAll(".delete-button");
-
-    editButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-        if (todoId) {
-          handleEdit(todoId);
-        }
-      });
-    });
-
-    deleteButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-        if (todoId) {
-          handleDelete(todoId);
-        }
-      });
-    });
-
-
-  }
 
   const cancelButton = form.querySelector(
     ".cancel-button",
