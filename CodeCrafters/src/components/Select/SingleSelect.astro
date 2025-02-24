@@ -43,10 +43,10 @@ const defaultPlaceholder = `Select an ${category}`;
       this.container = container;
       this.selectBox = container.querySelector(".select-box") as HTMLDivElement;
       this.optionsList = container.querySelector(
-        ".options"
+        ".options",
       ) as HTMLUListElement;
       this.hiddenInput = container.querySelector(
-        "input[type='hidden']"
+        "input[type='hidden']",
       ) as HTMLInputElement;
       this.defaultText =
         this.selectBox.dataset.defaultText || "Select an option";
@@ -57,7 +57,7 @@ const defaultPlaceholder = `Select an ${category}`;
     private initialize() {
       this.selectBox.addEventListener(
         "click",
-        this.handleSelectBoxClick.bind(this)
+        this.handleSelectBoxClick.bind(this),
       );
 
       const options = this.optionsList.querySelectorAll(".option");
@@ -129,7 +129,7 @@ const defaultPlaceholder = `Select an ${category}`;
     });
 
     const cancelButton = document.querySelector(
-      ".cancel-button"
+      ".cancel-button",
     ) as HTMLButtonElement;
     if (cancelButton) {
       const originalClickHandler = cancelButton.onclick;

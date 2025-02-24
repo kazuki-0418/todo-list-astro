@@ -54,17 +54,17 @@ const { options, name } = Astro.props;
     constructor(container: HTMLElement) {
       this.container = container;
       this.selectedTags = container.querySelector(
-        "[data-selected-tags]"
+        "[data-selected-tags]",
       ) as HTMLElement;
       this.searchBox = container.querySelector(
-        "[data-search-box]"
+        "[data-search-box]",
       ) as HTMLInputElement;
       this.optionsList = container.querySelector(
-        "[data-options-list]"
+        "[data-options-list]",
       ) as HTMLElement;
       this.checkboxes = this.optionsList.querySelectorAll("[data-checkbox]");
       this.hiddenInputsContainer = container.querySelector(
-        "[data-hidden-inputs]"
+        "[data-hidden-inputs]",
       ) as HTMLElement;
       this.name = container.dataset.name || "";
 
@@ -74,7 +74,7 @@ const { options, name } = Astro.props;
     private initialize() {
       this.container.addEventListener(
         "click",
-        this.handleContainerClick.bind(this)
+        this.handleContainerClick.bind(this),
       );
 
       this.checkboxes.forEach((checkbox) => {
@@ -126,7 +126,7 @@ const { options, name } = Astro.props;
     private handleOptionClick(event: Event) {
       const option = event.currentTarget as HTMLElement;
       const checkbox = option.querySelector(
-        "input[type='checkbox']"
+        "input[type='checkbox']",
       ) as HTMLInputElement;
       const target = event.target as Element;
 
@@ -226,7 +226,7 @@ const { options, name } = Astro.props;
     });
 
     const cancelButton = document.querySelector(
-      ".cancel-button"
+      ".cancel-button",
     ) as HTMLButtonElement;
     if (cancelButton) {
       const originalClickHandler = cancelButton.onclick;

@@ -104,7 +104,7 @@ import TodoCard from "./TodoCard.astro";
       addTodoButton.addEventListener("click", () => {
         const modal = document.querySelector(".modal") as HTMLDivElement;
         const modalOverlay = document.querySelector(
-          ".modal-overlay"
+          ".modal-overlay",
         ) as HTMLDivElement;
         if (modal && modalOverlay) {
           modal.style.display = "flex";

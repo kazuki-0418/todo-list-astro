@@ -137,7 +137,7 @@ import "@styles/style.css";
   };
 
   const cancelButton = document.querySelector(
-    ".cancel-button"
+    ".cancel-button",
   ) as HTMLButtonElement;
   cancelButton.addEventListener("click", () => {
     closeModal();
@@ -147,7 +147,7 @@ import "@styles/style.css";
   const closeModal = () => {
     const modal = document.querySelector(".modal") as HTMLDivElement;
     const modalOverlay = document.querySelector(
-      ".modal-overlay"
+      ".modal-overlay",
     ) as HTMLDivElement;
 
     modal.style.display = "none";
