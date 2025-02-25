@@ -3,118 +3,72 @@ import "@styles/style.css";
 
 ---
 
-<div class="todo-detail-container">
-  <h1 class="todo-title" id="todoTitle">プロジェクト計画書の作成</h1>
+<div class="todo-detail-container" id="todoDetail">
+  <h1 class="todo-title" id="todoTitle"></h1>
 
   <div class="detail-section">
     <div class="detail-row">
-      <div class="detail-label">ステータス:</div>
+      <div class="detail-label">Status:</div>
       <div class="detail-value">
         <span class="status-badge status-in-progress" id="todoStatus"
-          >進行中</span
-        >
+          ></span>
       </div>
     </div>
 
     <div class="detail-row">
-      <div class="detail-label">期限日:</div>
-      <div class="detail-value" id="todoDueDate">2025-03-15</div>
+      <div class="detail-label">Due Date:</div>
+      <div class="detail-value" id="todoDueDate"></div>
     </div>
 
     <div class="detail-row">
-      <div class="detail-label">タグ:</div>
+      <div class="detail-label">Tag:</div>
       <div class="detail-value">
         <div class="tag-list" id="todoTags">
-          <span class="tag">プロジェクト</span>
-          <span class="tag">書類</span>
-          <span class="tag">重要</span>
+          <span class="tag"></span>
         </div>
       </div>
     </div>
 
     <div class="detail-row">
-      <div class="detail-label">担当者:</div>
+      <div class="detail-label">Assign To:</div>
       <div class="detail-value">
         <div class="assignee-list" id="todoAssignees">
-          <div class="assignee">
-            <div class="assignee-avatar">TK</div>
-            <span>田中健太</span>
-          </div>
-          <div class="assignee">
-            <div class="assignee-avatar">YS</div>
-            <span>山田さくら</span>
-          </div>
         </div>
       </div>
     </div>
 
-    <div class="detail-row">
-      <div class="detail-label">メモ:</div>
+    <!-- Todo: Add next time -->
+    <!-- <div class="detail-row">
+      <div class="detail-label">Note:</div>
       <div class="detail-value">
         <div class="notes-section" id="todoNotes">
-          経営企画部からの要件を確認して、3月10日までにドラフトを作成すること。
-          最終版は3月15日の会議前に完成させる必要あり。
+          
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="dates-section">
-      <div id="todoCreatedAt">作成日: 2025-02-20 10:30</div>
-      <div id="todoUpdatedAt">更新日: 2025-02-22 15:45</div>
+      <div id="todoCreatedAt"></div>
+      <div id="todoUpdatedAt"></div>
     </div>
   </div>
 </div>
 
 <script>
-  import { TodoService } from "@services/todoService";
-  import type { Todo } from "src/types/todo";
-  import { addEventListeners, TodoCard } from "@components/TodoCard";
-  const todoService = new TodoService();
-  const todoList = document.getElementById("todoList") as HTMLDivElement;
+import { TodoModalType } from "@utils/todoModalType";
 
-  const deleteTodo = async (event: SubmitEvent) => {
-    event.preventDefault();
-    const form = document.getElementById("delete-todo-form") as HTMLFormElement;
-    const formData = new FormData(form);
-    const id = formData.get("id") as string;
-
-    const updatedTodos = todoService.deleteTodo(id);
-    renderTodos(updatedTodos);
-
-    closeModal();
-    formReset();
-  };
-
-  const form = document.getElementById("delete-todo-form") as HTMLFormElement;
-  form.addEventListener("submit", deleteTodo);
-
-  const formReset = () => {
-    const form = document.getElementById("delete-todo-form") as HTMLFormElement;
-    form.reset();
-  };
-
-  const renderTodos = (todos: Todo[]) => {
-    todoList.innerHTML = "";
-
-    const todoElements = todos.map((todo) => TodoCard(todo)).join("");
-    todoList.innerHTML = todoElements;
-
-    addEventListeners(todoList);
-  };
-
-  const cancelButton = form.querySelector(
+  const cancelButton = document.getElementById("todoDetail")?.querySelector(
     ".cancel-button",
   ) as HTMLButtonElement;
   if (cancelButton) {
     cancelButton.addEventListener("click", () => {
       closeModal();
-      formReset();
     });
   }
 
   const closeModal = () => {
     const modalControls = window.modalControls;
     if (!modalControls) return;
-    modalControls["delete-todo-modal"].close();
+    modalControls[TodoModalType.VIEW].close();
   };
 </script>

@@ -1,10 +1,11 @@
 import { TodoContext } from "@contexts/todoContext";
+import { TodoModalType } from "./todoModalType";
 
 export const handleView = (todoId: string) => {
   const todoContext = TodoContext.getInstance();
   const todo = todoContext.getTodoById(todoId);
 
-  function showModal(modalId: string) {
+  function showModal(modalId: TodoModalType) {
     const modalControls = window.modalControls;
     if (!modalControls) {
       console.error("modalControls not found");
@@ -14,10 +15,10 @@ export const handleView = (todoId: string) => {
   }
 
   if (todo) {
-    showModal("view-todo-modal");
+    showModal(TodoModalType.VIEW);
 
-    const viewTodoDetail = document.querySelector(
-      "todo-detail-container",
+    const viewTodoDetail = document.getElementById(
+      "todoDetail",
     ) as HTMLDivElement;
 
     const todoTitle = viewTodoDetail.querySelector(
@@ -50,25 +51,27 @@ export const handleView = (todoId: string) => {
     }
 
     const todoAssignedTo = viewTodoDetail.querySelector(
-      "#todoAssignedTo",
+      "#todoAssignees",
     ) as HTMLParagraphElement;
     if (todoAssignedTo) {
       todoAssignedTo.innerText = todo.assignedTo.join(", ") || "None";
     }
 
-    const todoNotes = viewTodoDetail.querySelector(
-      "#todoNotes",
-    ) as HTMLParagraphElement;
-    if (todoNotes) {
-      todoNotes.innerText = todo.notes || "None";
-    }
+    // const todoNotes = viewTodoDetail.querySelector(
+    //   "#todoNotes",
+    // ) as HTMLParagraphElement;
+    // if (todoNotes) {
+    //   todoNotes.innerText = todo.notes || "None";
+    // }
 
     const todoCreatedAt = viewTodoDetail.querySelector(
       "#todoCreatedAt",
     ) as HTMLParagraphElement;
 
     if (todoCreatedAt) {
-      todoCreatedAt.innerText = new Date(todo.createdAt).toLocaleDateString();
+      todoCreatedAt.innerText = `Created At:${new Date(
+        todo.createdAt,
+      ).toLocaleDateString()}`;
     }
 
     const todoUpdatedAt = viewTodoDetail.querySelector(
@@ -76,7 +79,7 @@ export const handleView = (todoId: string) => {
     ) as HTMLParagraphElement;
 
     if (todoUpdatedAt) {
-      todoUpdatedAt.innerText = new Date(todo.updatedAt).toLocaleDateString();
+      todoUpdatedAt.innerText = `Updated At:${new Date(todo.updatedAt).toLocaleDateString()}`;
     }
   }
 };

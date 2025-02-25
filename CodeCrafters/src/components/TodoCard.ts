@@ -1,11 +1,13 @@
 import { handleDelete } from "@utils/handleDelete";
 import { handleEdit } from "@utils/handleEdit";
+import { handleView } from "@utils/handleView";
 import type { Todo } from "src/types/todo";
 
 export function addEventListeners(todoList: HTMLElement | null) {
   if (!todoList) return;
   const editButtons = todoList.querySelectorAll(".edit-button");
   const deleteButtons = todoList.querySelectorAll(".delete-button");
+  const viewButtons = todoList.querySelectorAll(".todo-card");
 
   editButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
@@ -26,11 +28,21 @@ export function addEventListeners(todoList: HTMLElement | null) {
       }
     });
   });
+
+  viewButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const todoId = (e.currentTarget as HTMLElement).dataset.todoId;
+      if (todoId) {
+        handleView(todoId);
+      }
+    });
+  });
 }
 
 export const TodoCard = (todo: Todo) => {
   return `
-    <div class="todo-card">
+    <div class="todo-card"  data-todo-id="${todo.id}">
       <div class="todo-container">
         <div class="title">${todo.title}</div>
         <div class="status">${todo.status}</div>
