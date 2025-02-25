@@ -1,5 +1,5 @@
 import { TodoContext } from "@contexts/todoContext";
-import type { Todo } from "../types/todo";
+import type { Todo } from "src/types/todo";
 
 export class TodoService {
   private todoContext: TodoContext;
@@ -80,10 +80,10 @@ export class TodoService {
   }
 
   /** Delete a Todo */
-  deleteTodo(title: string): Todo[] {
+  deleteTodo(id: string): Todo[] {
     const updatedTodos = this.todoContext
       .getTodos()
-      .filter((todo) => todo.title !== title);
+      .filter((todo) => todo.id !== id);
 
     this.todoContext.setTodos(updatedTodos);
     this.saveTodosToStorage(updatedTodos);
