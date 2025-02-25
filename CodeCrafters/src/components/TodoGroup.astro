@@ -80,6 +80,7 @@ declare global {
 </section>
 
 <script>
+  let renderTodos : Function
   import { TodoCard } from "./TodoCard";
   import { TodoContext } from "@contexts/todoContext";
   import { TodoService } from "@services/todoService";
@@ -93,7 +94,7 @@ declare global {
 
     const todoService = new TodoService();
 
-    function renderTodos() {
+  renderTodos = ()=> {
       if (!todoList) return;
       if (!inProgress) return;
       if (!finish) return;
@@ -175,38 +176,40 @@ declare global {
       });
     }
     })
-
-    const todos = document.querySelectorAll(".todo-card")
-    todos.forEach(todo => {
-
-      if(todo){
-        const parent = todo.parentElement
-        todo.addEventListener("dragend",()=>{
-        if(todo.parentElement !== parent){
-          changeStatus(todoContext, todo, todoService)
-        }
-      }) 
-      }
-    })
+    setInterval(() => {
+      const todos = document.querySelectorAll(".todo-card")
+      todos.forEach(todo => {
+          const parent = todo.parentElement
+          todo.addEventListener("dragend",()=>{
+              if(todo.parentElement !== parent){
+                console.log(todo.id)
+                changeStatus(todoContext, todo, todoService)
+              }
+          }) 
+      })
+    },10);
 });
+
+
 
 function changeStatus(todoContext: TodoContext, todo: Element, todoService: TodoService) {
     const listTodos = todoContext.getTodos()
     listTodos.forEach(todoItem =>{
       if(todoItem.id === todo.id){
-        console.log(todo.parentElement?.id)
         if(todo.parentElement?.id === "todo-done"){
-          todoService.toggleTodoStatus(todoItem.title, "done")
+          todoService.toggleTodoStatus(todoItem.id, "done")
         }
         if(todo.parentElement?.id=== "in-progress"){
-          todoService.toggleTodoStatus(todoItem.title, "in-progress")
+          todoService.toggleTodoStatus(todoItem.id, "in-progress")
         }
         if(todo.parentElement?.id === "todo-add"){
-          todoService.toggleTodoStatus(todoItem.title, "todo")
+          todoService.toggleTodoStatus(todoItem.id, "todo")
         }
       } 
     })
+    renderTodos()
 }
+
 </script>
 
 <script is:inline>
@@ -222,7 +225,6 @@ function changeStatus(todoContext: TodoContext, todo: Element, todoService: Todo
     function dropMe(ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
-        console.log(data)
         ev.target.appendChild(document.getElementById(data));
     }
     
