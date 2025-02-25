@@ -1,7 +1,7 @@
 @import "variables";
 
 .todo-card {
-    // <<<<<<<HEADbackground: #f8f8f8;
+    background: #f8f8f8;
     //メインのグレー背景border-radius: 12px;
     padding: 16px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -95,7 +95,6 @@
             }
         }
     }
-// =======
   background: #f8f8f8; // メインのグレー背景
   border-radius: 12px;
   padding: 16px;
@@ -159,5 +158,4 @@
     margin-top: 10px;
     font-size: 14px;
   }
-// >>>>>>> 4fa64c1f0f23afbc60e752c67dcd7c2fe72a791c
 }
