@@ -1,4 +1,6 @@
 import { TodoContext } from "@contexts/todoContext";
+import { TodoModalType } from "./todoModalType";
+import { TodoFormType } from "./todoFormType";
 
 export const handleEdit = (todoId: string) => {
   const todoContext = TodoContext.getInstance();
@@ -14,10 +16,10 @@ export const handleEdit = (todoId: string) => {
   }
 
   if (todo) {
-    showModal("update-todo-modal");
+    showModal(TodoModalType.UPDATE);
 
     const updateTodoForm = document.getElementById(
-      "update-todo-form",
+      TodoFormType.UPDATE,
     ) as HTMLFormElement;
 
     const idInput = updateTodoForm.querySelector(
