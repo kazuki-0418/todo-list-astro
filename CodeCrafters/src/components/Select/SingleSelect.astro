@@ -44,6 +44,7 @@ const defaultPlaceholder = `Select an ${category}`;
     private hiddenInput: HTMLInputElement;
     private container: HTMLElement;
     private defaultText: string;
+    private defaultValue: string;
 
     constructor(container: HTMLElement) {
       this.container = container;
@@ -56,6 +57,7 @@ const defaultPlaceholder = `Select an ${category}`;
       ) as HTMLInputElement;
       this.defaultText =
         this.selectBox.dataset.defaultText || "Select an option";
+      this.defaultValue = container.dataset.defaultValue || "";
 
       this.initialize();
     }
@@ -116,8 +118,22 @@ const defaultPlaceholder = `Select an ${category}`;
     }
 
     public reset() {
-      this.selectBox.textContent = this.defaultText;
-      this.hiddenInput.value = "";
+      if (this.defaultValue) {
+        const defaultOption = Array.from(this.optionsList.querySelectorAll('.option'))
+          .find(opt => (opt as HTMLElement).dataset.value === this.defaultValue);
+        
+        if (defaultOption) {
+          this.selectBox.textContent = (defaultOption as HTMLElement).dataset.label || this.defaultText;
+          this.hiddenInput.value = this.defaultValue;
+        } else {
+          this.selectBox.textContent = this.defaultText;
+          this.hiddenInput.value = "";
+        }
+      } else {
+        this.selectBox.textContent = this.defaultText;
+        this.hiddenInput.value = "";
+      }
+      
       this.optionsList.classList.remove("active");
     }
   }

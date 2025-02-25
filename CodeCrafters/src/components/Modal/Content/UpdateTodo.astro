@@ -29,13 +29,6 @@ import { TodoFormType } from "@utils/todoFormType";
   </div>
 
   <div class="form-group">
-    <label>Due Date</label>
-    <div class="due-date-input">
-      <input type="date" id="dueDate" name="dueDate" />
-    </div>
-  </div>
-
-  <div class="form-group">
     <label>Tags</label>
     <MultiSelect
       options={[
@@ -60,6 +53,15 @@ import { TodoFormType } from "@utils/todoFormType";
       name="assignTo"
     />
   </div>
+
+
+  <div class="form-group">
+    <label>Due Date</label>
+    <div class="due-date-input">
+      <input type="date" id="dueDate" name="dueDate" />
+    </div>
+  </div>
+
 
   <div class="form-footer">
     <button type="reset" class="cancel-button">Cancel</button>
