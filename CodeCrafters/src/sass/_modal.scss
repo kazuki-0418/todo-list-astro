@@ -1,4 +1,5 @@
 @use "sass:color";
+@import "variables";
 
 @mixin input-style {
   width: -webkit-fill-available;
@@ -198,6 +199,179 @@
             background: #e1e1e1;
           }
         }
+      }
+
+      .delete-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .delete-form-body {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+
+          .delete-form-message {
+            font-size: 16px;
+          }
+
+          .todo-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: auto;
+          }
+        }
+        .delete-form-footer {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+
+          .delete-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: $error;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: $error;
+            }
+          }
+
+          .cancel-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #f1f1f1;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: #e1e1e1;
+            }
+          }
+        }
+      }
+
+      .todo-detail-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .todo-title {
+          font-size: 1.4rem;
+          font-weight: 600;
+          word-break: break-word;
+          margin-bottom: 8px;
+        }
+
+        .detail-section {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          .detail-row {
+            display: flex;
+            align-items: flex-start;
+
+            .detail-label {
+              min-width: 100px;
+              color: #555;
+              font-weight: 500;
+              font-size: 14px;
+            }
+
+            .detail-value {
+              flex: 1;
+
+              // ステータス用のバッジ
+              .status-badge {
+                display: inline-block;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 0.85rem;
+                font-weight: 500;
+
+                &.status-todo {
+                  background-color: #e9ecef;
+                  color: #495057;
+                }
+                &.status-in-progress {
+                  background-color: #cff4fc;
+                  color: #055160;
+                }
+                &.status-done {
+                  background-color: #d1e7dd;
+                  color: #0f5132;
+                }
+                &.status-cancelled {
+                  background-color: #f8d7da;
+                  color: #842029;
+                }
+              }
+
+              // タグリスト内のタグ
+              .tag-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+
+                .tag {
+                  background-color: #f0f0f0;
+                  color: #333;
+                  padding: 4px 8px;
+                  border-radius: 16px;
+                  font-size: 0.85rem;
+                }
+              }
+
+              // 担当者リストのスタイル
+              .assignee-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+
+                .assignee {
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+
+                  .assignee-avatar {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background-color: #6c757d;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                  }
+                }
+              }
+
+              // メモ用のセクション
+              .notes-section {
+                background-color: #f9f9f9;
+                border-radius: 6px;
+                padding: 12px;
+                white-space: pre-wrap;
+                word-break: break-word;
+                font-size: 14px;
+              }
+            }
+          } // .detail-row
+
+          .dates-section {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #6c757d;
+            text-align: right;
+          }
+        } // .detail-section
       }
     }
   }
