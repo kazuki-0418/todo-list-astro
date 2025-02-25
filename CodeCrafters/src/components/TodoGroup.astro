@@ -21,14 +21,14 @@ declare global {
 <!-- <section class="main-container">
   <div class="Board">
     <div>
-      <h2>Todo List</h2>
+      <h2>Task List</h2>
       <div id="todoList"></div>
-      <button id="add-todo">Add Todo</button>
+      <button id="add-todo">Add Task</button>
     </div>
-    <BaseModal title={"Create Todo"} id="create-todo-modal">
+    <BaseModal title={"Create Task"} id="create-todo-modal">
       <CreateTodo />
     </BaseModal>
-    <BaseModal title={"Update Todo"} id="update-todo-modal">
+    <BaseModal title={"Update Task"} id="update-todo-modal">
       <UpdateTodo />
     </BaseModal>
   </div>
@@ -159,7 +159,7 @@ declare global {
     }
 
     function handleDelete(todoId: string) {
-      if (confirm("Are you sure you want to delete this todo?")) {
+      if (confirm("Are you sure you want to delete this Task?")) {
         todoService.deleteTodo(todoId);
         renderTodos();
       }

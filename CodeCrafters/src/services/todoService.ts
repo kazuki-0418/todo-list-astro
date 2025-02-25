@@ -69,7 +69,7 @@ export class TodoService {
       .map((todo) =>
         todo.title === title
           ? { ...todo, status: newStatus, updatedAt: new Date() }
-          : todo
+          : todo,
       );
 
     this.todoContext.setTodos(updatedTodos);

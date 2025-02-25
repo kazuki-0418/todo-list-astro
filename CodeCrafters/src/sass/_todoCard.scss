@@ -1,16 +1,20 @@
 @import "variables";
 
 .todo-card {
-    background: #f8f8f8; // メインのグレー背景
-    border-radius: 12px;
+    // <<<<<<<HEADbackground: #f8f8f8;
+    //メインのグレー背景border-radius: 12px;
     padding: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // 軽いシャドウで浮かせる
-    border-left: 5px solid $primary; // ✅ アクセントカラー (紫)
-    font-family: "Poppins", sans-serif;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    //軽いシャドウで浮かせるborder-left: 5px solid $primary;
+    //✅アクセントカラー(紫)font-family: "Poppins", sans-serif;
     margin: 1em 0;
-  
     &:hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    -webkit-transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    -moz-transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    -ms-transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    -o-transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
@@ -91,4 +95,69 @@
             }
         }
     }
+// =======
+  background: #f8f8f8; // メインのグレー背景
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // 軽いシャドウで浮かせる
+  border-left: 5px solid $primary; // ✅ アクセントカラー (紫)
+  font-family: "Poppins", sans-serif;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+
+  strong {
+    color: $primary; // ✅ アクセントカラー (紫)
+  }
+
+  .tag-list,
+  .assigned-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .tag,
+  .assigned {
+    background: $primary;
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  .meta {
+    font-size: 12px;
+    color: #777;
+    margin-top: 8px;
+  }
+
+  .notes {
+    background: rgba(106, 13, 173, 0.1);
+    padding: 8px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+// >>>>>>> 4fa64c1f0f23afbc60e752c67dcd7c2fe72a791c
 }
