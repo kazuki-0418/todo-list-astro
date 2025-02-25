@@ -1,3 +1,5 @@
+@import "variables";
+
 .todo-card {
     background: #f8f8f8; // メインのグレー背景
     border-radius: 12px;
@@ -6,6 +8,7 @@
     border-left: 5px solid $primary; // ✅ アクセントカラー (紫)
     font-family: "Poppins", sans-serif;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    margin: 1em 0;
   
     &:hover {
       transform: translateY(-5px);
@@ -62,3 +65,30 @@
     }
   }
   
+
+.todocard{
+    width: 22em;
+    margin: 1em auto;
+    background-color: $white;
+    border-radius: 10px;
+    height: auto;
+    .todocard-container{
+        padding: 1em;
+        height: auto; 
+        .title{
+            margin: .3em 0;
+        }
+    }
+    .options-TodoCard{
+        width: 100%;
+        padding: .5em 0;
+        .options{
+            margin-left: 88%;
+            max-width: 100%;
+            width: 8%;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}

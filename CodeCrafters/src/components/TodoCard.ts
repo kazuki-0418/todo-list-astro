@@ -2,7 +2,7 @@ import type { Todo } from "src/types/todo";
 
 export const TodoCard = (todo: Todo) => {
   return `
-    <div class="todo-card">
+    <div id="${todo.id}" class="todo-card" draggable="true"  ondragstart="drag(event)" ondragover="noAllowDrop(event)">
       <div class="todo-container">
         <div class="title">${todo.title}</div>
         <div class="status">${todo.status}</div>
