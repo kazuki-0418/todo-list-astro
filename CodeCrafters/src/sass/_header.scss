@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     gap: 2rem;
+    position: relative;
   }
 
   .search-container {
@@ -35,6 +36,36 @@
         background-color 0.3s,
         color 0.3s,
         border-color 0.3s;
+    }
+  }
+
+  #autocomplete-results {
+    position: absolute;
+    top: 100%;
+    left: 19%;
+    width: 76%;
+    margin-top: 5px;
+    padding: 0.5rem;
+    list-style: none;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--background-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    display: none;
+
+    .autocomplete-item {
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      border-radius: 6px;
+
+      &:hover {
+        background: var(--hover-color);
+      }
     }
   }
 
@@ -64,4 +95,15 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+// Set the theme based on the data-theme attribute
+:root {
+  --border-color: #ccc;
+  --hover-color: #f0f0f0;
+}
+
+[data-theme="dark"] {
+  --border-color: #333333;
+  --hover-color: #333333;
 }
