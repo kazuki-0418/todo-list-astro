@@ -1,1 +1,65 @@
-<h1>Header here</h1>
+---
+import { RiFileList3Line } from "react-icons/ri";
+import { IoSearch } from "react-icons/io5";
+import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
+---
+
+<div class="header-container">
+  <div class="header-left">
+    <RiFileList3Line size="2em" color="#87cefa" />
+    <div class="search-container">
+      <IoSearch size="2em" />
+      <input type="text" id="search-input" class="search-input" placeholder="Search" autocomplete="off" />
+    </div>
+    <ul id="autocomplete-results"></ul>
+  </div>
+  <button
+    id="theme-toggle-button"
+    aria-label="Toggle theme"
+    class="theme-toggle-btn"
+  >
+    <span id="sun-icon">
+      <IoSunnyOutline />
+    </span>
+    <span id="moon-icon" class="moon-icon">
+      <IoMoonOutline color="#ffffff" />
+    </span>
+  </button>
+</div>
+
+<script type="module" src="/src/scripts/autocomplete.ts"></script>
+<script type="module" lang="ts">
+  document.addEventListener("DOMContentLoaded", () => {
+    const themeToggleButton = document.getElementById("theme-toggle-button");
+    const sunIcon = document.getElementById("sun-icon");
+    const moonIcon = document.getElementById("moon-icon");
+
+    const currentTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", currentTheme);
+
+    if (currentTheme === "light") {
+      sunIcon.style.display = "block";
+      moonIcon.style.display = "none";
+    } else {
+      sunIcon.style.display = "none";
+      moonIcon.style.display = "block";
+    }
+
+    themeToggleButton.addEventListener("click", () => {
+      const newTheme =
+        document.documentElement.getAttribute("data-theme") === "light"
+          ? "dark"
+          : "light";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+
+      if (newTheme === "light") {
+        sunIcon.style.display = "block";
+        moonIcon.style.display = "none";
+      } else {
+        sunIcon.style.display = "none";
+        moonIcon.style.display = "block";
+      }
+    });
+  });
+</script>
