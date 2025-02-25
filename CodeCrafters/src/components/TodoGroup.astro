@@ -4,6 +4,7 @@ import BaseModal from "@components/Modal/BaseModal.astro";
 import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
 import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
 import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
+import { TodoModalType } from "@utils/todoModalType";
 
 // Global type declaration for modalControls
 declare global {
@@ -25,13 +26,13 @@ declare global {
       <div id="todoList"></div>
       <button id="add-todo">Add Task</button>
     </div>
-    <BaseModal title={"Create Task"} id="create-todo-modal">
+    <BaseModal title={"Create Task"} id={TodoModalType.CREATE}>
       <CreateTodo />
     </BaseModal>
-    <BaseModal title={"Update Task"} id="update-todo-modal">
+    <BaseModal title={"Update Task"} id={TodoModalType.UPDATE}>
       <UpdateTodo />
     </BaseModal>
-    <BaseModal title={"Delete Task"} id="delete-todo-modal">
+    <BaseModal title={"Delete Task"} id={TodoModalType.DELETE}>
       <DeleteTodo />
     </BaseModal>
   </div>
@@ -40,6 +41,7 @@ declare global {
 <script>
   import { addEventListeners, TodoCard } from "./TodoCard";
   import { TodoContext } from "@contexts/todoContext";
+  import { TodoModalType } from "@utils/todoModalType";
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
@@ -70,7 +72,7 @@ declare global {
     const addTodoButton = document.getElementById("add-todo");
     if (addTodoButton) {
       addTodoButton.addEventListener("click", () => {
-        showModal("create-todo-modal");
+        showModal(TodoModalType.CREATE);
       });
     }
   });

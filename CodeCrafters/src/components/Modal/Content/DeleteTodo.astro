@@ -1,8 +1,9 @@
 ---
 import "@styles/style.css";
+import { TodoFormType } from "@utils/todoFormType";
 ---
 
-<form class="delete-form" id="delete-todo-form">
+<form class="delete-form" id={TodoFormType.DELETE}>
   <input type="hidden" name="id" id="todo-id" />
 
   <div class="delete-form-body">
@@ -21,15 +22,18 @@ import "@styles/style.css";
 <script>
   import { TodoService } from "@services/todoService";
   import type { Todo } from "src/types/todo";
-  import { handleEdit } from "@utils/handleEdit";
   import { addEventListeners, TodoCard } from "@components/TodoCard";
-  import { handleDelete } from "@utils/handleDelete";
+  import { TodoFormType } from "@utils/todoFormType";
+  import { TodoModalType } from "@utils/todoModalType";
+
   const todoService = new TodoService();
   const todoList = document.getElementById("todoList") as HTMLDivElement;
 
   const deleteTodo = async (event: SubmitEvent) => {
     event.preventDefault();
-    const form = document.getElementById("delete-todo-form") as HTMLFormElement;
+    const form = document.getElementById(
+      TodoFormType.DELETE,
+    ) as HTMLFormElement;
     const formData = new FormData(form);
     const id = formData.get("id") as string;
 
@@ -40,11 +44,13 @@ import "@styles/style.css";
     formReset();
   };
 
-  const form = document.getElementById("delete-todo-form") as HTMLFormElement;
+  const form = document.getElementById(TodoFormType.DELETE) as HTMLFormElement;
   form.addEventListener("submit", deleteTodo);
 
   const formReset = () => {
-    const form = document.getElementById("delete-todo-form") as HTMLFormElement;
+    const form = document.getElementById(
+      TodoFormType.DELETE,
+    ) as HTMLFormElement;
     form.reset();
   };
 
@@ -70,6 +76,6 @@ import "@styles/style.css";
   const closeModal = () => {
     const modalControls = window.modalControls;
     if (!modalControls) return;
-    modalControls["delete-todo-modal"].close();
+    modalControls[TodoModalType.DELETE].close();
   };
 </script>

@@ -2,9 +2,10 @@
 import MultiSelect from "@components/Select/MultiSelect.astro";
 import SingleSelect from "@components/Select/SingleSelect.astro";
 import "@styles/style.css";
+import { TodoFormType } from "@utils/todoFormType";
 ---
 
-<form class="form-container" id="add-todo-form">
+<form class="form-container" id={TodoFormType.ADD}>
   <div class="form-group">
     <label>Title</label>
     <div class="name-inputs">
@@ -68,13 +69,16 @@ import "@styles/style.css";
   import { addEventListeners, TodoCard } from "@components/TodoCard";
   import { TodoService } from "@services/todoService";
   import type { Todo } from "src/types/todo";
+  import { TodoFormType } from "@utils/todoFormType";
+  import { TodoModalType } from "@utils/todoModalType";
+
   const todoService = new TodoService();
   const todoList = document.getElementById("todoList") as HTMLDivElement;
 
   const addTodo = async (event: SubmitEvent) => {
     event.preventDefault();
 
-    const form = document.getElementById("add-todo-form") as HTMLFormElement;
+    const form = document.getElementById(TodoFormType.ADD) as HTMLFormElement;
     const formData = new FormData(form);
 
     const title = formData.get("title") as string;
@@ -104,11 +108,11 @@ import "@styles/style.css";
     formReset();
   };
 
-  const form = document.getElementById("add-todo-form") as HTMLFormElement;
+  const form = document.getElementById(TodoFormType.ADD) as HTMLFormElement;
   form.addEventListener("submit", addTodo);
 
   const formReset = () => {
-    const form = document.getElementById("add-todo-form") as HTMLFormElement;
+    const form = document.getElementById(TodoFormType.ADD) as HTMLFormElement;
     form.reset();
   };
 
@@ -131,6 +135,6 @@ import "@styles/style.css";
   const closeModal = () => {
     const modalControls = window.modalControls;
     if (!modalControls) return;
-    modalControls["create-todo-modal"].close();
+    modalControls[TodoModalType.CREATE].close();
   };
 </script>
