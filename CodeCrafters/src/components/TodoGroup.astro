@@ -183,13 +183,14 @@ declare global {
         const parent = todo.parentElement
         todo.addEventListener("dragend",()=>{
         if(todo.parentElement !== parent){
-          Changuestatus(todoContext, todo, todoService)
+          changeStatus(todoContext, todo, todoService)
         }
       }) 
       }
     })
 });
-function Changuestatus(todoContext: TodoContext, todo: Element, todoService: TodoService) {
+
+function changeStatus(todoContext: TodoContext, todo: Element, todoService: TodoService) {
     const listTodos = todoContext.getTodos()
     listTodos.forEach(todoItem =>{
       if(todoItem.id === todo.id){
