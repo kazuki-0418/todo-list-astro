@@ -23,6 +23,21 @@ export async function addTodo(newTodo: Partial<Todo>): Promise<Todo | null> {
   return data;
 }
 
+export async function updateTodoStatus(
+  id: string,
+  status: string,
+): Promise<boolean> {
+  const { error } = await supabase
+    .from("todos")
+    .update({ status: status })
+    .eq("id", id);
+  if (error) {
+    console.error("Error updating todo status:", error.message);
+    return false;
+  }
+  return true;
+}
+
 export async function updateTodo(
   id: string,
   updates: Partial<Todo>,
