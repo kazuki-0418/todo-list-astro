@@ -63,11 +63,11 @@ export class TodoService {
   }
 
   /** Toggle status of a Todo */
-  toggleTodoStatus(title: string, newStatus: Todo["status"]): Todo[] {
+  toggleTodoStatus(id: string, newStatus: Todo["status"]): Todo[] {
     const updatedTodos = this.todoContext
       .getTodos()
       .map((todo) =>
-        todo.title === title
+        todo.id === id
           ? { ...todo, status: newStatus, updatedAt: new Date() }
           : todo,
       );

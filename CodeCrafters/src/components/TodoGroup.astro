@@ -6,6 +6,8 @@ import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
 import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
 import { TodoModalType } from "@utils/todoModalType";
 import ViewTodo from "./Modal/Content/ViewTodo.astro";
+import { IoAddCircle } from "react-icons/io5";
+
 
 // Global type declaration for modalControls
 declare global {
@@ -21,19 +23,14 @@ declare global {
 ---
 
 <section class="main-container">
-  <div class="Board">
-    <div>
-      <h2>Task List</h2>
-      <div id="todoList"></div>
-      <button id="add-todo">Add Task</button>
-    </div>
-    <BaseModal title={"Create Task"} id={TodoModalType.CREATE}>
+  <div>
+    <BaseModal title={"Create Todo"} id={TodoModalType.CREATE}>
       <CreateTodo />
     </BaseModal>
-    <BaseModal title={"Update Task"} id={TodoModalType.UPDATE}>
+    <BaseModal title={"Update Todo"} id={TodoModalType.UPDATE}>
       <UpdateTodo />
     </BaseModal>
-    <BaseModal title={"Delete Task"} id={TodoModalType.DELETE}>
+    <BaseModal title={"Delete Todo"} id={TodoModalType.DELETE}>
       <DeleteTodo />
     </BaseModal>
 
@@ -41,26 +38,97 @@ declare global {
       <ViewTodo />
     </BaseModal>
   </div>
+
+  <h2>Codebreakers</h2>
+  <div class="Board column">
+    <div class="todo column">
+      <div class="header-board">
+        <h3>Todo</h3>
+        <span class="add" id="add-todo">
+          <IoAddCircle size={32} />
+        </span>
+      </div>
+      <div
+        id="todo-add"
+        class="column-add todo-add"
+        ondrop="dropMe(event)"
+        ondragover="allowDrop(event)"
+      >
+      </div>
+    </div>
+    <div class="In-progress column">
+      <div class="header-board">
+        <h3>In Progress</h3>
+        <span class="add" id="add-todo">
+          <IoAddCircle size={32} />
+        </span>
+      </div>
+      <div
+        id="in-progress"
+        class="column-add in-progress"
+        ondrop="dropMe(event)"
+        ondragover="allowDrop(event)"
+      >
+      </div>
+    </div>
+    <div class="Done column">
+      <div class="header-board">
+        <h3>Finished</h3>
+        <span class="add" id="add-todo">
+          <IoAddCircle size={32} />
+        </span>
+      </div>
+      <div
+        id="todo-done"
+        class="column-add done"
+        ondrop="dropMe(event)"
+        ondragover="allowDrop(event)"
+        data-todos=`${UpdateTodo}`
+      >
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
   import { addEventListeners, TodoCard } from "./TodoCard";
   import { TodoContext } from "@contexts/todoContext";
-  import { TodoModalType } from "@utils/todoModalType";
+  import { TodoService } from "@services/todoService";
+  import { handleCreate } from "@utils/handleCreate";
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
-    const todoList = document.getElementById("todoList");
+    const todoList = document.getElementById("todo-add");
+    const inProgress = document.getElementById("in-progress");
+    const finish = document.getElementById("todo-done");
 
+    const todoService = new TodoService();
     function renderTodos() {
       if (!todoList) return;
+      if (!inProgress) return;
+      if (!finish) return;
+
+      todoList.innerHTML = "";
+      inProgress.innerHTML = "";
+      finish.innerHTML = "";
 
       const todos = todoContext.getTodos();
-
-      const todoElements = todos.map((todo) => TodoCard(todo)).join("");
-      todoList.innerHTML = todoElements;
+      todos.forEach((todo) => {
+        let todoItem = TodoCard(todo);
+        if (todo.status === "todo") {
+          todoList.innerHTML += todoItem;
+        }
+        if (todo.status === "in-progress") {
+          inProgress.innerHTML += todoItem;
+        }
+        if (todo.status === "done") {
+          finish.innerHTML += todoItem;
+        }
+      });
 
       addEventListeners(todoList);
+      addEventListeners(inProgress);
+      addEventListeners(finish);
     }
 
     function showModal(modalId: string) {
@@ -74,11 +142,76 @@ declare global {
 
     renderTodos();
 
-    const addTodoButton = document.getElementById("add-todo");
-    if (addTodoButton) {
-      addTodoButton.addEventListener("click", () => {
-        showModal(TodoModalType.CREATE);
+    const addTodoButtons = document.querySelectorAll("#add-todo");
+    addTodoButtons.forEach((addTodoBtn) => {
+      if (addTodoBtn) {
+        addTodoBtn.addEventListener("click", () => {
+          const columnName = addTodoBtn.parentElement?.parentElement?.className;
+          if (columnName?.includes("todo")) {
+            handleCreate("todo");
+          }
+          if (columnName?.includes("In-progress")) {
+            handleCreate("in-progress");
+          }
+          if (columnName?.includes("Done")) {
+            handleCreate("done");
+          }
+        });
+      }
+    });
+    setInterval(() => {
+      const todos = document.querySelectorAll(".todo-card");
+      todos.forEach((todo) => {
+        const parent = todo.parentElement;
+        todo.addEventListener("dragend", () => {
+          if (todo.parentElement !== parent) {
+            changeStatus(todoContext, todo, todoService);
+            renderTodos();
+          }
+        });
       });
-    }
+    }, 10);
   });
+
+  function changeStatus(
+    todoContext: TodoContext,
+    todo: Element,
+    todoService: TodoService,
+  ) {
+    const listTodos = todoContext.getTodos();
+    listTodos.forEach((todoItem) => {
+      if (todoItem.id === todo.id) {
+        if (todo.parentElement?.id === "todo-done") {
+          todoService.toggleTodoStatus(todoItem.id, "done");
+        }
+        if (todo.parentElement?.id === "in-progress") {
+          todoService.toggleTodoStatus(todoItem.id, "in-progress");
+        }
+        if (todo.parentElement?.id === "todo-add") {
+          todoService.toggleTodoStatus(todoItem.id, "todo");
+        }
+      }
+    });
+  }
+</script>
+
+<script is:inline>
+  // drag and drop
+  function allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+  }
+
+  function dropMe(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+  }
+
+  function noAllowDrop(ev) {
+    ev.stopPropagation();
+  }
 </script>

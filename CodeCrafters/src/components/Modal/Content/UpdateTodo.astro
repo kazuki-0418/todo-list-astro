@@ -54,14 +54,12 @@ import { TodoFormType } from "@utils/todoFormType";
     />
   </div>
 
-
   <div class="form-group">
     <label>Due Date</label>
     <div class="due-date-input">
       <input type="date" id="dueDate" name="dueDate" />
     </div>
   </div>
-
 
   <div class="form-footer">
     <button type="reset" class="cancel-button">Cancel</button>
@@ -77,7 +75,6 @@ import { TodoFormType } from "@utils/todoFormType";
   import { TodoModalType } from "@utils/todoModalType";
 
   const todoService = new TodoService();
-  const todoList = document.getElementById("todoList") as HTMLDivElement;
 
   const updateTodo = async (event: SubmitEvent) => {
     event.preventDefault();
@@ -125,12 +122,30 @@ import { TodoFormType } from "@utils/todoFormType";
   };
 
   const renderTodos = (todos: Todo[]) => {
+    const todoList = document.getElementById("todo-add") as HTMLDivElement;
+    const inProgress = document.getElementById("in-progress") as HTMLDivElement;
+    const finish = document.getElementById("todo-done") as HTMLDivElement;
     todoList.innerHTML = "";
+    inProgress.innerHTML = "";
+    finish.innerHTML = "";
 
-    const todoElements = todos.map((todo) => TodoCard(todo)).join("");
-    todoList.innerHTML = todoElements;
+    todos.forEach((todo) => {
+      let todoItem = TodoCard(todo);
+      if (todo.status === "todo") {
+        todoList.innerHTML += todoItem;
+      }
+      if (todo.status === "in-progress") {
+        inProgress.innerHTML += todoItem;
+      }
+      if (todo.status === "done") {
+        finish.innerHTML += todoItem;
+      }
+    });
+
 
     addEventListeners(todoList);
+    addEventListeners(inProgress);
+    addEventListeners(finish);
   };
 
   const cancelButton = form.querySelector(
