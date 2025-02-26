@@ -1,43 +1,93 @@
 ---
-import { IoAdd } from "react-icons/io5";
-import { MdCircle } from "react-icons/md";
+// TodoGroup.astro
+import BaseModal from "@components/Modal/BaseModal.astro";
+import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
+import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
+import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
+import { TodoModalType } from "@utils/todoModalType";
+import { IoAddCircle } from "react-icons/io5";
 
-type Props = {
-  id: string;
-  title: string;
-  color: string;
-};
-
-const { id, title, color } = Astro.props;
+// Global type declaration for modalControls
+declare global {
+  interface Window {
+    modalControls?: {
+      [key: string]: {
+        show: () => void;
+        close: () => void;
+      };
+    };
+  }
+}
 ---
 
-<div class="board column">
-  <div class="todo column">
-    <div class="header-board">
-      <div class="header-title">
-        <MdCircle size={16} color={color} />
-        <p>{title}</p>
+<section class="todo-group-container">
+  <div>
+    <BaseModal title={"Create Todo"} id={TodoModalType.CREATE}>
+      <CreateTodo />
+    </BaseModal>
+    <BaseModal title={"Update Todo"} id={TodoModalType.UPDATE}>
+      <UpdateTodo />
+    </BaseModal>
+    <BaseModal title={"Delete Todo"} id={TodoModalType.DELETE}>
+      <DeleteTodo />
+    </BaseModal>
+  </div>
+
+  <div class="Board column">
+    <div class="todo column">
+      <div class="header-board">
+        <h3>Todo</h3>
+        <span class="add" id="add-todo">
+          <IoAddCircle size={32} />
+        </span>
       </div>
-      <span class="add" id="add-todo">
-        <IoAdd size={32} />
-      </span>
+      <div
+        id="todo-add"
+        class="column-add todo-add"
+        ondrop="dropMe(event)"
+        ondragover="allowDrop(event)"
+      >
+      </div>
     </div>
-    <div
-      id={id}
-      class=`column-add ${id}`
-      ondrop="dropMe(event)"
-      ondragover="allowDrop(event)"
-    >
+    <div class="In-progress column">
+      <div class="header-board">
+        <h3>In Progress</h3>
+        <span class="add" id="add-todo">
+          <IoAddCircle size={32} />
+        </span>
+      </div>
+      <div
+        id="in-progress"
+        class="column-add in-progress"
+        ondrop="dropMe(event)"
+        ondragover="allowDrop(event)"
+      >
+      </div>
+    </div>
+    <div class="Done column">
+      <div class="header-board">
+        <h3>Finished</h3>
+        <span class="add" id="add-todo">
+          <IoAddCircle size={32} />
+        </span>
+      </div>
+      <div
+        id="todo-done"
+        class="column-add done"
+        ondrop="dropMe(event)"
+        ondragover="allowDrop(event)"
+        data-todos=`${UpdateTodo}`
+      >
+      </div>
     </div>
   </div>
-</div>
+</section>
 
 <script>
   import { addEventListeners, TodoCard } from "./TodoCard";
   import { TodoContext } from "@contexts/todoContext";
   import { TodoService } from "@services/todoService";
   import { handleCreate } from "@utils/handleCreate";
-  import { TodoStatusType } from "@utils/todoStatusType";
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
@@ -58,13 +108,13 @@ const { id, title, color } = Astro.props;
       const todos = todoContext.getTodos();
       todos.forEach((todo) => {
         let todoItem = TodoCard(todo);
-        if (todo.status === TodoStatusType.TODO) {
+        if (todo.status === "todo") {
           todoList.innerHTML += todoItem;
         }
-        if (todo.status === TodoStatusType.IN_PROGRESS) {
+        if (todo.status === "in-progress") {
           inProgress.innerHTML += todoItem;
         }
-        if (todo.status === TodoStatusType.DONE) {
+        if (todo.status === "done") {
           finish.innerHTML += todoItem;
         }
       });
@@ -91,13 +141,13 @@ const { id, title, color } = Astro.props;
         addTodoBtn.addEventListener("click", () => {
           const columnName = addTodoBtn.parentElement?.parentElement?.className;
           if (columnName?.includes("todo")) {
-            handleCreate(TodoStatusType.TODO);
+            handleCreate("todo");
           }
-          if (columnName?.includes("in-progress")) {
-            handleCreate(TodoStatusType.IN_PROGRESS);
+          if (columnName?.includes("In-progress")) {
+            handleCreate("in-progress");
           }
-          if (columnName?.includes("todo-done")) {
-            handleCreate(TodoStatusType.DONE);
+          if (columnName?.includes("Done")) {
+            handleCreate("done");
           }
         });
       }
@@ -125,13 +175,13 @@ const { id, title, color } = Astro.props;
     listTodos.forEach((todoItem) => {
       if (todoItem.id === todo.id) {
         if (todo.parentElement?.id === "todo-done") {
-          todoService.toggleTodoStatus(todoItem.id, TodoStatusType.DONE);
+          todoService.toggleTodoStatus(todoItem.id, "done");
         }
-        if (todo.parentElement?.id === TodoStatusType.IN_PROGRESS) {
-          todoService.toggleTodoStatus(todoItem.id, TodoStatusType.IN_PROGRESS);
+        if (todo.parentElement?.id === "in-progress") {
+          todoService.toggleTodoStatus(todoItem.id, "in-progress");
         }
         if (todo.parentElement?.id === "todo-add") {
-          todoService.toggleTodoStatus(todoItem.id, TodoStatusType.TODO);
+          todoService.toggleTodoStatus(todoItem.id, "todo");
         }
       }
     });
