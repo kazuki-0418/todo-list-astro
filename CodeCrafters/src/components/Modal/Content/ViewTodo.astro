@@ -1,6 +1,5 @@
 ---
 import "@styles/style.css";
-
 ---
 
 <div class="todo-detail-container" id="todoDetail">
@@ -10,8 +9,7 @@ import "@styles/style.css";
     <div class="detail-row">
       <div class="detail-label">Status:</div>
       <div class="detail-value">
-        <span class="status-badge status-in-progress" id="todoStatus"
-          ></span>
+        <span class="status-badge status-in-progress" id="todoStatus"></span>
       </div>
     </div>
 
@@ -32,8 +30,7 @@ import "@styles/style.css";
     <div class="detail-row">
       <div class="detail-label">Assign To:</div>
       <div class="detail-value">
-        <div class="assignee-list" id="todoAssignees">
-        </div>
+        <div class="assignee-list" id="todoAssignees"></div>
       </div>
     </div>
 
@@ -55,11 +52,11 @@ import "@styles/style.css";
 </div>
 
 <script>
-import { TodoModalType } from "@utils/todoModalType";
+  import { TodoModalType } from "@utils/todoModalType";
 
-  const cancelButton = document.getElementById("todoDetail")?.querySelector(
-    ".cancel-button",
-  ) as HTMLButtonElement;
+  const cancelButton = document
+    .getElementById("todoDetail")
+    ?.querySelector(".cancel-button") as HTMLButtonElement;
   if (cancelButton) {
     cancelButton.addEventListener("click", () => {
       closeModal();

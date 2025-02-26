@@ -7,7 +7,7 @@ export function addEventListeners(todoList: HTMLElement | null) {
   if (!todoList) return;
   const editButtons = todoList.querySelectorAll(".edit-button");
   const deleteButtons = todoList.querySelectorAll(".delete-button");
-  const viewButtons = todoList.querySelectorAll(".todo-card");
+  const viewButtons = todoList.querySelectorAll(".todo-container");
 
   editButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
@@ -43,7 +43,7 @@ export function addEventListeners(todoList: HTMLElement | null) {
 export const TodoCard = (todo: Todo) => {
   return `
     <div id="${todo.id}" class="todo-card" draggable="true"  ondragstart="drag(event)" ondragover="noAllowDrop(event)">
-      <div class="todo-container">
+      <div class="todo-container" id="${todo.id}" data-todo-id="${todo.id}">
         <div class="title">${todo.title}</div>
         <div class="status">${todo.status}</div>
         <div class="due-date">${new Date(

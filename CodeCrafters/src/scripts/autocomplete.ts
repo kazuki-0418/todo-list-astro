@@ -1,5 +1,6 @@
 import type { Todo } from "src/types/todo";
 import { TodoContext } from "@contexts/todoContext";
+import { handleView } from "@utils/handleView";
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById(
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
           searchInput.value = item.title;
           resultsContainer.style.display = "none";
           resultsContainer.innerHTML = "";
+          handleView(item.id);
         });
 
         resultsContainer.appendChild(li);
