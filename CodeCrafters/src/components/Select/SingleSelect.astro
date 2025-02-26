@@ -18,8 +18,11 @@ const defaultPlaceholder = `Select an ${category}`;
     id={`select-box-${name}`}
     data-default-text={defaultPlaceholder}
   >
-  {options.find(option => option.value === defaultValue)?.label || defaultPlaceholder}
-</div>
+    {
+      options.find((option) => option.value === defaultValue)?.label ||
+        defaultPlaceholder
+    }
+  </div>
   <ul class="options" id={`options-list-${name}`}>
     {
       options.map((option) => (
@@ -119,11 +122,15 @@ const defaultPlaceholder = `Select an ${category}`;
 
     public reset() {
       if (this.defaultValue) {
-        const defaultOption = Array.from(this.optionsList.querySelectorAll('.option'))
-          .find(opt => (opt as HTMLElement).dataset.value === this.defaultValue);
-        
+        const defaultOption = Array.from(
+          this.optionsList.querySelectorAll(".option"),
+        ).find(
+          (opt) => (opt as HTMLElement).dataset.value === this.defaultValue,
+        );
+
         if (defaultOption) {
-          this.selectBox.textContent = (defaultOption as HTMLElement).dataset.label || this.defaultText;
+          this.selectBox.textContent =
+            (defaultOption as HTMLElement).dataset.label || this.defaultText;
           this.hiddenInput.value = this.defaultValue;
         } else {
           this.selectBox.textContent = this.defaultText;
@@ -133,7 +140,7 @@ const defaultPlaceholder = `Select an ${category}`;
         this.selectBox.textContent = this.defaultText;
         this.hiddenInput.value = "";
       }
-      
+
       this.optionsList.classList.remove("active");
     }
   }

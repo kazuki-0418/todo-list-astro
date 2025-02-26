@@ -23,7 +23,6 @@ import { TodoFormType } from "@utils/todoFormType";
         { value: "done", label: "Done" },
       ]}
       category="Status"
-      defaultValue="todo"
     />
   </div>
 
@@ -74,7 +73,6 @@ import { TodoFormType } from "@utils/todoFormType";
   import { TodoModalType } from "@utils/todoModalType";
 
   const todoService = new TodoService();
-  const todoList = document.getElementById("todoList") as HTMLDivElement;
 
   const addTodo = async (event: SubmitEvent) => {
     event.preventDefault();
@@ -119,31 +117,29 @@ import { TodoFormType } from "@utils/todoFormType";
 
   const renderTodos = (todos: Todo[]) => {
     const todoList = document.getElementById("todo-add") as HTMLDivElement;
-    const inProgress = document.getElementById("in-progress") as HTMLDivElement
-    const finish = document.getElementById("todo-done") as HTMLDivElement
+    const inProgress = document.getElementById("in-progress") as HTMLDivElement;
+    const finish = document.getElementById("todo-done") as HTMLDivElement;
 
-    if(!todoList) return
-    if(!inProgress) return
-    if(!finish) return
+    if (!todoList) return;
+    if (!inProgress) return;
+    if (!finish) return;
 
     todoList.innerHTML = "";
-    inProgress.innerHTML ="";
-    finish.innerHTML ="";
+    inProgress.innerHTML = "";
+    finish.innerHTML = "";
 
-    todos.forEach(todo => {
-      let todoItem = TodoCard(todo)
-        if(todo.status === "todo"){
-          todoList.innerHTML += todoItem
-        }
-        if(todo.status === "in-progress"){
-          inProgress.innerHTML += todoItem
-        }
-        if(todo.status === "done"){
-          finish.innerHTML += todoItem
-        }
-    })
-    // const todoElements = todos.map((todo) => TodoCard(todo)).join("");
-    // todoList.innerHTML = todoElements;
+    todos.forEach((todo) => {
+      let todoItem = TodoCard(todo);
+      if (todo.status === "todo") {
+        todoList.innerHTML += todoItem;
+      }
+      if (todo.status === "in-progress") {
+        inProgress.innerHTML += todoItem;
+      }
+      if (todo.status === "done") {
+        finish.innerHTML += todoItem;
+      }
+    });
     addEventListeners(todoList);
     addEventListeners(inProgress);
     addEventListeners(finish);
