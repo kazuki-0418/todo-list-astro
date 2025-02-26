@@ -51,3 +51,11 @@
     }
   }
 }
+
+[data-theme="dark"] .column{
+  background-color: #222222 !important;
+}
+
+[data-theme="dark"] #add-todo{
+  background-color: #222222 !important;
+}
