@@ -199,6 +199,60 @@
           }
         }
       }
+
+      .delete-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .delete-form-body {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+
+          .delete-form-message {
+            font-size: 16px;
+          }
+
+          .todo-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: auto;
+          }
+        }
+        .delete-form-footer {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+
+          .delete-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: $error;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: $error;
+            }
+          }
+
+          .cancel-button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #f1f1f1;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+              background: #e1e1e1;
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -2,9 +2,10 @@
 import MultiSelect from "@components/Select/MultiSelect.astro";
 import SingleSelect from "@components/Select/SingleSelect.astro";
 import "@styles/style.css";
+import { TodoFormType } from "@utils/todoFormType";
 ---
 
-<form class="form-container" id="add-todo-form">
+<form class="form-container" id={TodoFormType.ADD}>
   <div class="form-group">
     <label>Title</label>
     <div class="name-inputs">
@@ -22,14 +23,8 @@ import "@styles/style.css";
         { value: "done", label: "Done" },
       ]}
       category="Status"
+      defaultValue="todo"
     />
-  </div>
-
-  <div class="form-group">
-    <label>Due Date</label>
-    <div class="due-date-input">
-      <input type="date" id="dueDate" name="dueDate" />
-    </div>
   </div>
 
   <div class="form-group">
@@ -58,6 +53,13 @@ import "@styles/style.css";
     />
   </div>
 
+  <div class="form-group">
+    <label>Due Date</label>
+    <div class="due-date-input">
+      <input type="date" id="dueDate" name="dueDate" />
+    </div>
+  </div>
+
   <div class="form-footer">
     <button type="reset" class="cancel-button">Cancel</button>
     <button type="submit" class="submit-button">Add</button>
@@ -65,16 +67,19 @@ import "@styles/style.css";
 </form>
 
 <script>
-  import { TodoCard } from "@components/TodoCard";
+  import { addEventListeners, TodoCard } from "@components/TodoCard";
   import { TodoService } from "@services/todoService";
-  import { handleEdit } from "@utils/handleEdit";
   import type { Todo } from "src/types/todo";
+  import { TodoFormType } from "@utils/todoFormType";
+  import { TodoModalType } from "@utils/todoModalType";
+
   const todoService = new TodoService();
+  const todoList = document.getElementById("todoList") as HTMLDivElement;
 
   const addTodo = async (event: SubmitEvent) => {
     event.preventDefault();
 
-    const form = document.getElementById("add-todo-form") as HTMLFormElement;
+    const form = document.getElementById(TodoFormType.ADD) as HTMLFormElement;
     const formData = new FormData(form);
 
     const title = formData.get("title") as string;
@@ -104,11 +109,11 @@ import "@styles/style.css";
     formReset();
   };
 
-  const form = document.getElementById("add-todo-form") as HTMLFormElement;
+  const form = document.getElementById(TodoFormType.ADD) as HTMLFormElement;
   form.addEventListener("submit", addTodo);
 
   const formReset = () => {
-    const form = document.getElementById("add-todo-form") as HTMLFormElement;
+    const form = document.getElementById(TodoFormType.ADD) as HTMLFormElement;
     form.reset();
   };
 
@@ -139,27 +144,10 @@ import "@styles/style.css";
     })
     // const todoElements = todos.map((todo) => TodoCard(todo)).join("");
     // todoList.innerHTML = todoElements;
-    addEventListeners();
+    addEventListeners(todoList);
+    addEventListeners(inProgress);
+    addEventListeners(finish);
   };
-
-  function addEventListeners() {
-    const editButtons = document.querySelectorAll(".edit-button");
-    const deleteButtons = document.querySelectorAll(".delete-button");
-
-    editButtons.forEach((button) => {
-      button.replaceWith(button.cloneNode(true));
-    });
-
-    document.querySelectorAll(".edit-button").forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-        if (todoId) {
-          handleEdit(todoId);
-        }
-      });
-    });
-  }
 
   const cancelButton = form.querySelector(
     ".cancel-button",
@@ -172,6 +160,6 @@ import "@styles/style.css";
   const closeModal = () => {
     const modalControls = window.modalControls;
     if (!modalControls) return;
-    modalControls["create-todo-modal"].close();
+    modalControls[TodoModalType.CREATE].close();
   };
 </script>

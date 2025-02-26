@@ -1,9 +1,10 @@
 ---
 // TodoGroup.astro
-import BaseModal from "./Modal/BaseModal.astro";
-import CreateTodo from "./Modal/Content/CreateTodo.astro";
-import UpdateTodo from "./Modal/Content/UpdateTodo.astro";
-import { TodoContext } from "@contexts/todoContext";
+import BaseModal from "@components/Modal/BaseModal.astro";
+import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
+import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
+import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
+import { TodoModalType } from "@utils/todoModalType";
 
 // Global type declaration for modalControls
 declare global {
@@ -18,30 +19,18 @@ declare global {
 }
 ---
 
-<!-- <section class="main-container">
-  <div class="Board">
-    <div>
-      <h2>Task List</h2>
-      <div id="todoList"></div>
-      <button id="add-todo">Add Task</button>
-    </div>
-    <BaseModal title={"Create Task"} id="create-todo-modal">
-      <CreateTodo />
-    </BaseModal>
-    <BaseModal title={"Update Task"} id="update-todo-modal">
-      <UpdateTodo />
-    </BaseModal>
-  </div>
-</section> -->
-
 <section class="main-container">
 
   <div>
-    <BaseModal title={"Create Todo"} id="create-todo-modal">
+    <BaseModal title={"Create Todo"} id={TodoModalType.CREATE}>
       <CreateTodo />
     </BaseModal>
-    <BaseModal title={"Update Todo"} id="update-todo-modal">
+    <BaseModal title={"Update Todo"} id={TodoModalType.UPDATE}>
       <UpdateTodo />
+    </BaseModal>
+    <BaseModal title={"Delete Todo"} id={TodoModalType.DELETE}>
+      <DeleteTodo />
+    </BaseModal>
   </div>
 
   <h2>Codebreakers</h2>
@@ -50,7 +39,7 @@ declare global {
           <div class="header-board">
               <h3>Todo</h3>
               <div class="options-board">
-                  <button class="add" id="add-todo"><img src="../../public/add.svg"></button>
+                  <button class="add" id="add-todo"><img src="/add.svg"></button>
               </div>
           </div>
           <div id="todo-add"  class="column-add todo-add" ondrop="dropMe(event)" ondragover="allowDrop(event)">
@@ -60,7 +49,7 @@ declare global {
           <div class="header-board">
               <h3>In Progress</h3>
               <div class="options-board">
-                  <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
+                  <button class="add"id="add-todo"><img src="/add.svg"></button>
               </div>
           </div>
           <div id="in-progress" class="column-add in-progress" ondrop="dropMe(event)" ondragover="allowDrop(event)">
@@ -70,7 +59,7 @@ declare global {
           <div class="header-board">
               <h3>Finished</h3>
               <div class="options-board">
-                  <button class="add"id="add-todo"><img src="../../public/add.svg"></button>
+                  <button class="add"id="add-todo"><img src="/add.svg"></button>
               </div>
           </div>
           <div id="todo-done" class="column-add done" ondrop="dropMe(event)" ondragover="allowDrop(event)" data-todos=`${UpdateTodo}`>
@@ -81,10 +70,11 @@ declare global {
 
 <script>
   let renderTodos : Function
-  import { TodoCard } from "./TodoCard";
+  import { addEventListeners,TodoCard } from "./TodoCard";
   import { TodoContext } from "@contexts/todoContext";
   import { TodoService } from "@services/todoService";
   import { handleEdit } from "@utils/handleEdit";
+  import { TodoModalType } from "@utils/todoModalType";
   
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
@@ -93,8 +83,9 @@ declare global {
     const finish = document.getElementById("todo-done")
 
     const todoService = new TodoService();
+    function renderTodos() {
 
-  renderTodos = ()=> {
+
       if (!todoList) return;
       if (!inProgress) return;
       if (!finish) return;
@@ -116,9 +107,10 @@ declare global {
           finish.innerHTML += todoItem
         }
       })
-      // const todoElements = todos.map((todo) => TodoCard(todo)).join("");
-      //todoList.innerHTML = todoElements;
-      addEventListeners();
+
+      addEventListeners(todoList);
+      addEventListeners(inProgress);
+      addEventListeners(finish);
     }
 
     function showModal(modalId: string) {
@@ -130,49 +122,14 @@ declare global {
       modalControls[modalId].show();
     }
 
-    function addEventListeners() {
-      const editButtons = document.querySelectorAll(".edit-button");
-      const deleteButtons = document.querySelectorAll(".delete-button");
-
-      editButtons.forEach((button) => {
-        button.replaceWith(button.cloneNode(true));
-      });
-
-      document.querySelectorAll(".edit-button").forEach((button) => {
-        button.addEventListener("click", (e) => {
-          e.preventDefault();
-          const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
-          if (todoId) {
-            handleEdit(todoId);
-          }
-        });
-      });
-
-      deleteButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-          e.preventDefault();
-          const todoId = (e.currentTarget as HTMLButtonElement ).dataset.todoId;
-          if (todoId) {
-            handleDelete(todoId);
-          }
-        });
-      });
-    }
-
-    function handleDelete(todoId: string) {
-      if (confirm("Are you sure you want to delete this Task?")) {
-        todoService.deleteTodo(todoId);
-        renderTodos();
-      }
-    }
-
     renderTodos();
 
     const addTodoButtons = document.querySelectorAll("#add-todo");
     addTodoButtons.forEach(addTodoBtn =>{
       if (addTodoBtn) {
       addTodoBtn.addEventListener("click", () => {
-        showModal("create-todo-modal");
+        showModal(TodoModalType.CREATE);
+
       });
     }
     })
@@ -182,8 +139,9 @@ declare global {
           const parent = todo.parentElement
           todo.addEventListener("dragend",()=>{
               if(todo.parentElement !== parent){
-                console.log(todo.id)
                 changeStatus(todoContext, todo, todoService)
+                renderTodos()
+
               }
           }) 
       })
@@ -207,7 +165,6 @@ function changeStatus(todoContext: TodoContext, todo: Element, todoService: Todo
         }
       } 
     })
-    renderTodos()
 }
 
 </script>

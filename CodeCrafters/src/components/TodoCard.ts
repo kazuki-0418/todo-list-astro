@@ -1,4 +1,32 @@
+import { handleDelete } from "@utils/handleDelete";
+import { handleEdit } from "@utils/handleEdit";
 import type { Todo } from "src/types/todo";
+
+export function addEventListeners(todoList: HTMLElement | null) {
+  if (!todoList) return;
+  const editButtons = todoList.querySelectorAll(".edit-button");
+  const deleteButtons = todoList.querySelectorAll(".delete-button");
+
+  editButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
+      if (todoId) {
+        handleEdit(todoId);
+      }
+    });
+  });
+
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const todoId = (e.currentTarget as HTMLButtonElement).dataset.todoId;
+      if (todoId) {
+        handleDelete(todoId);
+      }
+    });
+  });
+}
 
 export const TodoCard = (todo: Todo) => {
   return `
