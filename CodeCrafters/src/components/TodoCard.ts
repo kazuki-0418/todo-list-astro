@@ -33,7 +33,7 @@ export function addEventListeners(todoList: HTMLElement | null) {
 }
 
 function getRemainingTime(todo: Todo) {
-  if (todo.status === "done") return "";
+  if (todo.status === "done") return "Delivered";
 
   const date = Math.round(
     (new Date(todo.dueDate).getTime() - new Date().getTime()) / 86400000,
@@ -71,8 +71,8 @@ function renderAssignedTo(todo: Todo) {
   const persons =
     assignedPeople.map((person: ProfileIconKeys, index: number) => {
       return index > 0
-        ? `<img class="assigned joint" src=${profileIcons[person]}>`
-        : `<img class="assigned" src=${profileIcons[person]}>`;
+        ? `<img class="assigned joint" src="${profileIcons[person]}">`
+        : `<img class="assigned" src="${profileIcons[person]}">`;
     }) || "None";
 
   return persons.join("");
@@ -115,10 +115,10 @@ export const TodoCard = (todo: Todo) => {
         </div>
       <div class="todo-actions">
         <button class="edit-button" data-todo-id="${todo.id}">
-            <img class="icon" src=${editIcon.src}>
+            <img class="icon" src="${editIcon.src}">
         </button>
         <button class="delete-button" data-todo-id="${todo.id}">
-            <img class="icon" src=${deleteIcon.src}>
+            <img class="icon" src="${deleteIcon.src}">
         </button>
       </div>
     </div>
