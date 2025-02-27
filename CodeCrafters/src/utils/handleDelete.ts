@@ -1,4 +1,6 @@
 import { TodoContext } from "@contexts/todoContext";
+import { TodoModalType } from "./todoModalType";
+import { TodoFormType } from "./todoFormType";
 
 export const handleDelete = (todoId: string) => {
   const todoContext = TodoContext.getInstance();
@@ -14,10 +16,10 @@ export const handleDelete = (todoId: string) => {
   }
 
   if (todo) {
-    showModal("delete-todo-modal");
+    showModal(TodoModalType.DELETE);
 
     const deleteTodoForm = document.getElementById(
-      "delete-todo-form",
+      TodoFormType.DELETE,
     ) as HTMLFormElement;
 
     const idInput = deleteTodoForm.querySelector(

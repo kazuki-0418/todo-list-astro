@@ -1,5 +1,6 @@
 import { handleDelete } from "@utils/handleDelete";
 import { handleEdit } from "@utils/handleEdit";
+import { handleView } from "@utils/handleView";
 import type { Todo } from "src/types/todo";
 import editIcon from "@assets/edit.svg";
 import deleteIcon from "@assets/delete.svg";
@@ -11,6 +12,7 @@ export function addEventListeners(todoList: HTMLElement | null) {
   const editButtons = todoList.querySelectorAll(".edit-button");
 
   const deleteButtons = todoList.querySelectorAll(".delete-button");
+  const viewButtons = todoList.querySelectorAll(".todo-container");
 
   editButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
@@ -31,14 +33,35 @@ export function addEventListeners(todoList: HTMLElement | null) {
       }
     });
   });
+
+  viewButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const todoId = (e.currentTarget as HTMLElement).dataset.todoId;
+      if (todoId) {
+        handleView(todoId);
+      }
+    });
+  });
 }
 
 function getRemainingTime(todo: Todo) {
   if (todo.status === "done") return "Completed";
-  if (!todo.dueDate) return "No due date";
+  const dueDate = new Date(todo.dueDate);
+  if (
+    (dueDate.getUTCFullYear() === 1970 &&
+      dueDate.getUTCMonth() === 0 &&
+      dueDate.getUTCDate() === 1 &&
+      dueDate.getUTCHours() === 0 &&
+      dueDate.getUTCMinutes() === 0 &&
+      dueDate.getUTCSeconds() === 0 &&
+      dueDate.getUTCMilliseconds() === 0) ||
+    todo.dueDate == ""
+  )
+    return "--:--:--";
 
   const date = Math.round(
-    (new Date(todo.dueDate).getTime() - new Date().getTime()) / 86400000,
+    (dueDate.getTime() - new Date().getTime()) / 86400000,
   );
   const daysInaMonth = 30;
   const monthsInaYear = 12;
@@ -103,7 +126,7 @@ function renderTags(tags: string[]) {
 export const TodoCard = (todo: Todo) => {
   return `
     <div id="${todo.id}" class="todo-card" draggable="true"  ondragstart="drag(event)" ondragover="noAllowDrop(event)">
-      <div class="todo-container">
+      <div class="todo-container" id="${todo.id}" data-todo-id="${todo.id}">
         <div class="title">${todo.title[0].toUpperCase() + todo.title.slice(1)}</div>
         <div class="status">${
           todoStatusTypeOptions.find((option) => option.value === todo.status)
