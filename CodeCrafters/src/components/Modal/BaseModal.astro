@@ -1,7 +1,6 @@
 ---
 import "@styles/style.css";
-import { Image } from "astro:assets";
-import CloseIcon from "@assets/close.svg";
+import { IoClose } from "react-icons/io5";
 
 type Props = {
   title: string;
@@ -31,7 +30,7 @@ const { title, id } = Astro.props;
         </div>
         <div class="modal-header-close">
           <button class="modal-close-button">
-            <Image src={CloseIcon} alt="close" />
+            <IoClose size="1.5em" className="close-icon"/>
           </button>
         </div>
       </div>

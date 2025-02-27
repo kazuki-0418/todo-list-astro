@@ -81,7 +81,7 @@
     display: flex;
     justify-content: flex-end;
     .edit-button {
-      background: #f8f8f8;
+      background: transparent;
       border: none;
       .icon {
         max-width: 1.5em;
@@ -92,8 +92,9 @@
       }
     }
     .delete-button {
-      background: #f8f8f8;
+      background: transparent;
       border: none;
+      
       .icon {
         max-width: 1.5em;
         width: auto;
@@ -268,14 +269,6 @@
 
 [data-theme="dark"] .todo-card {
   background: #000;
-}
-
-[data-theme="dark"] .edit-button {
-  background: #000 !important;
-}
-
-[data-theme="dark"] .delete-button {
-  background: #000 !important;
 }
 
 [data-theme="dark"] .backend-badge {

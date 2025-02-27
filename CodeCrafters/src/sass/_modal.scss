@@ -1,4 +1,5 @@
 @use "sass:color";
+@import "variables";
 
 @mixin input-style {
   width: -webkit-fill-available;
@@ -22,6 +23,8 @@
 
     .modal {
       display: block;
+      background-color: var(--border-color);
+      box-shadow: 2px 2px 2px var(--modal-shadow-color);
     }
 
     .modal-overlay {
@@ -73,11 +76,15 @@
           .modal-close-button {
             cursor: pointer;
             border: none;
-            background: none;
-            padding: 4px;
+            background:var(--border-color);
+            padding: 2px;
 
             &:hover {
               opacity: 0.8;
+            }
+
+            .close-icon{
+              color: var(--close-icon);
             }
           }
         }
@@ -95,10 +102,13 @@
           flex-direction: column;
           gap: 4px;
 
+          option{
+            background-color: #333333;
+          }
           label {
             font-size: 14px;
             font-weight: 600;
-            color: #333;
+            color: var(--letter-color);
           }
         }
 
@@ -109,6 +119,9 @@
           > input {
             @include input-style;
             flex: 1;
+            color: var(--letter-color);
+            background-color: var(--input-background);
+            border: 1px solid var(--input-boder-color);
           }
         }
 
@@ -125,6 +138,9 @@
 
           > input {
             @include input-style;
+            color: var(--letter-color);
+            background-color: var(--input-background);
+            border: 1px solid var(--input-boder-color);
           }
         }
 
@@ -163,12 +179,13 @@
             padding: 10px;
             border: none;
             border-radius: 6px;
-            background: color.adjust($primary, $lightness: -20%);
+            background: var(--add-btn-background);
             color: white;
             font-size: 16px;
             cursor: pointer;
             &:hover {
-              background: color.adjust($primary, $lightness: -30%);
+              background: var(--add-btn-background);
+              filter: brightness(0.9);
             }
           }
 
@@ -176,12 +193,12 @@
             padding: 10px;
             border: none;
             border-radius: 6px;
-            background: #f1f1f1;
-            color: #333;
+            background: var(--cancel-btn-background);
+            color: var(--cancel-btn-color);
             font-size: 16px;
             cursor: pointer;
             &:hover {
-              background: #e1e1e1;
+              background: var(--cancel-btn-hover);
             }
           }
         }
@@ -190,12 +207,12 @@
           padding: 10px;
           border: none;
           border-radius: 6px;
-          background: #f1f1f1;
-          color: #333;
+          background: var(--cancel-btn-background);
+          color: var(--cancel-btn-color);
           font-size: 16px;
           cursor: pointer;
           &:hover {
-            background: #e1e1e1;
+            background: var(--cancel-btn-hover);
           }
         }
       }
@@ -230,12 +247,13 @@
             padding: 10px;
             border: none;
             border-radius: 6px;
-            background: $error;
+            background-color: var(--delete-btn-color);
             color: white;
             font-size: 16px;
             cursor: pointer;
             &:hover {
-              background: $error;
+              background: var(--delete-btn-color);
+              filter: brightness(0.9);
             }
           }
 
@@ -243,16 +261,47 @@
             padding: 10px;
             border: none;
             border-radius: 6px;
-            background: #f1f1f1;
-            color: #333;
+            background: var(--cancel-btn-background);
+            color: var(--cancel-btn-color);
             font-size: 16px;
             cursor: pointer;
             &:hover {
-              background: #e1e1e1;
+              background: var(--cancel-btn-hover);
             }
           }
         }
       }
     }
   }
+}
+
+// Set the theme based on the data-theme attribute
+:root {
+  --letter-color: black;
+  --close-btn: #ccc;
+  --border-color: #ffffff;
+  --hover-color: #f0f0f0;
+  --close-icon: black;
+  --modal-shadow-color: #333333;
+  --add-btn-background: #24A6F5;
+  --cancel-btn-background:#f6f8fa;
+  --cancel-btn-color: #252921;
+  --cancel-btn-hover: #e9eaec;
+  --input-boder-color: #ccc;
+  --delete-btn-color: #ff0033;
+}
+
+[data-theme="dark"] {
+  --letter-color: white;
+  --close-btn: #333333;
+  --border-color: #151b23f2;
+  --hover-color: #333333;
+  --close-icon:white;
+  --modal-shadow-color: #585858;
+  --add-btn-background:#008B8B;
+  --cancel-btn-background:#212830;
+  --cancel-btn-color: #f0f6fc;
+  --input-boder-color: #646e7b;
+  --cancel-btn-hover: #252d36;
+  --delete-btn-color: #B30024;
 }
