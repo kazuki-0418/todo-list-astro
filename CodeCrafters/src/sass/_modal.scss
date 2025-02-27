@@ -1,4 +1,5 @@
 @use "sass:color";
+@import "variables";
 
 @mixin input-style {
   width: -webkit-fill-available;
@@ -23,7 +24,7 @@
     .modal {
       display: block;
       background-color: var(--border-color);
-      box-shadow: 5px 5px 5px var(--modal-shadow-color);
+      box-shadow: 2px 2px 2px var(--modal-shadow-color);
     }
 
     .modal-overlay {
@@ -183,7 +184,8 @@
             font-size: 16px;
             cursor: pointer;
             &:hover {
-              background: color.adjust($primary, $lightness: -30%);
+              background: var(--add-btn-background);
+              filter: brightness(0.9);
             }
           }
 
@@ -205,12 +207,12 @@
           padding: 10px;
           border: none;
           border-radius: 6px;
-          background: #f1f1f1;
-          color: #333;
+          background: var(--cancel-btn-background);
+          color: var(--cancel-btn-color);
           font-size: 16px;
           cursor: pointer;
           &:hover {
-            background: #e1e1e1;
+            background: var(--cancel-btn-hover);
           }
         }
       }
@@ -245,12 +247,13 @@
             padding: 10px;
             border: none;
             border-radius: 6px;
-            background: $error;
+            background-color: var(--delete-btn-color);
             color: white;
             font-size: 16px;
             cursor: pointer;
             &:hover {
-              background: $error;
+              background: var(--delete-btn-color);
+              filter: brightness(0.9);
             }
           }
 
@@ -258,12 +261,12 @@
             padding: 10px;
             border: none;
             border-radius: 6px;
-            background: #f1f1f1;
-            color: #333;
+            background: var(--cancel-btn-background);
+            color: var(--cancel-btn-color);
             font-size: 16px;
             cursor: pointer;
             &:hover {
-              background: #e1e1e1;
+              background: var(--cancel-btn-hover);
             }
           }
         }
@@ -280,11 +283,12 @@
   --hover-color: #f0f0f0;
   --close-icon: black;
   --modal-shadow-color: #333333;
-  --add-btn-background:#87cefa;
+  --add-btn-background: #24A6F5;
   --cancel-btn-background:#f6f8fa;
   --cancel-btn-color: #252921;
   --cancel-btn-hover: #e9eaec;
   --input-boder-color: #ccc;
+  --delete-btn-color: #ff0033;
 }
 
 [data-theme="dark"] {
@@ -299,4 +303,5 @@
   --cancel-btn-color: #f0f6fc;
   --input-boder-color: #646e7b;
   --cancel-btn-hover: #252d36;
+  --delete-btn-color: #B30024;
 }
