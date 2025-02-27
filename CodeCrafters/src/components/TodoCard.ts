@@ -35,6 +35,7 @@ export function addEventListeners(todoList: HTMLElement | null) {
 
 function getRemainingTime(todo: Todo) {
   if (todo.status === "done") return "Completed";
+  if (!todo.dueDate) return "No due date";
 
   const date = Math.round(
     (new Date(todo.dueDate).getTime() - new Date().getTime()) / 86400000,
@@ -109,15 +110,13 @@ export const TodoCard = (todo: Todo) => {
             ?.label
         }</div>
         <div class="todo-info">
-          <div class="due-date">
-          ${getRemainingTime(todo)}</div>
-        <div class="tags">${renderTags(todo.tags)}
+          <div class="tags">${renderTags(todo.tags)}</div>
         </div>
-      </div>
-      <div class="assigned-to">${renderAssignedTo(todo)}</div>
+        <div class="assigned-to">${renderAssignedTo(todo)}</div>
         ${todo.notes ? `<div class="notes">${todo.notes}</div>` : ""}
-        </div>
-      <div class="todo-actions">
+        <div class="due-date">${getRemainingTime(todo)}</div>
+      </div>
+        <div class="todo-actions">
         <button class="edit-button" data-todo-id="${todo.id}">
             <img class="icon" src="${editIcon.src}">
         </button>
