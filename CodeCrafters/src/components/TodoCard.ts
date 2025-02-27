@@ -4,6 +4,7 @@ import type { Todo } from "src/types/todo";
 import editIcon from "@assets/edit.svg";
 import deleteIcon from "@assets/delete.svg";
 import { profileIcons } from "@utils/propfileIcons";
+import { todoStatusTypeOptions } from "@utils/todoStatusType";
 
 export function addEventListeners(todoList: HTMLElement | null) {
   if (!todoList) return;
@@ -103,7 +104,10 @@ export const TodoCard = (todo: Todo) => {
     <div id="${todo.id}" class="todo-card" draggable="true"  ondragstart="drag(event)" ondragover="noAllowDrop(event)">
       <div class="todo-container">
         <div class="title">${todo.title[0].toUpperCase() + todo.title.slice(1)}</div>
-        <div class="status">${todo.status[0].toUpperCase() + todo.status.slice(1)}</div>
+        <div class="status">${
+          todoStatusTypeOptions.find((option) => option.value === todo.status)
+            ?.label
+        }</div>
         <div class="todo-info">
           <div class="due-date">
           ${getRemainingTime(todo)}</div>
