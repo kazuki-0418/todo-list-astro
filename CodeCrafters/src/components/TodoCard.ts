@@ -1,13 +1,13 @@
 import { handleDelete } from "@utils/handleDelete";
 import { handleEdit } from "@utils/handleEdit";
 import type { Todo } from "src/types/todo";
-import { IoTrashOutline, IoEllipsisHorizontalSharp } from "react-icons/io5";
-
+import editIcon from "@assets/edit.svg";
+import deleteIcon from "@assets/delete.svg";
+import { profileIcons } from "@utils/propfileIcons";
 
 export function addEventListeners(todoList: HTMLElement | null) {
   if (!todoList) return;
   const editButtons = todoList.querySelectorAll(".edit-button");
-
 
   const deleteButtons = todoList.querySelectorAll(".delete-button");
 
@@ -32,21 +32,70 @@ export function addEventListeners(todoList: HTMLElement | null) {
   });
 }
 
-function getRemainingTime(todo: Todo){
-  const date = Math.round((new Date(todo.dueDate,).getTime() - new Date().getTime())/86400000)
-  const daysInaMonth = 30
-  const monthsInaYear = 12
-  const years = Math.floor((date/daysInaMonth)/monthsInaYear)
-  const months = Math.floor(date/daysInaMonth)
-  
-  return (years === 1 ? years + " Year left" : years > 1 ? years + " Years left" :months === 1  ? months + " Month left" : months > 1 ? months + " Months left" : date >= 2 ? date + ' Days left' : date === 1 ? date + "Day left"  : date  == 0 ? "Today" : "Late" ) 
+function getRemainingTime(todo: Todo) {
+  if (todo.status === "done") return "";
+
+  const date = Math.round(
+    (new Date(todo.dueDate).getTime() - new Date().getTime()) / 86400000,
+  );
+  const daysInaMonth = 30;
+  const monthsInaYear = 12;
+  const years = Math.floor(date / daysInaMonth / monthsInaYear);
+  const months = Math.floor(date / daysInaMonth);
+
+  return years === 1
+    ? years + " Year left"
+    : years > 1
+      ? years + " Years left"
+      : months === 1
+        ? months + " Month left"
+        : months > 1
+          ? months + " Months left"
+          : date >= 2
+            ? date + " Days left"
+            : date === 1
+              ? date + "Day left"
+              : date == 0
+                ? "Today"
+                : "Overdue by " + Math.abs(date) + " Days";
 }
 
-function personAsingnerto(todo: Todo){
-  const persons = todo.assignedTo.map(person =>{
-    return `<div class="assigned">${person[0]}</div>`
-  }) || "None"
-  return persons
+function renderAssignedTo(todo: Todo) {
+  type ProfileIconKeys = keyof typeof profileIcons;
+  const assignedPeople = todo.assignedTo.filter(
+    (person): person is ProfileIconKeys => {
+      return person in profileIcons;
+    },
+  );
+
+  const persons =
+    assignedPeople.map((person: ProfileIconKeys, index: number) => {
+      return index > 0
+        ? `<img class="assigned joint" src=${profileIcons[person]}>`
+        : `<img class="assigned" src=${profileIcons[person]}>`;
+    }) || "None";
+
+  return persons.join("");
+}
+
+function renderTags(tags: string[]) {
+  return tags
+    .map((tag) => {
+      const styles: Record<string, string> = {
+        backend: "background-color: #F4F1FD; color: #7B3AEB;",
+        frontend: "background-color: #FDF6EB; color: #DD985F;",
+        "desktop-design": "background-color: #FCF2F8; color: #D82B77;",
+        "mobile-design": "background-color: #E2EBFA; color: #0860FB;",
+      };
+
+      return styles[tag]
+        ? `<div class="tag" style="${styles[tag]}">${
+            tag[0].toUpperCase() + tag.slice(1)
+          }</div>`
+        : null;
+    })
+    .filter(Boolean)
+    .join("");
 }
 
 export const TodoCard = (todo: Todo) => {
@@ -58,20 +107,20 @@ export const TodoCard = (todo: Todo) => {
         <div class="todo-info">
           <div class="due-date">
           ${getRemainingTime(todo)}</div>
-        <div class="tags">${todo.tags.join(", ") || "None"}</div>
+        <div class="tags">${renderTags(todo.tags)}
+        </div>
       </div>
-      <div class="assigned-to">${personAsingnerto(todo)}</div>
+      <div class="assigned-to">${renderAssignedTo(todo)}</div>
         ${todo.notes ? `<div class="notes">${todo.notes}</div>` : ""}
         </div>
       <div class="todo-actions">
         <button class="edit-button" data-todo-id="${todo.id}">
-            <img class="icon" src="../../public/opts.svg">
+            <img class="icon" src=${editIcon.src}>
         </button>
         <button class="delete-button" data-todo-id="${todo.id}">
-            <img class="icon" src="../../public/trash.svg">
+            <img class="icon" src=${deleteIcon.src}>
         </button>
       </div>
     </div>
   `;
 };
-
