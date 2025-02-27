@@ -94,6 +94,7 @@ export const handleEdit = (todoId: string) => {
       dueDateInput.value = "";
     } else {
       date.setDate(date.getDate());
+      if (isNaN(date.getTime())) return;
       const formattedDate = date.toISOString().split("T")[0];
       dueDateInput.value = formattedDate;
     }
