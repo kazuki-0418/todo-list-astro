@@ -1,117 +1,109 @@
 @import "variables";
 
-
 .todo-card {
   background: #f8f8f8;
   padding: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin: 2em 0;
   border-radius: 10px;
-  .title{
+
+  .todo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+  .title {
     font-weight: bold;
     font-size: 1.3em;
   }
-  .status{
+  .status {
     font-weight: bold;
     color: #777;
   }
-  .todo-info{
-    display: flex;
-    flex-direction: row-reverse;
+  .todo-info {
     width: 100%;
-    justify-content: space-between;
-    margin: .4em 0;
-    .due-date{
-      font-family:sans-serif;
+    margin: 0.4em 0;
+    .due-date {
       font-weight: 600;
-      font-size: .8em;
+      font-size: 0.8em;
     }
-    .tags{
-      font-family: Arial, Helvetica, sans-serif;
+    .tags {
       display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      gap: .5em;
-      .tag{
-        font-size: .8em;
-        padding: .2em .5em;
+      gap: 0.5em;
+      .tag {
+        font-size: 0.7em;
         border-radius: 5px;
-        margin-right: .5em;
         background: #f8f8f8;
         color: #777;
       }
-
 
       .backend-badge {
         background: #800080;
         color: #f8f8f8;
       }
-      
-      .frontend-badge{
+
+      .frontend-badge {
         background: #008000;
         color: #f8f8f8;
       }
 
-      .desktop-design-badge{
-        background: #00FFFF;
+      .desktop-design-badge {
+        background: #00ffff;
         color: #f8f8f8;
       }
 
-      .mobile-design-badge{
-        background: #FFA500;
+      .mobile-design-badge {
+        background: #ffa500;
         color: #f8f8f8;
       }
-
-  
     }
   }
 
-  .assigned-to{
-    font-family: Arial, Helvetica, sans-serif;
+  .assigned-to {
     display: flex;
     flex-direction: row;
-    
-    .assigned{
+
+    .assigned {
       width: 32px;
       height: 32px;
       border-radius: 50%;
     }
 
-    .joint{
+    .joint {
       width: 32px;
       height: 32px;
       border-radius: 50%;
       margin-left: -10px;
     }
   }
-  .todo-actions{
-    padding-top: .3em;
+  .todo-actions {
+    padding-top: 0.3em;
     display: flex;
     justify-content: flex-end;
-    .edit-button{
+    .edit-button {
       background: #f8f8f8;
       border: none;
-      .icon{
+      .icon {
         max-width: 1.5em;
         width: auto;
       }
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
     }
-    .delete-button{
+    .delete-button {
       background: #f8f8f8;
       border: none;
-      .icon{
+      .icon {
         max-width: 1.5em;
         width: auto;
       }
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
     }
   }
-  &:hover{
+  &:hover {
     transition:
       transform 0.2s ease-in-out,
       box-shadow 0.2s ease-in-out;
@@ -274,34 +266,34 @@
   filter: invert(100%);
 }
 
-[data-theme="dark"] .todo-card{
+[data-theme="dark"] .todo-card {
   background: #000;
 }
 
-[data-theme="dark"] .edit-button{
+[data-theme="dark"] .edit-button {
   background: #000 !important;
 }
 
-[data-theme="dark"] .delete-button{
+[data-theme="dark"] .delete-button {
   background: #000 !important;
 }
 
 [data-theme="dark"] .backend-badge {
-  background: #4B0082 !important;
-  color: #D8BFD8 !important;
+  background: #4b0082 !important;
+  color: #d8bfd8 !important;
 }
 
 [data-theme="dark"] .frontend-badge {
   background: #006400 !important;
-  color: #90EE90 !important;
+  color: #90ee90 !important;
 }
 
 [data-theme="dark"] .desktop-design-badge {
-  background: #008B8B !important;
-  color: #E0FFFF !important;
+  background: #008b8b !important;
+  color: #e0ffff !important;
 }
 
 [data-theme="dark"] .mobile-design-badge {
-  background:  #A0522D !important;
-  color: #FFDAB9 !important;
+  background: #a0522d !important;
+  color: #ffdab9 !important;
 }
