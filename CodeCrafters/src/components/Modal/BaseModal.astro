@@ -41,6 +41,8 @@ const { title, id } = Astro.props;
 </div>
 
 <script>
+  import { TodoModalType } from "@utils/todoModalType";
+
   class ModalController {
     private wrapper: HTMLElement;
     private modal: HTMLElement;
@@ -67,11 +69,13 @@ const { title, id } = Astro.props;
 
       this.overlay.addEventListener("click", () => {
         this.close();
+        this.resetAddTodoForm();
       });
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && this.isOpen()) {
           this.close();
+          this.resetAddTodoForm();
         }
       });
     }
@@ -101,6 +105,15 @@ const { title, id } = Astro.props;
         detail: { modalId: this.modalId },
       });
       document.dispatchEvent(event);
+    }
+
+    resetAddTodoForm() {
+      if (this.modalId === TodoModalType.CREATE) {
+        const form = document.getElementById(
+          "add-todo-form",
+        ) as HTMLFormElement;
+        form.reset();
+      }
     }
   }
 
