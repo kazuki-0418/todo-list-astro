@@ -1,0 +1,24 @@
+.main-container {
+  padding: 1rem 2rem;
+
+  .board-title {
+    animation: slideInFromLeft 0.5s ease-out;
+  }
+}
+
+.todo-group-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-500%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

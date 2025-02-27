@@ -1,7 +1,6 @@
 import type { Todo } from "src/types/todo";
 import { TodoContext } from "@contexts/todoContext";
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById(
     "search-input",
@@ -12,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const todoContext = TodoContext.getInstance();
   const todos: Todo[] = todoContext.getTodos();
-
 
   searchInput.addEventListener("input", () => {
     const query = searchInput.value.toLowerCase();

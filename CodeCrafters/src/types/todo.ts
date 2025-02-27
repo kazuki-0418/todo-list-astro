@@ -1,4 +1,4 @@
-type Status = "todo" | "in-progress" | "done" | "cancelled";
+export type Status = "todo" | "in-progress" | "done" | "cancelled";
 
 export type Todo = {
   id: string;

@@ -1,7 +1,41 @@
 ---
-import TodoGroup from "./TodoGroup.astro";
+import TodoGroup from "@components/TodoGroup.astro";
+import BaseModal from "@components/Modal/BaseModal.astro";
+import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
+import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
+import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
+import { TodoModalType } from "@utils/todoModalType";
+
+// Global type declaration for modalControls
+declare global {
+  interface Window {
+    modalControls?: {
+      [key: string]: {
+        show: () => void;
+        close: () => void;
+      };
+    };
+  }
+}
 ---
 
-<div>
-  <TodoGroup />
+<div class="main-container">
+  <div>
+    <BaseModal title={"Create Todo"} id={TodoModalType.CREATE}>
+      <CreateTodo />
+    </BaseModal>
+    <BaseModal title={"Update Todo"} id={TodoModalType.UPDATE}>
+      <UpdateTodo />
+    </BaseModal>
+    <BaseModal title={"Delete Todo"} id={TodoModalType.DELETE}>
+      <DeleteTodo />
+    </BaseModal>
+  </div>
+
+  <h1 class="board-title">My Board</h1>
+  <div class="todo-group-container">
+    <TodoGroup id="todo-add" title="Todo" color="#ffd700" />
+    <TodoGroup id="in-progress" title="In Progress" color="#00bfff" />
+    <TodoGroup id="todo-done" title="Done" color="#32cd32" />
+  </div>
 </div>
