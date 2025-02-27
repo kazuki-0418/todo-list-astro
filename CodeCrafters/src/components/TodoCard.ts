@@ -33,7 +33,7 @@ export function addEventListeners(todoList: HTMLElement | null) {
 }
 
 function getRemainingTime(todo: Todo) {
-  if (todo.status === "done") return "Delivered";
+  if (todo.status === "done") return "Completed";
 
   const date = Math.round(
     (new Date(todo.dueDate).getTime() - new Date().getTime()) / 86400000,
