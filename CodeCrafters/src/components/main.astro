@@ -5,6 +5,7 @@ import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
 import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
 import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
 import { TodoModalType } from "@utils/todoModalType";
+import BtnSort from "./btnSort.astro";
 
 // Global type declaration for modalControls
 declare global {
@@ -20,6 +21,7 @@ declare global {
 ---
 
 <div class="main-container">
+  <BtnSort />
   <div>
     <BaseModal title={"Create Todo"} id={TodoModalType.CREATE}>
       <CreateTodo />

@@ -38,7 +38,9 @@ const { id, title, color } = Astro.props;
   import { TodoService } from "@services/todoService";
   import { handleCreate } from "@utils/handleCreate";
   import { TodoStatusType } from "@utils/todoStatusType";
-  import type { Status } from "src/types/todo";
+  import asc from "@assets/asc.svg";
+  import desc from "@assets/desc.svg";
+
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
@@ -49,13 +51,31 @@ const { id, title, color } = Astro.props;
     const finish = document.getElementById("todo-done");
 
     function renderTodos() {
+
+      const btnSort = document.querySelector(".sort") as HTMLButtonElement
+
       if (!todoList || !inProgress || !finish) return;
 
       todoList.innerHTML = "";
       inProgress.innerHTML = "";
       finish.innerHTML = "";
-
-      const todos = todoContext.getTodos();
+      let todos = todoContext.getTodos();
+      
+      if(btnSort.getAttribute("data-value") === "Desc"){
+        todos = todos.sort((a , b) => +new Date(a.dueDate) - +new Date(b.dueDate))
+      }
+      if(btnSort.getAttribute("data-value") === "Asc"){
+          let listDesc = todos.slice()
+          listDesc.sort((a , b) => +new Date(a.dueDate) - +new Date(b.dueDate))
+          todos = []
+          let count = 0
+          while(count < listDesc.length){
+            let item = listDesc.pop()
+            if(item){
+              todos.push(item)
+            }
+          }
+        }
       todos.forEach((todo) => {
         const todoItem = TodoCard(todo);
         if (todo.status === TodoStatusType.TODO) {
@@ -75,6 +95,27 @@ const { id, title, color } = Astro.props;
     }
 
     renderTodos();
+
+    //btn sort logic
+    const btnSort = document.querySelector(".sort") as HTMLButtonElement
+    btnSort.innerHTML = `<img class="icon" src='${asc.src}'>Sort Asc`
+    btnSort.addEventListener("click", () =>{
+        let flag: boolean = false 
+        if(btnSort){
+            if(btnSort.getAttribute("data-value") === "Asc" && flag === false){
+                btnSort.setAttribute("data-value","Desc")
+                btnSort.innerHTML = `<img  class="icon" src='${asc.src}'> Sort Asc`
+                flag = true
+                renderTodos()
+            }
+            if(btnSort.getAttribute("data-value") === "Desc" && flag === false){
+                btnSort.setAttribute("data-value","Asc")
+                btnSort.innerHTML = `<img class="icon" src='${desc.src}'> Sort Desc`
+                flag = true
+                renderTodos()
+            } 
+        }
+    })
 
     // Add Todo button logic
     const addTodoButtons = document.querySelectorAll("#add-todo");
