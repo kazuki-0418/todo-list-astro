@@ -10,10 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "autocomplete-results",
   ) as HTMLUListElement;
 
-  const todoContext = TodoContext.getInstance();
-  const todos: Todo[] = todoContext.getTodos();
-
   searchInput.addEventListener("input", () => {
+    const todoContext = TodoContext.getInstance();
+    const todos: Todo[] = todoContext.getTodos();
     const query = searchInput.value.toLowerCase();
     resultsContainer.innerHTML = "";
     resultsContainer.style.display = query ? "block" : "none";
