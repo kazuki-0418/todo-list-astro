@@ -3,6 +3,7 @@ import MultiSelect from "@components/Select/MultiSelect.astro";
 import SingleSelect from "@components/Select/SingleSelect.astro";
 import "@styles/style.css";
 import { TodoFormType } from "@utils/todoFormType";
+import { todoStatusTypeOptions } from "@utils/todoStatusType";
 ---
 
 <form class="form-container" id={TodoFormType.ADD}>
@@ -17,11 +18,7 @@ import { TodoFormType } from "@utils/todoFormType";
     <label>Status</label>
     <SingleSelect
       name="status"
-      options={[
-        { value: "todo", label: "To Do" },
-        { value: "in-progress", label: "In Progress" },
-        { value: "done", label: "Done" },
-      ]}
+      options={todoStatusTypeOptions}
       category="Status"
     />
   </div>

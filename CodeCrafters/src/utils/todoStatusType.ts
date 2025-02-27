@@ -4,3 +4,9 @@ export enum TodoStatusType {
   DONE = "done",
   CANCELLED = "cancelled",
 }
+
+export const todoStatusTypeOptions = [
+  { value: TodoStatusType.TODO, label: "To Do" },
+  { value: TodoStatusType.IN_PROGRESS, label: "In Progress" },
+  { value: TodoStatusType.DONE, label: "Done" },
+];
