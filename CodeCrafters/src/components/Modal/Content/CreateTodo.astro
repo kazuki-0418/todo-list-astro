@@ -96,7 +96,7 @@ import { TodoFormType } from "@utils/todoFormType";
       id: Math.random().toString(36),
       title: title.trim(),
       status,
-      dueDate:dueDate?.toString(),
+      dueDate:dueDate?.toLocaleString(),
       tags,
       assignedTo,
       notes: "",

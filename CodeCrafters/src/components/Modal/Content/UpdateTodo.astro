@@ -87,18 +87,19 @@ import { TodoFormType } from "@utils/todoFormType";
     const id = formData.get("id") as string;
     const title = formData.get("title") as string;
     const status = formData.get("status") as Todo["status"];
+    const dueDate = formData.get("dueDate");
     const tags = formData.getAll(`tags[]`) as string[];
 
     const assignedTo = formData.getAll("assignTo[]") as string[];
-    let dueDate = formData.get("dueDate");
 
-    if (!title.trim()) return;
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) return;
 
     const newTodo = {
       id,
-      title: title.trim(),
+      title: trimmedTitle,
       status,
-      dueDate,
+      dueDate:dueDate?.toLocaleString(),
       tags,
       assignedTo,
       notes: "",

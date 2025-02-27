@@ -54,7 +54,7 @@ export const handleView = (todoId: string) => {
         ) {
           return "--:--:--";
         }
-
+        date.setDate(date.getDate() + 1);
         return date.toDateString();
       };
 
