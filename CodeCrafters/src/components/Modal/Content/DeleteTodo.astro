@@ -62,7 +62,7 @@ import { TodoFormType } from "@utils/todoFormType";
     finish.innerHTML = "";
 
     todos.forEach((todo) => {
-      let todoItem = TodoCard(todo);
+      const todoItem = TodoCard(todo);
       if (todo.status === "todo") {
         todoList.innerHTML += todoItem;
       }

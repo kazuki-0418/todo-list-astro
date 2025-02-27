@@ -40,15 +40,32 @@ export function addEventListeners(todoList: HTMLElement | null) {
   });
 }
 
+const renderDuedate = (dueDate: string) => {
+  const date = new Date(dueDate);
+
+  if (
+    isNaN(date.getTime()) ||
+    (date.getUTCFullYear() === 1970 &&
+      date.getUTCMonth() === 0 &&
+      date.getUTCDate() === 1 &&
+      date.getUTCHours() === 0 &&
+      date.getUTCMinutes() === 0 &&
+      date.getUTCSeconds() === 0 &&
+      date.getUTCMilliseconds() === 0)
+  ) {
+    return "--:--:--";
+  }
+
+  return date.toDateString();
+};
+
 export const TodoCard = (todo: Todo) => {
   return `
     <div id="${todo.id}" class="todo-card" draggable="true"  ondragstart="drag(event)" ondragover="noAllowDrop(event)">
       <div class="todo-container" id="${todo.id}" data-todo-id="${todo.id}">
         <div class="title">${todo.title}</div>
         <div class="status">${todo.status}</div>
-        <div class="due-date">${new Date(
-          todo.dueDate,
-        ).toLocaleDateString()}</div>
+        <div class="due-date">${renderDuedate(todo.dueDate)}</div>
         <div class="tags">${todo.tags.join(", ") || "None"}</div>
         <div class="assigned-to">${todo.assignedTo.join(", ") || "None"}</div>
         ${todo.notes ? `<div class="notes">${todo.notes}</div>` : ""}

@@ -55,7 +55,10 @@ import { TodoFormType } from "@utils/todoFormType";
   <div class="form-group">
     <label>Due Date</label>
     <div class="due-date-input">
-      <input type="date" id="dueDate" name="dueDate" />
+      <input type="date" id="dueDateDisplay" min={
+        new Date().toISOString().split("T")[0]
+      } oninput="dueDate.value = this.value" name="dueDateDisplay" />
+      <input type="hidden" id="dueDate" name="dueDate" />
     </div>
   </div>
 
@@ -93,7 +96,7 @@ import { TodoFormType } from "@utils/todoFormType";
       id: Math.random().toString(36),
       title: title.trim(),
       status,
-      dueDate,
+      dueDate:dueDate?.toString(),
       tags,
       assignedTo,
       notes: "",
@@ -129,7 +132,7 @@ import { TodoFormType } from "@utils/todoFormType";
     finish.innerHTML = "";
 
     todos.forEach((todo) => {
-      let todoItem = TodoCard(todo);
+      const todoItem = TodoCard(todo);
       if (todo.status === "todo") {
         todoList.innerHTML += todoItem;
       }

@@ -32,14 +32,26 @@ export const handleEdit = (todoId: string) => {
       '[name="title"]',
     ) as HTMLInputElement;
     if (titleInput) titleInput.value = todo.title;
+
+    const date = new Date(todo.dueDate);
     const dueDateInput = updateTodoForm.querySelector(
       '[name="dueDate"]',
     ) as HTMLInputElement;
-
-    const date = new Date(todo.dueDate);
-    date.setDate(date.getDate() - 1);
-    const formattedDate = date.toISOString().split("T")[0];
-    dueDateInput.value = formattedDate;
+    if (
+      date.getUTCFullYear() === 1970 &&
+      date.getUTCMonth() === 0 &&
+      date.getUTCDate() === 1 &&
+      date.getUTCHours() === 0 &&
+      date.getUTCMinutes() === 0 &&
+      date.getUTCSeconds() === 0 &&
+      date.getUTCMilliseconds() === 0
+    ) {
+      dueDateInput.value = "";
+    } else {
+      date.setDate(date.getDate());
+      const formattedDate = date.toISOString().split("T")[0];
+      dueDateInput.value = formattedDate;
+    }
 
     if (todo.tags) {
       todo.tags.forEach((tag) => {

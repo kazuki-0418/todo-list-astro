@@ -39,7 +39,26 @@ export const handleView = (todoId: string) => {
       "#todoDueDate",
     ) as HTMLParagraphElement;
     if (todoDueDate) {
-      todoDueDate.innerText = new Date(todo.dueDate).toLocaleDateString();
+      const renderDuedate = (dueDate: string) => {
+        const date = new Date(dueDate);
+
+        if (
+          (date.getUTCFullYear() === 1970 &&
+            date.getUTCMonth() === 0 &&
+            date.getUTCDate() === 1 &&
+            date.getUTCHours() === 0 &&
+            date.getUTCMinutes() === 0 &&
+            date.getUTCSeconds() === 0 &&
+            date.getUTCMilliseconds() === 0) ||
+          isNaN(date.getTime())
+        ) {
+          return "--:--:--";
+        }
+
+        return date.toDateString();
+      };
+
+      todoDueDate.innerText = renderDuedate(todo.dueDate);
     }
 
     const todoTags = viewTodoDetail.querySelector(
