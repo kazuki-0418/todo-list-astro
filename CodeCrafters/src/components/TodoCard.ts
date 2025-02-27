@@ -82,14 +82,14 @@ function renderTags(tags: string[]) {
   return tags
     .map((tag) => {
       const styles: Record<string, string> = {
-        backend: "background-color: #F4F1FD; color: #7B3AEB;",
-        frontend: "background-color: #FDF6EB; color: #DD985F;",
-        "desktop-design": "background-color: #FCF2F8; color: #D82B77;",
-        "mobile-design": "background-color: #E2EBFA; color: #0860FB;",
+        backend: "backend-badge",
+        frontend: "frontend-badge",
+        "desktop-design": "desktop-design-badge",
+        "mobile-design": "mobile-design-badge",
       };
 
       return styles[tag]
-        ? `<div class="tag" style="${styles[tag]}">${
+        ? `<div class="tag ${styles[tag]}">${
             tag[0].toUpperCase() + tag.slice(1)
           }</div>`
         : null;

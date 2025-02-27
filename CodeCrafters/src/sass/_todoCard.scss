@@ -40,6 +40,29 @@
         background: #f8f8f8;
         color: #777;
       }
+
+
+      .backend-badge {
+        background: #800080;
+        color: #f8f8f8;
+      }
+      
+      .frontend-badge{
+        background: #008000;
+        color: #f8f8f8;
+      }
+
+      .desktop-design-badge{
+        background: #00FFFF;
+        color: #f8f8f8;
+      }
+
+      .mobile-design-badge{
+        background: #FFA500;
+        color: #f8f8f8;
+      }
+
+  
     }
   }
 
@@ -262,3 +285,22 @@
   background: #000 !important;
 }
 
+[data-theme="dark"] .backend-badge {
+  background: #4B0082 !important;
+  color: #D8BFD8 !important;
+}
+
+[data-theme="dark"] .frontend-badge {
+  background: #006400 !important;
+  color: #90EE90 !important;
+}
+
+[data-theme="dark"] .desktop-design-badge {
+  background: #008B8B !important;
+  color: #E0FFFF !important;
+}
+
+[data-theme="dark"] .mobile-design-badge {
+  background:  #A0522D !important;
+  color: #FFDAB9 !important;
+}
