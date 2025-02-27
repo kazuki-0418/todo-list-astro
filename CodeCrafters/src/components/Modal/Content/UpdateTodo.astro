@@ -92,13 +92,14 @@ import { TodoFormType } from "@utils/todoFormType";
 
     const assignedTo = formData.getAll("assignTo[]") as string[];
 
-    if (!title.trim()) return;
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) return;
 
     const newTodo = {
       id,
-      title: title.trim(),
+      title: trimmedTitle,
       status,
-      dueDate,
+      dueDate: dueDate?.toLocaleString(),
       tags,
       assignedTo,
       notes: "",
@@ -130,7 +131,7 @@ import { TodoFormType } from "@utils/todoFormType";
     finish.innerHTML = "";
 
     todos.forEach((todo) => {
-      let todoItem = TodoCard(todo);
+      const todoItem = TodoCard(todo);
       if (todo.status === "todo") {
         todoList.innerHTML += todoItem;
       }

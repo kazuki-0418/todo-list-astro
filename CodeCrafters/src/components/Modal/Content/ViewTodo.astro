@@ -1,0 +1,71 @@
+---
+import "@styles/style.css";
+---
+
+<div class="todo-detail-container" id="todoDetail">
+  <h1 class="todo-title" id="todoTitle"></h1>
+
+  <div class="detail-section">
+    <div class="detail-row">
+      <div class="detail-label">Status:</div>
+      <div class="detail-value">
+        <span class="status-badge status-in-progress" id="todoStatus"></span>
+      </div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Due Date:</div>
+      <div class="detail-value" id="todoDueDate"></div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Tag:</div>
+      <div class="detail-value">
+        <div class="tag-list" id="todoTags">
+          <span class="tag"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-row">
+      <div class="detail-label">Assign To:</div>
+      <div class="detail-value">
+        <div class="assignee-list" id="todoAssignees"></div>
+      </div>
+    </div>
+
+    <!-- Todo: Add next time -->
+    <!-- <div class="detail-row">
+      <div class="detail-label">Note:</div>
+      <div class="detail-value">
+        <div class="notes-section" id="todoNotes">
+          
+        </div>
+      </div>
+    </div> -->
+
+    <div class="dates-section">
+      <div id="todoCreatedAt"></div>
+      <div id="todoUpdatedAt"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { TodoModalType } from "@utils/todoModalType";
+
+  const cancelButton = document
+    .getElementById("todoDetail")
+    ?.querySelector(".cancel-button") as HTMLButtonElement;
+  if (cancelButton) {
+    cancelButton.addEventListener("click", () => {
+      closeModal();
+    });
+  }
+
+  const closeModal = () => {
+    const modalControls = window.modalControls;
+    if (!modalControls) return;
+    modalControls[TodoModalType.VIEW].close();
+  };
+</script>
