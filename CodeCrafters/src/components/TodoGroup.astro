@@ -12,7 +12,7 @@ const { id, title, color } = Astro.props;
 ---
 
 <div class="board column">
-  <div class="todo column">
+  <div class=`${id} column`>
     <div class="header-board">
       <div class="header-title">
         <MdCircle size={16} color={color} />
@@ -38,18 +38,18 @@ const { id, title, color } = Astro.props;
   import { TodoService } from "@services/todoService";
   import { handleCreate } from "@utils/handleCreate";
   import { TodoStatusType } from "@utils/todoStatusType";
+  import type { Status } from "src/types/todo";
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
+    const todoService = new TodoService();
+
     const todoList = document.getElementById("todo-add");
     const inProgress = document.getElementById("in-progress");
     const finish = document.getElementById("todo-done");
 
-    const todoService = new TodoService();
     function renderTodos() {
-      if (!todoList) return;
-      if (!inProgress) return;
-      if (!finish) return;
+      if (!todoList || !inProgress || !finish) return;
 
       todoList.innerHTML = "";
       inProgress.innerHTML = "";
@@ -57,7 +57,7 @@ const { id, title, color } = Astro.props;
 
       const todos = todoContext.getTodos();
       todos.forEach((todo) => {
-        let todoItem = TodoCard(todo);
+        const todoItem = TodoCard(todo);
         if (todo.status === TodoStatusType.TODO) {
           todoList.innerHTML += todoItem;
         }
@@ -74,17 +74,9 @@ const { id, title, color } = Astro.props;
       addEventListeners(finish);
     }
 
-    function showModal(modalId: string) {
-      const modalControls = window.modalControls;
-      if (!modalControls) {
-        console.error("modalControls not found");
-        return;
-      }
-      modalControls[modalId].show();
-    }
-
     renderTodos();
 
+    // Add Todo button logic
     const addTodoButtons = document.querySelectorAll("#add-todo");
     addTodoButtons.forEach((addTodoBtn) => {
       if (addTodoBtn) {
@@ -125,13 +117,13 @@ const { id, title, color } = Astro.props;
     listTodos.forEach((todoItem) => {
       if (todoItem.id === todo.id) {
         if (todo.parentElement?.id === "todo-done") {
-          todoService.toggleTodoStatus(todoItem.id, TodoStatusType.DONE);
+          todoService.toggleTodoStatus(todoItem.id, "done");
         }
-        if (todo.parentElement?.id === TodoStatusType.IN_PROGRESS) {
-          todoService.toggleTodoStatus(todoItem.id, TodoStatusType.IN_PROGRESS);
+        if (todo.parentElement?.id === "in-progress") {
+          todoService.toggleTodoStatus(todoItem.id, "in-progress");
         }
         if (todo.parentElement?.id === "todo-add") {
-          todoService.toggleTodoStatus(todoItem.id, TodoStatusType.TODO);
+          todoService.toggleTodoStatus(todoItem.id, "todo");
         }
       }
     });
@@ -139,19 +131,25 @@ const { id, title, color } = Astro.props;
 </script>
 
 <script is:inline>
-  // drag and drop
-  function allowDrop(ev) {
-    ev.preventDefault();
+  // Drag and Drop
+  function allowDrop(e) {
+    e.preventDefault();
   }
 
   function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
   }
 
-  function dropMe(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+  function dropMe(e) {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("text");
+    const todo = document.getElementById(data);
+
+    if (e.target.classList.contains("column-add")) {
+      e.target.appendChild(todo);
+    } else if (e.target.closest(".column-add")) {
+      e.target.closest(".column-add").appendChild(todo);
+    }
   }
 
   function noAllowDrop(ev) {
