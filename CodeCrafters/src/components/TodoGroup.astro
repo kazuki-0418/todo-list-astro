@@ -39,7 +39,6 @@ const { id, title, color } = Astro.props;
   import { TodoService } from "@services/todoService";
   import { handleCreate } from "@utils/handleCreate";
   import { TodoStatusType } from "@utils/todoStatusType";
-  import type { Status } from "src/types/todo";
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();

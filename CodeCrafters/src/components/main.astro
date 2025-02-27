@@ -5,6 +5,7 @@ import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
 import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
 import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
 import { TodoModalType } from "@utils/todoModalType";
+import ViewTodo from "./Modal/Content/ViewTodo.astro";
 
 // Global type declaration for modalControls
 declare global {
@@ -21,14 +22,17 @@ declare global {
 
 <div class="main-container">
   <div>
-    <BaseModal title={"Create Todo"} id={TodoModalType.CREATE}>
+    <BaseModal title={"Create Task"} id={TodoModalType.CREATE}>
       <CreateTodo />
     </BaseModal>
-    <BaseModal title={"Update Todo"} id={TodoModalType.UPDATE}>
+    <BaseModal title={"Update Task"} id={TodoModalType.UPDATE}>
       <UpdateTodo />
     </BaseModal>
-    <BaseModal title={"Delete Todo"} id={TodoModalType.DELETE}>
+    <BaseModal title={"Delete Task"} id={TodoModalType.DELETE}>
       <DeleteTodo />
+    </BaseModal>
+    <BaseModal title={"Task Detail"} id={TodoModalType.VIEW}>
+      <ViewTodo />
     </BaseModal>
   </div>
 
