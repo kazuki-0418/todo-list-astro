@@ -5,7 +5,6 @@ import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
 import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
 import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
 import { TodoModalType } from "@utils/todoModalType";
-import BtnSort from "./btnSort.astro";
 import ViewTodo from "./Modal/Content/ViewTodo.astro";
 
 // Global type declaration for modalControls
@@ -22,7 +21,6 @@ declare global {
 ---
 
 <div class="main-container">
-  <BtnSort />
   <div>
     <BaseModal title={"Create Task"} id={TodoModalType.CREATE}>
       <CreateTodo />
@@ -39,6 +37,11 @@ declare global {
   </div>
 
   <h1 class="board-title">My Board</h1>
+  <div class="container-btnSort">
+    <div class="btnSort-div">
+      <button class="sort" data-value="Desc"></button>
+    </div>
+  </div>
   <div class="todo-group-container">
     <TodoGroup id="todo-add" title="Todo" color="#ffd700" />
     <TodoGroup id="in-progress" title="In Progress" color="#00bfff" />

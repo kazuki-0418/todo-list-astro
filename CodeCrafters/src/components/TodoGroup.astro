@@ -48,39 +48,40 @@ const { id, title, color } = Astro.props;
   document.addEventListener("DOMContentLoaded", async () => {
     const todoContext = TodoContext.getInstance();
     const todoService = new TodoService();
-    
+
     // Get DOM elements
     const todoList = document.getElementById("todo-add");
     const inProgress = document.getElementById("in-progress");
     const finish = document.getElementById("todo-done");
-    
+
     // Show loading indicators
     showLoadingIndicators(true);
-    
+
     // Wait for initial data load
     await todoContext.loadTodosFromDatabase();
-    
+
     // First render after initial load
     renderTodos();
-    
+
     // Hide loading indicators
     showLoadingIndicators(false);
-    
+
     // Subscribe to changes in the todo data
     todoContext.subscribe(() => {
       renderTodos();
     });
 
-    function showLoadingIndicators(show:boolean) {
-      const loadingIndicators = document.querySelectorAll('.loading-indicator') as NodeListOf<HTMLElement>;
-      loadingIndicators.forEach(indicator => {
-        indicator.style.display = show ? 'flex' : 'none';
+    function showLoadingIndicators(show: boolean) {
+      const loadingIndicators = document.querySelectorAll(
+        ".loading-indicator",
+      ) as NodeListOf<HTMLElement>;
+      loadingIndicators.forEach((indicator) => {
+        indicator.style.display = show ? "flex" : "none";
       });
     }
 
     function renderTodos() {
-
-      const btnSort = document.querySelector(".sort") as HTMLButtonElement
+      const btnSort = document.querySelector(".sort") as HTMLButtonElement;
 
       if (!todoList || !inProgress || !finish) return;
 
@@ -89,23 +90,25 @@ const { id, title, color } = Astro.props;
       inProgress.innerHTML = "";
       finish.innerHTML = "";
       let todos = todoContext.getTodos();
-      
-      if(btnSort.getAttribute("data-value") === "Desc"){
-        todos = todos.sort((a , b) => +new Date(a.dueDate) - +new Date(b.dueDate))
+
+      if (btnSort.getAttribute("data-value") === "Desc") {
+        todos = todos.sort(
+          (a, b) => +new Date(a.due_date) - +new Date(b.due_date),
+        );
       }
-      if(btnSort.getAttribute("data-value") === "Asc"){
-          let listDesc = todos.slice()
-          listDesc.sort((a , b) => +new Date(a.dueDate) - +new Date(b.dueDate))
-          todos = []
-          let count = 0
-          while(count < listDesc.length){
-            let item = listDesc.pop()
-            if(item){
-              todos.push(item)
-            }
+      if (btnSort.getAttribute("data-value") === "Asc") {
+        let listDesc = todos.slice();
+        listDesc.sort((a, b) => +new Date(a.due_date) - +new Date(b.due_date));
+        todos = [];
+        let count = 0;
+        while (count < listDesc.length) {
+          let item = listDesc.pop();
+          if (item) {
+            todos.push(item);
           }
         }
-        
+      }
+
       todos.forEach((todo) => {
         const todoItem = TodoCard(todo);
         if (todo.status === TodoStatusType.TODO) {
@@ -122,22 +125,22 @@ const { id, title, color } = Astro.props;
       addEventListeners(todoList);
       addEventListeners(inProgress);
       addEventListeners(finish);
-      
+
       // Setup drag events after rendering
       setupDragEvents();
     }
-    
+
     function setupDragEvents() {
       const todos = document.querySelectorAll(".todo-card");
       todos.forEach((todo) => {
         const parent = todo.parentElement;
-        
+
         // Remove existing event listeners to prevent duplication
         todo.removeEventListener("dragend", handleDragEnd);
-        
+
         // Add fresh event listener
         todo.addEventListener("dragend", handleDragEnd);
-        
+
         function handleDragEnd() {
           if (todo.parentElement !== parent) {
             changeStatus(todoContext, todo, todoService);
@@ -147,25 +150,25 @@ const { id, title, color } = Astro.props;
     }
 
     //btn sort logic
-    const btnSort = document.querySelector(".sort") as HTMLButtonElement
-    btnSort.innerHTML = `<img class="icon" src='${asc.src}'>Sort Asc`
-    btnSort.addEventListener("click", () =>{
-        let flag: boolean = false 
-        if(btnSort){
-            if(btnSort.getAttribute("data-value") === "Asc" && flag === false){
-                btnSort.setAttribute("data-value","Desc")
-                btnSort.innerHTML = `<img  class="icon" src='${asc.src}'> Sort Asc`
-                flag = true
-                renderTodos()
-            }
-            if(btnSort.getAttribute("data-value") === "Desc" && flag === false){
-                btnSort.setAttribute("data-value","Asc")
-                btnSort.innerHTML = `<img class="icon" src='${desc.src}'> Sort Desc`
-                flag = true
-                renderTodos()
-            } 
+    const btnSort = document.querySelector(".sort") as HTMLButtonElement;
+    btnSort.innerHTML = `<img class="sort-icon" src='${asc.src}'>`;
+    btnSort.addEventListener("click", () => {
+      let flag: boolean = false;
+      if (btnSort) {
+        if (btnSort.getAttribute("data-value") === "Asc" && flag === false) {
+          btnSort.setAttribute("data-value", "Desc");
+          btnSort.innerHTML = `<img class="sort-icon" src='${asc.src}'>`;
+          flag = true;
+          renderTodos();
         }
-    })
+        if (btnSort.getAttribute("data-value") === "Desc" && flag === false) {
+          btnSort.setAttribute("data-value", "Asc");
+          btnSort.innerHTML = `<img class="sort-icon" src='${desc.src}'>`;
+          flag = true;
+          renderTodos();
+        }
+      }
+    });
 
     // Add Todo button logic
     const addTodoButtons = document.querySelectorAll("#add-todo");
@@ -245,7 +248,7 @@ const { id, title, color } = Astro.props;
     width: 100%;
     padding: 20px;
   }
-  
+
   .loading-spinner {
     border: 3px solid #f3f3f3;
     border-top: 3px solid #3498db;
@@ -254,9 +257,13 @@ const { id, title, color } = Astro.props;
     height: 30px;
     animation: spin 2s linear infinite;
   }
-  
+
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>

@@ -18,7 +18,7 @@ $checkbox-size: 16px;
     min-height: 24px;
     align-items: center;
     margin-top: 4px;
-    background-color:var(--input-background) ;
+    background-color: var(--input-background);
 
     .tag {
       display: flex;
@@ -105,7 +105,7 @@ $checkbox-size: 16px;
 :root {
   --letter-color: black;
   --options-background-color: #ffffff;
-  --option-hover-color:#f3f4f6;
+  --option-hover-color: #f3f4f6;
   --tag-background: #f3f4f6;
 }
 
@@ -113,5 +113,5 @@ $checkbox-size: 16px;
   --letter-color: white;
   --options-background-color: #333;
   --option-hover-color: grey;
-  --tag-background:#464646;
+  --tag-background: #464646;
 }

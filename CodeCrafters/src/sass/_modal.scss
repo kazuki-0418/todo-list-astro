@@ -76,14 +76,14 @@
           .modal-close-button {
             cursor: pointer;
             border: none;
-            background:var(--border-color);
+            background: var(--border-color);
             padding: 2px;
 
             &:hover {
               opacity: 0.8;
             }
 
-            .close-icon{
+            .close-icon {
               color: var(--close-icon);
             }
           }
@@ -102,7 +102,7 @@
           flex-direction: column;
           gap: 4px;
 
-          option{
+          option {
             background-color: #333333;
           }
           label {
@@ -399,8 +399,8 @@
   --hover-color: #f0f0f0;
   --close-icon: black;
   --modal-shadow-color: #333333;
-  --add-btn-background: #24A6F5;
-  --cancel-btn-background:#f6f8fa;
+  --add-btn-background: #24a6f5;
+  --cancel-btn-background: #f6f8fa;
   --cancel-btn-color: #252921;
   --cancel-btn-hover: #e9eaec;
   --input-boder-color: #ccc;
@@ -412,12 +412,12 @@
   --close-btn: #333333;
   --border-color: #151b23f2;
   --hover-color: #333333;
-  --close-icon:white;
+  --close-icon: white;
   --modal-shadow-color: #585858;
-  --add-btn-background:#008B8B;
-  --cancel-btn-background:#212830;
+  --add-btn-background: #008b8b;
+  --cancel-btn-background: #212830;
   --cancel-btn-color: #f0f6fc;
   --input-boder-color: #646e7b;
   --cancel-btn-hover: #252d36;
-  --delete-btn-color: #B30024;
+  --delete-btn-color: #b30024;
 }
