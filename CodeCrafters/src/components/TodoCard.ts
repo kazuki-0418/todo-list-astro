@@ -47,7 +47,7 @@ export function addEventListeners(todoList: HTMLElement | null) {
 
 function getRemainingTime(todo: Todo) {
   if (todo.status === "done") return "Completed";
-  const dueDate = new Date(todo.dueDate);
+  const dueDate = new Date(todo.due_date);
   if (
     (dueDate.getUTCFullYear() === 1970 &&
       dueDate.getUTCMonth() === 0 &&
@@ -56,7 +56,7 @@ function getRemainingTime(todo: Todo) {
       dueDate.getUTCMinutes() === 0 &&
       dueDate.getUTCSeconds() === 0 &&
       dueDate.getUTCMilliseconds() === 0) ||
-    todo.dueDate == ""
+    todo.due_date == ""
   )
     return "--:--:--";
 
@@ -87,7 +87,7 @@ function getRemainingTime(todo: Todo) {
 
 function renderAssignedTo(todo: Todo) {
   type ProfileIconKeys = keyof typeof profileIcons;
-  const assignedPeople = todo.assignedTo.filter(
+  const assignedPeople = todo.assigned_to.filter(
     (person): person is ProfileIconKeys => {
       return person in profileIcons;
     },

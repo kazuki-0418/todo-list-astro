@@ -58,7 +58,7 @@ export const handleView = (todoId: string) => {
         return date.toDateString();
       };
 
-      todoDueDate.innerText = renderDuedate(todo.dueDate);
+      todoDueDate.innerText = renderDuedate(todo.due_date);
     }
 
     const todoTags = viewTodoDetail.querySelector(
@@ -73,15 +73,15 @@ export const handleView = (todoId: string) => {
       "#todoAssignees",
     ) as HTMLParagraphElement;
     if (todoAssignedTo) {
-      todoAssignedTo.innerText = todo.assignedTo.join(", ") || "None";
+      todoAssignedTo.innerText = todo.assigned_to.join(", ") || "None";
     }
 
-    // const todoNotes = viewTodoDetail.querySelector(
-    //   "#todoNotes",
-    // ) as HTMLParagraphElement;
-    // if (todoNotes) {
-    //   todoNotes.innerText = todo.notes || "None";
-    // }
+    const todoNotes = viewTodoDetail.querySelector(
+      "#todoNotes",
+    ) as HTMLParagraphElement;
+    if (todoNotes) {
+      todoNotes.innerText = todo.notes || "";
+    }
 
     const todoCreatedAt = viewTodoDetail.querySelector(
       "#todoCreatedAt",
@@ -89,7 +89,7 @@ export const handleView = (todoId: string) => {
 
     if (todoCreatedAt) {
       todoCreatedAt.innerText = `Created At:${new Date(
-        todo.createdAt,
+        todo.created_at,
       ).toLocaleDateString()}`;
     }
 
@@ -98,7 +98,7 @@ export const handleView = (todoId: string) => {
     ) as HTMLParagraphElement;
 
     if (todoUpdatedAt) {
-      todoUpdatedAt.innerText = `Updated At:${new Date(todo.updatedAt).toLocaleDateString()}`;
+      todoUpdatedAt.innerText = `Updated At:${new Date(todo.updated_at).toLocaleDateString()}`;
     }
   }
 };

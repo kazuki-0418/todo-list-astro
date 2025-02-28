@@ -94,16 +94,15 @@ import { todoStatusTypeOptions } from "@utils/todoStatusType";
     if (!title.trim()) return;
 
     const newTodo = {
-      id: Math.random().toString(36),
       title: title.trim(),
       status,
-      dueDate: dueDate?.toLocaleString(),
+      due_date: dueDate?.toLocaleString(),
       tags,
-      assignedTo,
+      assigned_to: assignedTo,
       notes: "",
     } as Todo;
 
-    const updatedTodos = todoService.addTodo(newTodo);
+    const updatedTodos = await todoService.addTodo(newTodo);
 
     renderTodos(updatedTodos);
 

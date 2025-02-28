@@ -6,6 +6,6 @@ import Male2 from "@assets/profile-icons/male2.jpg";
 export const profileIcons = {
   Alana: Female1.src,
   Nana: Female2.src,
-  Chris: Male1.src,
-  Kazuki: Male2.src,
+  Kazuki: Male1.src,
+  Chris: Male2.src,
 };

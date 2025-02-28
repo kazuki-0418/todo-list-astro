@@ -371,17 +371,13 @@
                 }
               }
 
-              // メモ用のセクション
               .notes-section {
-                background-color: #f9f9f9;
-                border-radius: 6px;
-                padding: 12px;
                 white-space: pre-wrap;
                 word-break: break-word;
                 font-size: 14px;
               }
             }
-          } // .detail-row
+          }
 
           .dates-section {
             margin-top: 8px;

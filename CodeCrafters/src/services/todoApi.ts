@@ -1,5 +1,5 @@
-import { supabase } from "../utils/supabaseClient";
-import type { Todo } from "../types/todo";
+import { supabase } from "@utils/supabaseClient";
+import type { Todo } from "src/types/todo";
 
 export async function fetchTodos(): Promise<Todo[]> {
   const { data, error } = await supabase.from("todos").select("*");

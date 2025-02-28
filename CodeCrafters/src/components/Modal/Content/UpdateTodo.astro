@@ -99,13 +99,13 @@ import { TodoFormType } from "@utils/todoFormType";
       id,
       title: trimmedTitle,
       status,
-      dueDate: dueDate?.toLocaleString(),
+      due_date: dueDate?.toLocaleString(),
       tags,
-      assignedTo,
+      assigned_to:assignedTo,
       notes: "",
     } as Todo;
 
-    const updatedTodos = todoService.updateTodo(newTodo);
+    const updatedTodos = await todoService.updateTodo(newTodo);
     renderTodos(updatedTodos);
 
     closeModal();

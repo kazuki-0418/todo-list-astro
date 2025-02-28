@@ -36,7 +36,7 @@ import { TodoFormType } from "@utils/todoFormType";
     const formData = new FormData(form);
     const id = formData.get("id") as string;
 
-    const updatedTodos = todoService.deleteTodo(id);
+    const updatedTodos =await todoService.deleteTodo(id);
     renderTodos(updatedTodos);
 
     closeModal();
