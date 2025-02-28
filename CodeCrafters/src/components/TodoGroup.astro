@@ -53,7 +53,8 @@ const { id, title, color } = Astro.props;
     const todoList = document.getElementById("todo-add");
     const inProgress = document.getElementById("in-progress");
     const finish = document.getElementById("todo-done");
-    
+  
+
     // Show loading indicators
     showLoadingIndicators(true);
     
@@ -110,6 +111,7 @@ const { id, title, color } = Astro.props;
         const todoItem = TodoCard(todo);
         if (todo.status === TodoStatusType.TODO) {
           todoList.innerHTML += todoItem;
+          
         }
         if (todo.status === TodoStatusType.IN_PROGRESS) {
           inProgress.innerHTML += todoItem;

@@ -1,0 +1,237 @@
+@import "input";
+
+%edit-form-style {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 500px;
+    margin: auto;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      option{
+        background-color: #333333;
+      }
+      label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--letter-color);
+      }
+    }
+
+    .name-inputs {
+      display: flex;
+      gap: 8px;
+
+      > input {
+        @extend %input-style;
+        flex: 1;
+        font-family: "Poppins", sans-serif;
+        color: var(--letter-color);
+        background-color: var(--input-background);
+        border: 1px solid var(--input-border-color);
+      }
+    }
+
+    .due-date-input {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+
+      .icon {
+        padding: 10px;
+        background: #f1f1f1;
+        border-right: 1px solid #ccc;
+      }
+
+      > input {
+        @extend %input-style;
+        color: var(--letter-color);
+        background-color: var(--input-background);
+        border: 1px solid var(--input-border-color);
+      }
+    }
+
+    .username-input {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      overflow: hidden;
+
+      .prefix {
+        padding: 10px;
+        background: #f1f1f1;
+        border-right: 1px solid #ccc;
+      }
+
+      input {
+        flex: 1;
+        border: none;
+        padding: 10px;
+        @extend %input-style;
+      }
+
+      .verified-icon {
+        padding: 10px;
+        color: #007bff;
+      }
+    }
+
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+
+      .submit-button {
+        font-family: $font-family;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        background: var(--add-btn-background);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        &:hover {
+          background: var(--add-btn-background);
+          filter: brightness(0.9);
+        }
+      }
+
+      .cancel-button {
+        font-family: $font-family;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        background: var(--cancel-btn-background);
+        color: var(--cancel-btn-color);
+        font-size: 16px;
+        cursor: pointer;
+        &:hover {
+          background: var(--cancel-btn-hover);
+        }
+      }
+    }
+
+    .cancel-button {
+      font-family: $font-family;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: var(--cancel-btn-background);
+      color: var(--cancel-btn-color);
+      font-size: 16px;
+      cursor: pointer;
+      &:hover {
+        background: var(--cancel-btn-hover);
+      }
+    }
+  }
+
+  %delete-form-style {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .delete-form-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .delete-form-message {
+        font-size: 16px;
+      }
+
+      .todo-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin: auto;
+      }
+    }
+    .delete-form-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      
+      .delete-button {
+        font-family: $font-family;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 6px;
+        background-color: var(--delete-btn-color);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        &:hover {
+          background: var(--delete-btn-color);
+          filter: brightness(0.9);
+        }
+      }
+
+      .cancel-button {
+        font-family: $font-family;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        background: var(--cancel-btn-background);
+        color: var(--cancel-btn-color);
+        font-size: 16px;
+        cursor: pointer;
+        &:hover {
+          background: var(--cancel-btn-hover);
+        }
+      }
+      
+    }
+
+    @media (max-width: $small) {
+      .delete-form-footer{
+        flex-direction: column;
+
+        .delete-button {
+          width: 100%;
+        }
+
+        .cancel-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+
+// Set the theme based on the data-theme attribute
+:root {
+    --letter-color: black;
+    --close-btn: #ccc;
+    --border-color: #ffffff;
+    --hover-color: #f0f0f0;
+    --close-icon: black;
+    --modal-shadow-color: #333333;
+    --add-btn-background: #24A6F5;
+    --cancel-btn-background:#f6f8fa;
+    --cancel-btn-color: #252921;
+    --cancel-btn-hover: #e9eaec;
+    --input-border-color: #ccc;
+    --delete-btn-color: #ff0033;
+  }
+  
+  [data-theme="dark"] {
+    --letter-color: white;
+    --close-btn: #333333;
+    --border-color: #151b23f2;
+    --hover-color: #333333;
+    --close-icon:white;
+    --modal-shadow-color: #585858;
+    --add-btn-background:#008B8B;
+    --cancel-btn-background:#212830;
+    --cancel-btn-color: #f0f6fc;
+    --input-border-color: #646e7b;
+    --cancel-btn-hover: #252d36;
+    --delete-btn-color: #B30024;
+  }
+  

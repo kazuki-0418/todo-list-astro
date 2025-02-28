@@ -24,10 +24,10 @@ declare global {
 <div class="main-container">
   <BtnSort />
   <div>
-    <BaseModal title={"Create Task"} id={TodoModalType.CREATE}>
+    <BaseModal title={"Create Task"} id={TodoModalType.CREATE} responsive={true}>
       <CreateTodo />
     </BaseModal>
-    <BaseModal title={"Update Task"} id={TodoModalType.UPDATE}>
+    <BaseModal title={"Update Task"} id={TodoModalType.UPDATE} responsive={true}>
       <UpdateTodo />
     </BaseModal>
     <BaseModal title={"Delete Task"} id={TodoModalType.DELETE}>

@@ -7,6 +7,8 @@
   margin: 2em 0;
   border-radius: 10px;
 
+  animation: slideUp 0.5s ease-in-out;
+
   .todo-container {
     display: flex;
     flex-direction: column;
@@ -48,8 +50,8 @@
       }
 
       .desktop-design-badge {
-        background: #00ffff;
-        color: #f8f8f8;
+        background: #0099cc;
+        color: #f0f0f0;
       }
 
       .mobile-design-badge {
@@ -89,6 +91,8 @@
       }
       &:hover {
         cursor: pointer;
+        opacity: calc(0.5 + 0.5 * 0.5);
+        animation: iconHover $transition-time linear infinite;
       }
     }
     .delete-button {
@@ -101,6 +105,8 @@
       }
       &:hover {
         cursor: pointer;
+        opacity: calc(0.5 + 0.5 * 0.5);
+        animation: iconHover $transition-time linear infinite;
       }
     }
   }
@@ -289,4 +295,30 @@
 [data-theme="dark"] .mobile-design-badge {
   background: #a0522d !important;
   color: #ffdab9 !important;
+}
+
+// アニメーション todoCard slideUp
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+@keyframes iconHover {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
