@@ -22,10 +22,18 @@ declare global {
 
 <div class="main-container">
   <div>
-    <BaseModal title={"Create Task"} id={TodoModalType.CREATE} responsive={true}>
+    <BaseModal
+      title={"Create Task"}
+      id={TodoModalType.CREATE}
+      responsive={true}
+    >
       <CreateTodo />
     </BaseModal>
-    <BaseModal title={"Update Task"} id={TodoModalType.UPDATE} responsive={true}>
+    <BaseModal
+      title={"Update Task"}
+      id={TodoModalType.UPDATE}
+      responsive={true}
+    >
       <UpdateTodo />
     </BaseModal>
     <BaseModal title={"Delete Task"} id={TodoModalType.DELETE}>

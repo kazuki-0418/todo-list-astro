@@ -6,7 +6,7 @@ type Props = {
   title: string;
   id: string;
   responsive?: boolean;
-}
+};
 
 declare global {
   interface Window {
@@ -22,7 +22,10 @@ declare global {
 const { title, id, responsive = false } = Astro.props;
 ---
 
-<div class={`modal-wrapper${responsive ? " responsive-modal" : ""}`} data-modal-id={id}>
+<div
+  class={`modal-wrapper${responsive ? " responsive-modal" : ""}`}
+  data-modal-id={id}
+>
   <div class="modal-overlay"></div>
   <div class="modal">
     <div class="modal-container">
@@ -62,7 +65,7 @@ const { title, id, responsive = false } = Astro.props;
         ".modal-close-button",
       ) as HTMLElement;
       this.isResponsive = wrapper.classList.contains("responsive-modal");
-      
+
       this.initialize();
     }
 
@@ -70,12 +73,12 @@ const { title, id, responsive = false } = Astro.props;
       this.closeButton.addEventListener("click", () => {
         this.close();
       });
-      
+
       this.overlay.addEventListener("click", () => {
         this.close();
         this.resetAddTodoForm();
       });
-      
+
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && this.isOpen()) {
           this.close();
@@ -118,7 +121,7 @@ const { title, id, responsive = false } = Astro.props;
       });
 
       document.body.classList.add("modal-open");
-      
+
       this.wrapper.classList.add("is-open");
       this.modal.style.display = "block";
       this.overlay.style.display = "block";
@@ -132,13 +135,13 @@ const { title, id, responsive = false } = Astro.props;
       if (this.isResponsive && this.isMobile()) {
         this.modal.style.transform = "translateY(100%)";
         this.modal.style.opacity = "0";
-        
+
         setTimeout(() => {
           this.completeClose();
         }, 300);
       } else {
         this.modal.style.opacity = "0";
-        
+
         setTimeout(() => {
           this.completeClose();
         }, 300);
@@ -152,7 +155,7 @@ const { title, id, responsive = false } = Astro.props;
       this.modal.style.transform = "";
       this.modal.style.opacity = "";
       this.modal.style.animation = "";
-      
+
       document.body.classList.remove("modal-open");
 
       const event = new CustomEvent("modalClose", {
