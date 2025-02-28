@@ -1,0 +1,269 @@
+---
+// TodoGroup.astro
+import { IoAdd } from "react-icons/io5";
+import { MdCircle } from "react-icons/md";
+
+type Props = {
+  id: string;
+  title: string;
+  color: string;
+};
+
+const { id, title, color } = Astro.props;
+---
+
+<div class="board column">
+  <div class=`${id} column`>
+    <div class="header-board">
+      <div class="header-title">
+        <MdCircle size={16} color={color} />
+        <p>{title}</p>
+      </div>
+      <span class="add" id="add-todo">
+        <IoAdd size={32} />
+      </span>
+    </div>
+    <div
+      id={id}
+      class=`column-add ${id}`
+      ondrop="dropMe(event)"
+      ondragover="allowDrop(event)"
+    >
+      <div class="loading-indicator" style="display: none;">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { addEventListeners, TodoCard } from "./TodoCard";
+  import { TodoContext } from "@contexts/todoContext";
+  import { TodoService } from "@services/todoService";
+  import { handleCreate } from "@utils/handleCreate";
+  import { TodoStatusType } from "@utils/todoStatusType";
+  import asc from "@assets/asc.svg";
+  import desc from "@assets/desc.svg";
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const todoContext = TodoContext.getInstance();
+    const todoService = new TodoService();
+
+    // Get DOM elements
+    const todoList = document.getElementById("todo-add");
+    const inProgress = document.getElementById("in-progress");
+    const finish = document.getElementById("todo-done");
+
+    // Show loading indicators
+    showLoadingIndicators(true);
+
+    // Wait for initial data load
+    await todoContext.loadTodosFromDatabase();
+
+    // First render after initial load
+    renderTodos();
+
+    // Hide loading indicators
+    showLoadingIndicators(false);
+
+    // Subscribe to changes in the todo data
+    todoContext.subscribe(() => {
+      renderTodos();
+    });
+
+    function showLoadingIndicators(show: boolean) {
+      const loadingIndicators = document.querySelectorAll(
+        ".loading-indicator",
+      ) as NodeListOf<HTMLElement>;
+      loadingIndicators.forEach((indicator) => {
+        indicator.style.display = show ? "flex" : "none";
+      });
+    }
+
+    function renderTodos() {
+      const btnSort = document.querySelector(".sort") as HTMLButtonElement;
+
+      if (!todoList || !inProgress || !finish) return;
+
+      // Clear existing content
+      todoList.innerHTML = "";
+      inProgress.innerHTML = "";
+      finish.innerHTML = "";
+      let todos = todoContext.getTodos();
+
+      if (btnSort.getAttribute("data-value") === "Desc") {
+        todos = todos.sort(
+          (a, b) => +new Date(a.due_date) - +new Date(b.due_date),
+        );
+      }
+      if (btnSort.getAttribute("data-value") === "Asc") {
+        let listDesc = todos.slice();
+        listDesc.sort((a, b) => +new Date(a.due_date) - +new Date(b.due_date));
+        todos = [];
+        let count = 0;
+        while (count < listDesc.length) {
+          let item = listDesc.pop();
+          if (item) {
+            todos.push(item);
+          }
+        }
+      }
+
+      todos.forEach((todo) => {
+        const todoItem = TodoCard(todo);
+        if (todo.status === TodoStatusType.TODO) {
+          todoList.innerHTML += todoItem;
+        }
+        if (todo.status === TodoStatusType.IN_PROGRESS) {
+          inProgress.innerHTML += todoItem;
+        }
+        if (todo.status === TodoStatusType.DONE) {
+          finish.innerHTML += todoItem;
+        }
+      });
+
+      addEventListeners(todoList);
+      addEventListeners(inProgress);
+      addEventListeners(finish);
+
+      // Setup drag events after rendering
+      setupDragEvents();
+    }
+
+    function setupDragEvents() {
+      const todos = document.querySelectorAll(".todo-card");
+      todos.forEach((todo) => {
+        const parent = todo.parentElement;
+
+        // Remove existing event listeners to prevent duplication
+        todo.removeEventListener("dragend", handleDragEnd);
+
+        // Add fresh event listener
+        todo.addEventListener("dragend", handleDragEnd);
+
+        function handleDragEnd() {
+          if (todo.parentElement !== parent) {
+            changeStatus(todoContext, todo, todoService);
+          }
+        }
+      });
+    }
+
+    //btn sort logic
+    const btnSort = document.querySelector(".sort") as HTMLButtonElement;
+    btnSort.innerHTML = `<img class="sort-icon" src='${asc.src}'>`;
+    btnSort.addEventListener("click", () => {
+      let flag: boolean = false;
+      if (btnSort) {
+        if (btnSort.getAttribute("data-value") === "Asc" && flag === false) {
+          btnSort.setAttribute("data-value", "Desc");
+          btnSort.innerHTML = `<img class="sort-icon" src='${asc.src}'>`;
+          flag = true;
+          renderTodos();
+        }
+        if (btnSort.getAttribute("data-value") === "Desc" && flag === false) {
+          btnSort.setAttribute("data-value", "Asc");
+          btnSort.innerHTML = `<img class="sort-icon" src='${desc.src}'>`;
+          flag = true;
+          renderTodos();
+        }
+      }
+    });
+
+    // Add Todo button logic
+    const addTodoButtons = document.querySelectorAll("#add-todo");
+    addTodoButtons.forEach((addTodoBtn) => {
+      if (addTodoBtn) {
+        addTodoBtn.addEventListener("click", () => {
+          const columnName = addTodoBtn.parentElement?.parentElement?.className;
+          if (columnName?.includes("todo")) {
+            handleCreate(TodoStatusType.TODO);
+          }
+          if (columnName?.includes("in-progress")) {
+            handleCreate(TodoStatusType.IN_PROGRESS);
+          }
+          if (columnName?.includes("todo-done")) {
+            handleCreate(TodoStatusType.DONE);
+          }
+        });
+      }
+    });
+  });
+
+  async function changeStatus(
+    todoContext: TodoContext,
+    todo: Element,
+    todoService: TodoService,
+  ) {
+    const listTodos = todoContext.getTodos();
+    for (const todoItem of listTodos) {
+      if (todoItem.id === todo.id) {
+        if (todo.parentElement?.id === "todo-done") {
+          await todoService.toggleTodoStatus(todoItem.id, "done");
+        }
+        if (todo.parentElement?.id === "in-progress") {
+          await todoService.toggleTodoStatus(todoItem.id, "in-progress");
+        }
+        if (todo.parentElement?.id === "todo-add") {
+          await todoService.toggleTodoStatus(todoItem.id, "todo");
+        }
+        break;
+      }
+    }
+  }
+</script>
+
+<script is:inline>
+  // Drag and Drop
+  function allowDrop(e) {
+    e.preventDefault();
+  }
+
+  function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+  }
+
+  function dropMe(e) {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("text");
+    const todo = document.getElementById(data);
+
+    if (e.target.classList.contains("column-add")) {
+      e.target.appendChild(todo);
+    } else if (e.target.closest(".column-add")) {
+      e.target.closest(".column-add").appendChild(todo);
+    }
+  }
+
+  function noAllowDrop(ev) {
+    ev.stopPropagation();
+  }
+</script>
+
+<style>
+  .loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .loading-spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>

@@ -1,0 +1,50 @@
+.single-select {
+  position: relative;
+
+  .select-box {
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    background: var(--input-background);
+    text-align: left;
+    color: var(--letter-color);
+  }
+
+  .options {
+    position: absolute;
+    width: 100%;
+    margin-top: 5px;
+    padding: 0;
+    list-style: none;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    color: var(--letter-color);
+    background: var(--border-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: none; // Hide options by default
+  }
+
+  .options.active {
+    display: block;
+  }
+
+  .option {
+    padding: 10px;
+    cursor: pointer;
+    &:hover {
+      background: var(--input-background);
+    }
+  }
+}
+
+:root {
+  --options-background-color: #ffffff;
+  --option-hover-color: #f3f4f6;
+}
+
+[data-theme="dark"] {
+  --options-background-color: #333;
+  --option-hover-color: grey;
+}

@@ -1,0 +1,35 @@
+%input-style {
+  width: -webkit-fill-available;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.2s;
+  background-color: var(--input-background);
+  color: var(--letter-color);
+  &:focus {
+    border-color: $primary;
+    outline: none;
+  }
+}
+
+::-webkit-calendar-picker-indicator {
+  color: var(--letter-color);
+}
+
+[data-theme="dark"] {
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}
+
+// Set the theme based on the data-theme attribute
+:root {
+  --letter-color: black;
+  --input-background: #ffffff;
+}
+
+[data-theme="dark"] {
+  --letter-color: white;
+  --input-background: #333;
+}

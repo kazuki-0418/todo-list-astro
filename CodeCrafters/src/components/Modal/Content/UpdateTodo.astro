@@ -1,0 +1,166 @@
+---
+import MultiSelect from "@components/Select/MultiSelect.astro";
+import SingleSelect from "@components/Select/SingleSelect.astro";
+import "@styles/style.css";
+import { TodoFormType } from "@utils/todoFormType";
+---
+
+<form class="form-container" id={TodoFormType.UPDATE}>
+  <input type="hidden" name="id" id="todo-id" />
+
+  <div class="form-group">
+    <label>Title</label>
+    <div class="name-inputs">
+      <input type="text" id="title" placeholder="" name="title" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Status</label>
+    <SingleSelect
+      name="status"
+      options={[
+        { value: "todo", label: "To Do" },
+        { value: "in-progress", label: "In Progress" },
+        { value: "done", label: "Done" },
+      ]}
+      category="Status"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Tags</label>
+    <MultiSelect
+      options={[
+        { value: "desktop-design", label: "Desktop Design" },
+        { value: "mobile-design", label: "Mobile Design" },
+        { value: "backend", label: "Backend" },
+        { value: "frontend", label: "Frontend" },
+      ]}
+      name="tags"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Assign To</label>
+    <MultiSelect
+      options={[
+        { value: "Alana", label: "Alana" },
+        { value: "Chris", label: "Chris" },
+        { value: "Nana", label: "Nana" },
+        { value: "Kazuki", label: "Kazuki" },
+      ]}
+      name="assignTo"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Due Date</label>
+    <div class="due-date-input">
+      <input type="date" id="dueDate" name="dueDate" />
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button type="reset" class="cancel-button">Cancel</button>
+    <button type="submit" class="submit-button">Update</button>
+  </div>
+</form>
+
+<script>
+  import { TodoService } from "@services/todoService";
+  import type { Todo } from "src/types/todo";
+  import { addEventListeners, TodoCard } from "@components/TodoCard";
+  import { TodoFormType } from "@utils/todoFormType";
+  import { TodoModalType } from "@utils/todoModalType";
+
+  const todoService = new TodoService();
+
+  const updateTodo = async (event: SubmitEvent) => {
+    event.preventDefault();
+
+    const form = document.getElementById(
+      TodoFormType.UPDATE,
+    ) as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const status = formData.get("status") as Todo["status"];
+    const dueDate = formData.get("dueDate");
+    const tags = formData.getAll(`tags[]`) as string[];
+
+    const assignedTo = formData.getAll("assignTo[]") as string[];
+
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) return;
+
+    const newTodo = {
+      id,
+      title: trimmedTitle,
+      status,
+      due_date: dueDate?.toLocaleString(),
+      tags,
+      assigned_to: assignedTo,
+      notes: "",
+    } as Todo;
+
+    const updatedTodos = await todoService.updateTodo(newTodo);
+    renderTodos(updatedTodos);
+
+    closeModal();
+    formReset();
+  };
+
+  const form = document.getElementById(TodoFormType.UPDATE) as HTMLFormElement;
+  form.addEventListener("submit", updateTodo);
+
+  const formReset = () => {
+    const form = document.getElementById(
+      TodoFormType.UPDATE,
+    ) as HTMLFormElement;
+    form.reset();
+  };
+
+  const renderTodos = (todos: Todo[]) => {
+    const todoList = document.getElementById("todo-add") as HTMLDivElement;
+    const inProgress = document.getElementById("in-progress") as HTMLDivElement;
+    const finish = document.getElementById("todo-done") as HTMLDivElement;
+    todoList.innerHTML = "";
+    inProgress.innerHTML = "";
+    finish.innerHTML = "";
+
+    todos.forEach((todo) => {
+      const todoItem = TodoCard(todo);
+      if (todo.status === "todo") {
+        todoList.innerHTML += todoItem;
+      }
+      if (todo.status === "in-progress") {
+        inProgress.innerHTML += todoItem;
+      }
+      if (todo.status === "done") {
+        finish.innerHTML += todoItem;
+      }
+    });
+
+    addEventListeners(todoList);
+    addEventListeners(inProgress);
+    addEventListeners(finish);
+  };
+
+  const cancelButton = form.querySelector(
+    ".cancel-button",
+  ) as HTMLButtonElement;
+  if (cancelButton) {
+    cancelButton.addEventListener("click", () => {
+      closeModal();
+      formReset();
+    });
+  }
+
+  const closeModal = () => {
+    const modalControls = window.modalControls;
+    if (!modalControls) return;
+    modalControls[TodoModalType.UPDATE].close();
+  };
+</script>
