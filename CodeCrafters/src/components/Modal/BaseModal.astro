@@ -1,7 +1,6 @@
 ---
 import "@styles/style.css";
-import { Image } from "astro:assets";
-import CloseIcon from "@assets/close.svg";
+import { IoClose } from "react-icons/io5";
 
 type Props = {
   title: string;
@@ -27,11 +26,11 @@ const { title, id } = Astro.props;
     <div class="modal-container">
       <div class="modal-header">
         <div class="modal-header-title">
-          <h2>{title}</h2>
+          <h3>{title}</h3>
         </div>
         <div class="modal-header-close">
           <button class="modal-close-button">
-            <Image src={CloseIcon} alt="close" />
+            <IoClose size="1.5em" className="close-icon"/>
           </button>
         </div>
       </div>
@@ -41,6 +40,8 @@ const { title, id } = Astro.props;
 </div>
 
 <script>
+  import { TodoModalType } from "@utils/todoModalType";
+
   class ModalController {
     private wrapper: HTMLElement;
     private modal: HTMLElement;
@@ -67,11 +68,13 @@ const { title, id } = Astro.props;
 
       this.overlay.addEventListener("click", () => {
         this.close();
+        this.resetAddTodoForm();
       });
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && this.isOpen()) {
           this.close();
+          this.resetAddTodoForm();
         }
       });
     }
@@ -101,6 +104,15 @@ const { title, id } = Astro.props;
         detail: { modalId: this.modalId },
       });
       document.dispatchEvent(event);
+    }
+
+    resetAddTodoForm() {
+      if (this.modalId === TodoModalType.CREATE) {
+        const form = document.getElementById(
+          "add-todo-form",
+        ) as HTMLFormElement;
+        form.reset();
+      }
     }
   }
 

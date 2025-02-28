@@ -1,10 +1,109 @@
 @import "variables";
 
 .todo-card {
-  background: #f8f8f8;
+  background: white;
   padding: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin: 2em 0;
+  border-radius: 10px;
+
+  .todo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 1.3em;
+  }
+  .status {
+    font-weight: bold;
+    color: #777;
+  }
+  .todo-info {
+    width: 100%;
+    margin: 0.4em 0;
+    .due-date {
+      font-weight: 600;
+      font-size: 0.8em;
+    }
+    .tags {
+      display: flex;
+      gap: 0.5em;
+      .tag {
+        font-size: 0.7em;
+        border-radius: 5px;
+        background: #f8f8f8;
+        color: #777;
+      }
+
+      .backend-badge {
+        background: #800080;
+        color: #f8f8f8;
+      }
+
+      .frontend-badge {
+        background: #008000;
+        color: #f8f8f8;
+      }
+
+      .desktop-design-badge {
+        background: #00ffff;
+        color: #f8f8f8;
+      }
+
+      .mobile-design-badge {
+        background: #ffa500;
+        color: #f8f8f8;
+      }
+    }
+  }
+
+  .assigned-to {
+    display: flex;
+    flex-direction: row;
+
+    .assigned {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .joint {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-left: -10px;
+    }
+  }
+  .todo-actions {
+    padding-top: 0.3em;
+    display: flex;
+    justify-content: flex-end;
+    .edit-button {
+      background: transparent;
+      border: none;
+      .icon {
+        max-width: 1.5em;
+        width: auto;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .delete-button {
+      background: transparent;
+      border: none;
+      
+      .icon {
+        max-width: 1.5em;
+        width: auto;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
   &:hover {
     transition:
       transform 0.2s ease-in-out,
@@ -51,10 +150,7 @@
     margin-top: 6px;
   }
 
-  .tag,
-  .assigned {
-    background: $primary;
-    color: white;
+  .tag {
     font-size: 12px;
     padding: 4px 10px;
     border-radius: 6px;
@@ -143,6 +239,7 @@
 
   .tag,
   .assigned {
+    width: 1em;
     background: $primary;
     color: white;
     font-size: 12px;
@@ -164,4 +261,32 @@
     margin-top: 10px;
     font-size: 14px;
   }
+}
+
+[data-theme="dark"] .icon {
+  filter: invert(100%);
+}
+
+[data-theme="dark"] .todo-card {
+  background: #000;
+}
+
+[data-theme="dark"] .backend-badge {
+  background: #4b0082 !important;
+  color: #d8bfd8 !important;
+}
+
+[data-theme="dark"] .frontend-badge {
+  background: #006400 !important;
+  color: #90ee90 !important;
+}
+
+[data-theme="dark"] .desktop-design-badge {
+  background: #008b8b !important;
+  color: #e0ffff !important;
+}
+
+[data-theme="dark"] .mobile-design-badge {
+  background: #a0522d !important;
+  color: #ffdab9 !important;
 }

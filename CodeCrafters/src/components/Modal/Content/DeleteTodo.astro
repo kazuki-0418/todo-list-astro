@@ -27,7 +27,6 @@ import { TodoFormType } from "@utils/todoFormType";
   import { TodoModalType } from "@utils/todoModalType";
 
   const todoService = new TodoService();
-  const todoList = document.getElementById("todoList") as HTMLDivElement;
 
   const deleteTodo = async (event: SubmitEvent) => {
     event.preventDefault();
@@ -55,12 +54,29 @@ import { TodoFormType } from "@utils/todoFormType";
   };
 
   const renderTodos = (todos: Todo[]) => {
+    const todoList = document.getElementById("todo-add") as HTMLDivElement;
+    const inProgress = document.getElementById("in-progress") as HTMLDivElement;
+    const finish = document.getElementById("todo-done") as HTMLDivElement;
     todoList.innerHTML = "";
+    inProgress.innerHTML = "";
+    finish.innerHTML = "";
 
-    const todoElements = todos.map((todo) => TodoCard(todo)).join("");
-    todoList.innerHTML = todoElements;
+    todos.forEach((todo) => {
+      const todoItem = TodoCard(todo);
+      if (todo.status === "todo") {
+        todoList.innerHTML += todoItem;
+      }
+      if (todo.status === "in-progress") {
+        inProgress.innerHTML += todoItem;
+      }
+      if (todo.status === "done") {
+        finish.innerHTML += todoItem;
+      }
+    });
 
     addEventListeners(todoList);
+    addEventListeners(inProgress);
+    addEventListeners(finish);
   };
 
   const cancelButton = form.querySelector(

@@ -1,5 +1,6 @@
 import type { Todo } from "src/types/todo";
 import { TodoContext } from "@contexts/todoContext";
+import { handleView } from "@utils/handleView";
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById(
@@ -9,10 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "autocomplete-results",
   ) as HTMLUListElement;
 
-  const todoContext = TodoContext.getInstance();
-  const todos: Todo[] = todoContext.getTodos();
-
   searchInput.addEventListener("input", () => {
+    const todoContext = TodoContext.getInstance();
+    const todos: Todo[] = todoContext.getTodos();
     const query = searchInput.value.toLowerCase();
     resultsContainer.innerHTML = "";
     resultsContainer.style.display = query ? "block" : "none";
@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
           searchInput.value = item.title;
           resultsContainer.style.display = "none";
           resultsContainer.innerHTML = "";
+          handleView(item.id);
         });
 
         resultsContainer.appendChild(li);

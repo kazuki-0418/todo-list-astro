@@ -37,4 +37,13 @@ export const handleCreate = (status: Status) => {
       statusSelectBox.textContent = selectedOption.dataset.label as string;
     }
   }
+
+  const dueDateInput = addTodoForm.querySelector(
+    '[name="dueDate"]',
+  ) as HTMLInputElement;
+
+  const today = new Date();
+  today.setDate(today.getDate());
+  const formattedDate = today.toISOString().split("T")[0];
+  dueDateInput.value = formattedDate;
 };

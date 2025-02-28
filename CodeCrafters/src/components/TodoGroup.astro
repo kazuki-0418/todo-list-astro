@@ -1,106 +1,55 @@
 ---
 // TodoGroup.astro
-import BaseModal from "@components/Modal/BaseModal.astro";
-import CreateTodo from "@components/Modal/Content/CreateTodo.astro";
-import DeleteTodo from "@components/Modal/Content/DeleteTodo.astro";
-import UpdateTodo from "@components/Modal/Content/UpdateTodo.astro";
-import { TodoModalType } from "@utils/todoModalType";
-import { IoAddCircle } from "react-icons/io5";
+import { IoAdd } from "react-icons/io5";
+import { MdCircle } from "react-icons/md";
 
-// Global type declaration for modalControls
-declare global {
-  interface Window {
-    modalControls?: {
-      [key: string]: {
-        show: () => void;
-        close: () => void;
-      };
-    };
-  }
-}
+type Props = {
+  id: string;
+  title: string;
+  color: string;
+};
+
+const { id, title, color } = Astro.props;
 ---
 
-<section class="main-container">
-  <div>
-    <BaseModal title={"Create Todo"} id={TodoModalType.CREATE}>
-      <CreateTodo />
-    </BaseModal>
-    <BaseModal title={"Update Todo"} id={TodoModalType.UPDATE}>
-      <UpdateTodo />
-    </BaseModal>
-    <BaseModal title={"Delete Todo"} id={TodoModalType.DELETE}>
-      <DeleteTodo />
-    </BaseModal>
-  </div>
-
-  <h2>Codebreakers</h2>
-  <div class="Board column">
-    <div class="todo column">
-      <div class="header-board">
-        <h3>Todo</h3>
-        <span class="add" id="add-todo">
-          <IoAddCircle size={32} />
-        </span>
+<div class="board column">
+  <div class=`${id} column`>
+    <div class="header-board">
+      <div class="header-title">
+        <MdCircle size={16} color={color} />
+        <p>{title}</p>
       </div>
-      <div
-        id="todo-add"
-        class="column-add todo-add"
-        ondrop="dropMe(event)"
-        ondragover="allowDrop(event)"
-      >
-      </div>
+      <span class="add" id="add-todo">
+        <IoAdd size={32} />
+      </span>
     </div>
-    <div class="In-progress column">
-      <div class="header-board">
-        <h3>In Progress</h3>
-        <span class="add" id="add-todo">
-          <IoAddCircle size={32} />
-        </span>
-      </div>
-      <div
-        id="in-progress"
-        class="column-add in-progress"
-        ondrop="dropMe(event)"
-        ondragover="allowDrop(event)"
-      >
-      </div>
-    </div>
-    <div class="Done column">
-      <div class="header-board">
-        <h3>Finished</h3>
-        <span class="add" id="add-todo">
-          <IoAddCircle size={32} />
-        </span>
-      </div>
-      <div
-        id="todo-done"
-        class="column-add done"
-        ondrop="dropMe(event)"
-        ondragover="allowDrop(event)"
-        data-todos=`${UpdateTodo}`
-      >
-      </div>
+    <div
+      id={id}
+      class=`column-add ${id}`
+      ondrop="dropMe(event)"
+      ondragover="allowDrop(event)"
+    >
     </div>
   </div>
-</section>
+</div>
 
 <script>
   import { addEventListeners, TodoCard } from "./TodoCard";
   import { TodoContext } from "@contexts/todoContext";
   import { TodoService } from "@services/todoService";
   import { handleCreate } from "@utils/handleCreate";
+  import { TodoStatusType } from "@utils/todoStatusType";
 
   document.addEventListener("DOMContentLoaded", () => {
     const todoContext = TodoContext.getInstance();
+    const todoService = new TodoService();
+
     const todoList = document.getElementById("todo-add");
     const inProgress = document.getElementById("in-progress");
     const finish = document.getElementById("todo-done");
 
-    const todoService = new TodoService();
     function renderTodos() {
-      if (!todoList) return;
-      if (!inProgress) return;
-      if (!finish) return;
+      if (!todoList || !inProgress || !finish) return;
 
       todoList.innerHTML = "";
       inProgress.innerHTML = "";
@@ -108,14 +57,14 @@ declare global {
 
       const todos = todoContext.getTodos();
       todos.forEach((todo) => {
-        let todoItem = TodoCard(todo);
-        if (todo.status === "todo") {
+        const todoItem = TodoCard(todo);
+        if (todo.status === TodoStatusType.TODO) {
           todoList.innerHTML += todoItem;
         }
-        if (todo.status === "in-progress") {
+        if (todo.status === TodoStatusType.IN_PROGRESS) {
           inProgress.innerHTML += todoItem;
         }
-        if (todo.status === "done") {
+        if (todo.status === TodoStatusType.DONE) {
           finish.innerHTML += todoItem;
         }
       });
@@ -125,30 +74,22 @@ declare global {
       addEventListeners(finish);
     }
 
-    function showModal(modalId: string) {
-      const modalControls = window.modalControls;
-      if (!modalControls) {
-        console.error("modalControls not found");
-        return;
-      }
-      modalControls[modalId].show();
-    }
-
     renderTodos();
 
+    // Add Todo button logic
     const addTodoButtons = document.querySelectorAll("#add-todo");
     addTodoButtons.forEach((addTodoBtn) => {
       if (addTodoBtn) {
         addTodoBtn.addEventListener("click", () => {
           const columnName = addTodoBtn.parentElement?.parentElement?.className;
           if (columnName?.includes("todo")) {
-            handleCreate("todo");
+            handleCreate(TodoStatusType.TODO);
           }
-          if (columnName?.includes("In-progress")) {
-            handleCreate("in-progress");
+          if (columnName?.includes("in-progress")) {
+            handleCreate(TodoStatusType.IN_PROGRESS);
           }
-          if (columnName?.includes("Done")) {
-            handleCreate("done");
+          if (columnName?.includes("todo-done")) {
+            handleCreate(TodoStatusType.DONE);
           }
         });
       }
@@ -190,19 +131,25 @@ declare global {
 </script>
 
 <script is:inline>
-  // drag and drop
-  function allowDrop(ev) {
-    ev.preventDefault();
+  // Drag and Drop
+  function allowDrop(e) {
+    e.preventDefault();
   }
 
   function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
   }
 
-  function dropMe(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+  function dropMe(e) {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("text");
+    const todo = document.getElementById(data);
+
+    if (e.target.classList.contains("column-add")) {
+      e.target.appendChild(todo);
+    } else if (e.target.closest(".column-add")) {
+      e.target.closest(".column-add").appendChild(todo);
+    }
   }
 
   function noAllowDrop(ev) {
