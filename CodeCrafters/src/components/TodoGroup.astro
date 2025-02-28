@@ -113,6 +113,7 @@ const { id, title, color } = Astro.props;
         const todoItem = TodoCard(todo);
         if (todo.status === TodoStatusType.TODO) {
           todoList.innerHTML += todoItem;
+          
         }
         if (todo.status === TodoStatusType.IN_PROGRESS) {
           inProgress.innerHTML += todoItem;

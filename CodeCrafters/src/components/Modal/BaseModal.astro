@@ -5,7 +5,9 @@ import { IoClose } from "react-icons/io5";
 type Props = {
   title: string;
   id: string;
-};
+  responsive?: boolean;
+}
+
 declare global {
   interface Window {
     modalControls?: {
@@ -17,10 +19,10 @@ declare global {
   }
 }
 
-const { title, id } = Astro.props;
+const { title, id, responsive = false } = Astro.props;
 ---
 
-<div class="modal-wrapper" data-modal-id={id}>
+<div class={`modal-wrapper${responsive ? " responsive-modal" : ""}`} data-modal-id={id}>
   <div class="modal-overlay"></div>
   <div class="modal">
     <div class="modal-container">
@@ -48,6 +50,8 @@ const { title, id } = Astro.props;
     private overlay: HTMLElement;
     private closeButton: HTMLElement;
     private modalId: string;
+    private isResponsive: boolean;
+    private mobileBreakpoint: number = 600;
 
     constructor(wrapper: HTMLElement) {
       this.wrapper = wrapper;
@@ -57,7 +61,8 @@ const { title, id } = Astro.props;
       this.closeButton = wrapper.querySelector(
         ".modal-close-button",
       ) as HTMLElement;
-
+      this.isResponsive = wrapper.classList.contains("responsive-modal");
+      
       this.initialize();
     }
 
@@ -65,22 +70,44 @@ const { title, id } = Astro.props;
       this.closeButton.addEventListener("click", () => {
         this.close();
       });
-
+      
       this.overlay.addEventListener("click", () => {
         this.close();
         this.resetAddTodoForm();
       });
-
+      
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && this.isOpen()) {
           this.close();
           this.resetAddTodoForm();
         }
       });
+
+      if (this.isResponsive) {
+        window.addEventListener("resize", () => {
+          if (this.isOpen()) {
+            this.updateModalAnimation();
+          }
+        });
+      }
     }
 
     private isOpen(): boolean {
       return this.wrapper.classList.contains("is-open");
+    }
+
+    private isMobile(): boolean {
+      return window.innerWidth <= this.mobileBreakpoint;
+    }
+
+    private updateModalAnimation() {
+      if (!this.isResponsive) return;
+
+      if (this.isMobile()) {
+        this.modal.style.animation = "modalBottomSlideUp 0.5s ease-out";
+      } else {
+        this.modal.style.animation = "modalFadeIn 0.5s ease-out";
+      }
     }
 
     show() {
@@ -90,15 +117,43 @@ const { title, id } = Astro.props;
         }
       });
 
+      document.body.classList.add("modal-open");
+      
       this.wrapper.classList.add("is-open");
       this.modal.style.display = "block";
       this.overlay.style.display = "block";
+
+      if (this.isResponsive) {
+        this.updateModalAnimation();
+      }
     }
 
     close() {
+      if (this.isResponsive && this.isMobile()) {
+        this.modal.style.transform = "translateY(100%)";
+        this.modal.style.opacity = "0";
+        
+        setTimeout(() => {
+          this.completeClose();
+        }, 300);
+      } else {
+        this.modal.style.opacity = "0";
+        
+        setTimeout(() => {
+          this.completeClose();
+        }, 300);
+      }
+    }
+
+    private completeClose() {
       this.wrapper.classList.remove("is-open");
       this.modal.style.display = "none";
       this.overlay.style.display = "none";
+      this.modal.style.transform = "";
+      this.modal.style.opacity = "";
+      this.modal.style.animation = "";
+      
+      document.body.classList.remove("modal-open");
 
       const event = new CustomEvent("modalClose", {
         detail: { modalId: this.modalId },
@@ -111,14 +166,13 @@ const { title, id } = Astro.props;
         const form = document.getElementById(
           "add-todo-form",
         ) as HTMLFormElement;
-        form.reset();
+        if (form) form.reset();
       }
     }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     window.modalControls = {};
-
     document.querySelectorAll(".modal-wrapper").forEach((wrapper) => {
       const modalId = (wrapper as HTMLElement).dataset.modalId;
       if (modalId) {

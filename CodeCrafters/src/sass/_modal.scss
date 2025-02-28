@@ -1,30 +1,28 @@
 @use "sass:color";
 @import "variables";
+@import "form";
 
-@mixin input-style {
-  width: -webkit-fill-available;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border 0.2s;
-
-  &:focus {
-    border-color: $primary;
-    outline: none;
-  }
-}
+// モバイルブレイクポイント
+$transition-time: 0.5s;
 
 .modal-wrapper {
   display: none;
+  
 
   &.is-open {
     display: block;
 
+
+
     .modal {
       display: block;
       background-color: var(--border-color);
-      box-shadow: 2px 2px 2px var(--modal-shadow-color);
+    }
+
+    @media (max-width: $small) {
+      .modal{
+        width: 80%;
+      }
     }
 
     .modal-overlay {
@@ -52,7 +50,6 @@
     width: 400px;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 1001;
     display: none;
 
@@ -76,14 +73,14 @@
           .modal-close-button {
             cursor: pointer;
             border: none;
-            background: var(--border-color);
+            background: transparent;
             padding: 2px;
 
             &:hover {
               opacity: 0.8;
             }
 
-            .close-icon {
+            .close-icon{
               color: var(--close-icon);
             }
           }
@@ -91,186 +88,11 @@
       }
 
       .form-container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        max-width: 500px;
-        margin: auto;
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-
-          option {
-            background-color: #333333;
-          }
-          label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--letter-color);
-          }
-        }
-
-        .name-inputs {
-          display: flex;
-          gap: 8px;
-
-          > input {
-            @include input-style;
-            flex: 1;
-            font-family: "Poppins", sans-serif;
-            color: var(--letter-color);
-            background-color: var(--input-background);
-            border: 1px solid var(--input-boder-color);
-          }
-        }
-
-        .due-date-input {
-          display: flex;
-          align-items: center;
-          overflow: hidden;
-
-          .icon {
-            padding: 10px;
-            background: #f1f1f1;
-            border-right: 1px solid #ccc;
-          }
-
-          > input {
-            @include input-style;
-            color: var(--letter-color);
-            background-color: var(--input-background);
-            border: 1px solid var(--input-boder-color);
-          }
-        }
-
-        .username-input {
-          display: flex;
-          align-items: center;
-          border: 1px solid #ccc;
-          border-radius: 6px;
-          overflow: hidden;
-
-          .prefix {
-            padding: 10px;
-            background: #f1f1f1;
-            border-right: 1px solid #ccc;
-          }
-
-          input {
-            flex: 1;
-            border: none;
-            padding: 10px;
-            @include input-style;
-          }
-
-          .verified-icon {
-            padding: 10px;
-            color: #007bff;
-          }
-        }
-
-        .form-footer {
-          display: flex;
-          justify-content: flex-end;
-          gap: 8px;
-
-          .submit-button {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background: var(--add-btn-background);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            &:hover {
-              background: var(--add-btn-background);
-              filter: brightness(0.9);
-            }
-          }
-
-          .cancel-button {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background: var(--cancel-btn-background);
-            color: var(--cancel-btn-color);
-            font-size: 16px;
-            cursor: pointer;
-            &:hover {
-              background: var(--cancel-btn-hover);
-            }
-          }
-        }
-
-        .cancel-button {
-          padding: 10px;
-          border: none;
-          border-radius: 6px;
-          background: var(--cancel-btn-background);
-          color: var(--cancel-btn-color);
-          font-size: 16px;
-          cursor: pointer;
-          &:hover {
-            background: var(--cancel-btn-hover);
-          }
-        }
+        @extend %edit-form-style;
       }
 
-      .delete-form {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        .delete-form-body {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-
-          .delete-form-message {
-            font-size: 16px;
-          }
-
-          .todo-title {
-            font-size: 18px;
-            font-weight: 500;
-            margin: auto;
-          }
-        }
-        .delete-form-footer {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 8px;
-
-          .delete-button {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background-color: var(--delete-btn-color);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            &:hover {
-              background: var(--delete-btn-color);
-              filter: brightness(0.9);
-            }
-          }
-
-          .cancel-button {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background: var(--cancel-btn-background);
-            color: var(--cancel-btn-color);
-            font-size: 16px;
-            cursor: pointer;
-            &:hover {
-              background: var(--cancel-btn-hover);
-            }
-          }
-        }
+      .delete-form{
+        @extend %delete-form-style;
       }
 
       .todo-detail-container {
@@ -330,7 +152,6 @@
                 }
               }
 
-              // タグリスト内のタグ
               .tag-list {
                 display: flex;
                 flex-wrap: wrap;
@@ -345,7 +166,6 @@
                 }
               }
 
-              // 担当者リストのスタイル
               .assignee-list {
                 display: flex;
                 flex-wrap: wrap;
@@ -385,39 +205,109 @@
             color: #6c757d;
             text-align: right;
           }
-        } // .detail-section
+        } 
       }
     }
   }
 }
 
-// Set the theme based on the data-theme attribute
+.modal-wrapper.is-open .modal {
+  animation: modalSlideUp $transition-time ease-out;
+}
+
+.modal-wrapper.responsive-modal {
+  @media (max-width: $small) {
+    .modal {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+      transform: none;
+      width: 100%;
+      max-width: 100%;
+      border-radius: 16px 16px 0 0;
+      overflow-y: auto;
+      overflow-x: hidden; 
+      box-sizing: border-box;
+    }
+    
+    &.is-open .modal {
+      animation: modalBottomSlideUp $transition-time ease-out;
+    }
+    
+    .modal-container {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      
+      * {
+        max-width: 100%;
+      }
+      
+      h3, p, span, div {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      
+      img, video, iframe {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+  
+  @media (min-width: #{$small + 1}) {
+    &.is-open .modal {
+      animation: modalFadeIn $transition-time ease-out;
+    }
+  }
+}
+
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@keyframes modalFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes modalSlideUp {
+  0% {
+    margin-top: 50px;
+    opacity: 0;
+  }
+  100% {
+    margin-top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes modalBottomSlideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 :root {
-  --letter-color: black;
-  --close-btn: #ccc;
   --border-color: #ffffff;
-  --hover-color: #f0f0f0;
   --close-icon: black;
-  --modal-shadow-color: #333333;
-  --add-btn-background: #24a6f5;
-  --cancel-btn-background: #f6f8fa;
-  --cancel-btn-color: #252921;
-  --cancel-btn-hover: #e9eaec;
-  --input-boder-color: #ccc;
-  --delete-btn-color: #ff0033;
 }
 
 [data-theme="dark"] {
-  --letter-color: white;
-  --close-btn: #333333;
-  --border-color: #151b23f2;
-  --hover-color: #333333;
-  --close-icon: white;
-  --modal-shadow-color: #585858;
-  --add-btn-background: #008b8b;
-  --cancel-btn-background: #212830;
-  --cancel-btn-color: #f0f6fc;
-  --input-boder-color: #646e7b;
-  --cancel-btn-hover: #252d36;
-  --delete-btn-color: #b30024;
+  --border-color: #151b23f5;
+  --close-icon:white;
 }
