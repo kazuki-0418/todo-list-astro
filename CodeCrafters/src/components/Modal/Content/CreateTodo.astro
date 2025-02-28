@@ -52,7 +52,14 @@ import { todoStatusTypeOptions } from "@utils/todoStatusType";
   <div class="form-group">
     <label>Due Date</label>
     <div class="due-date-input">
-      <input type="date" id="dueDate" name="dueDate" />
+      <input
+        type="date"
+        id="dueDateDisplay"
+        min={new Date().toISOString().split("T")[0]}
+        oninput="dueDate.value = this.value"
+        name="dueDateDisplay"
+      />
+      <input type="hidden" id="dueDate" name="dueDate" />
     </div>
   </div>
 
@@ -87,16 +94,15 @@ import { todoStatusTypeOptions } from "@utils/todoStatusType";
     if (!title.trim()) return;
 
     const newTodo = {
-      id: Math.random().toString(36),
       title: title.trim(),
       status,
-      dueDate,
+      due_date: dueDate?.toLocaleString(),
       tags,
-      assignedTo,
+      assigned_to: assignedTo,
       notes: "",
     } as Todo;
 
-    const updatedTodos = todoService.addTodo(newTodo);
+    const updatedTodos = await todoService.addTodo(newTodo);
 
     renderTodos(updatedTodos);
 
@@ -126,7 +132,7 @@ import { todoStatusTypeOptions } from "@utils/todoStatusType";
     finish.innerHTML = "";
 
     todos.forEach((todo) => {
-      let todoItem = TodoCard(todo);
+      const todoItem = TodoCard(todo);
       if (todo.status === "todo") {
         todoList.innerHTML += todoItem;
       }

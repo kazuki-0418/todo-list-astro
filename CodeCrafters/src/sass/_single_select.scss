@@ -1,14 +1,14 @@
 .single-select {
   position: relative;
-  font-family: Arial, sans-serif;
 
   .select-box {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-boder-color);
     border-radius: 6px;
     cursor: pointer;
-    background: #fff;
+    background: var(--input-background);
     text-align: left;
+    color: var(--letter-color);
   }
 
   .options {
@@ -19,7 +19,8 @@
     list-style: none;
     border: 1px solid #ccc;
     border-radius: 6px;
-    background: #fff;
+    color: var(--letter-color);
+    background: var(--border-color);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 10;
     display: none; // Hide options by default
@@ -33,7 +34,18 @@
     padding: 10px;
     cursor: pointer;
     &:hover {
-      background: #f0f0f0;
+      background: var(--input-background);
     }
   }
+}
+
+:root {
+  --options-background-color: #ffffff;
+  --option-hover-color:#f3f4f6;
+  
+}
+
+[data-theme="dark"] {
+  --options-background-color: #333;
+  --option-hover-color: grey;
 }

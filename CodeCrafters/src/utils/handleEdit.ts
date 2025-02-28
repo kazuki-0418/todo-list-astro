@@ -1,4 +1,6 @@
 import { TodoContext } from "@contexts/todoContext";
+import { TodoModalType } from "./todoModalType";
+import { TodoFormType } from "./todoFormType";
 
 export const handleEdit = (todoId: string) => {
   const todoContext = TodoContext.getInstance();
@@ -14,10 +16,10 @@ export const handleEdit = (todoId: string) => {
   }
 
   if (todo) {
-    showModal("update-todo-modal");
+    showModal(TodoModalType.UPDATE);
 
     const updateTodoForm = document.getElementById(
-      "update-todo-form",
+      TodoFormType.UPDATE,
     ) as HTMLFormElement;
 
     const idInput = updateTodoForm.querySelector(
@@ -30,14 +32,6 @@ export const handleEdit = (todoId: string) => {
       '[name="title"]',
     ) as HTMLInputElement;
     if (titleInput) titleInput.value = todo.title;
-    const dueDateInput = updateTodoForm.querySelector(
-      '[name="dueDate"]',
-    ) as HTMLInputElement;
-
-    const date = new Date(todo.dueDate);
-    date.setDate(date.getDate() - 1);
-    const formattedDate = date.toISOString().split("T")[0];
-    dueDateInput.value = formattedDate;
 
     if (todo.tags) {
       todo.tags.forEach((tag) => {
@@ -52,8 +46,8 @@ export const handleEdit = (todoId: string) => {
       });
     }
 
-    if (todo.assignedTo) {
-      todo.assignedTo.forEach((assignee) => {
+    if (todo.assigned_to) {
+      todo.assigned_to.forEach((assignee) => {
         const checkbox = updateTodoForm.querySelector(
           `[data-checkbox][value="${assignee}"]`,
         ) as HTMLInputElement;
@@ -82,6 +76,27 @@ export const handleEdit = (todoId: string) => {
       if (selectedOption) {
         statusSelectBox.textContent = selectedOption.dataset.label as string;
       }
+    }
+
+    const date = new Date(todo.due_date);
+    const dueDateInput = updateTodoForm.querySelector(
+      '[name="dueDate"]',
+    ) as HTMLInputElement;
+    if (
+      date.getUTCFullYear() === 1970 &&
+      date.getUTCMonth() === 0 &&
+      date.getUTCDate() === 1 &&
+      date.getUTCHours() === 0 &&
+      date.getUTCMinutes() === 0 &&
+      date.getUTCSeconds() === 0 &&
+      date.getUTCMilliseconds() === 0
+    ) {
+      dueDateInput.value = "";
+    } else {
+      date.setDate(date.getDate());
+      if (isNaN(date.getTime())) return;
+      const formattedDate = date.toISOString().split("T")[0];
+      dueDateInput.value = formattedDate;
     }
   }
 };

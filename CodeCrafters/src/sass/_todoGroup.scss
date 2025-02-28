@@ -59,6 +59,10 @@
       height: 100%;
     }
   }
+
+  @media (max-width: $medium) {
+    flex: 0 0 100%;
+  }
 }
 
 @keyframes slideUp {
