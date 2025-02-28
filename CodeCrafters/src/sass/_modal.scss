@@ -17,7 +17,6 @@ $transition-time: 0.5s;
     .modal {
       display: block;
       background-color: var(--border-color);
-      box-shadow: 2px 2px 2px var(--modal-shadow-color);
     }
 
     @media (max-width: $small) {
@@ -51,7 +50,6 @@ $transition-time: 0.5s;
     width: 400px;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 1001;
     display: none;
 
@@ -307,11 +305,9 @@ body.modal-open {
 :root {
   --border-color: #ffffff;
   --close-icon: black;
-  --modal-shadow-color: #333333;
 }
 
 [data-theme="dark"] {
-  --border-color: #151b23f2;
+  --border-color: #151b23f5;
   --close-icon:white;
-  --modal-shadow-color: #585858;
 }
