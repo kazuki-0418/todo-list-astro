@@ -46,8 +46,8 @@ export const handleEdit = (todoId: string) => {
       });
     }
 
-    if (todo.assignedTo) {
-      todo.assignedTo.forEach((assignee) => {
+    if (todo.assigned_to) {
+      todo.assigned_to.forEach((assignee) => {
         const checkbox = updateTodoForm.querySelector(
           `[data-checkbox][value="${assignee}"]`,
         ) as HTMLInputElement;
@@ -78,7 +78,7 @@ export const handleEdit = (todoId: string) => {
       }
     }
 
-    const date = new Date(todo.dueDate);
+    const date = new Date(todo.due_date);
     const dueDateInput = updateTodoForm.querySelector(
       '[name="dueDate"]',
     ) as HTMLInputElement;
