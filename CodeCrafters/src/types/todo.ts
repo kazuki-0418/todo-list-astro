@@ -4,10 +4,10 @@ export type Todo = {
   id: string;
   title: string;
   status: Status;
-  dueDate: string; // Format: "YYYY-MM-DD"
-  createdAt: Date; // Automatically set when a new Todo is created
-  updatedAt: Date; // Automatically set when a Todo is updated
+  due_date: string; // Format: "YYYY-MM-DD"
+  created_at: Date; // Automatically set when a new Todo is created
+  updated_at: Date; // Automatically set when a Todo is updated
   tags: string[];
-  assignedTo: string[];
+  assigned_to: string[];
   notes?: string; // You can leave additional information.
 };

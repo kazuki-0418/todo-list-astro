@@ -1,32 +1,30 @@
 import { TodoContext } from "@contexts/todoContext";
+import {
+  fetchTodos,
+  addTodo as apiAddTodo,
+  updateTodo as apiUpdateTodo,
+  updateTodoStatus as apiUpdateTodoStatus,
+  deleteTodo as apiDeleteTodo,
+} from "@services/todoApi";
 import type { Todo } from "src/types/todo";
 
 export class TodoService {
   private todoContext: TodoContext;
-  private storageKey = "todos"; // Key for localStorage
 
   constructor() {
     this.todoContext = TodoContext.getInstance();
-    this.loadTodosFromStorage();
   }
 
-  /** Load data from localStorage and sync with Context */
-  private loadTodosFromStorage(): void {
-    const storedTodos = localStorage.getItem(this.storageKey);
-    if (storedTodos) {
-      const todos: Todo[] = JSON.parse(storedTodos).map((todo: Todo) => ({
-        ...todo,
-        dueDate: new Date(todo.dueDate),
-        createdAt: new Date(todo.createdAt),
-        updatedAt: new Date(todo.updatedAt),
-      }));
+  /** Refresh data from the database */
+  async refreshTodos(): Promise<Todo[]> {
+    try {
+      const todos = await fetchTodos();
       this.todoContext.setTodos(todos);
+      return todos;
+    } catch (error) {
+      console.error("Error refreshing todos:", error);
+      return this.todoContext.getTodos(); // Return cached data if refresh fails
     }
-  }
-
-  /** Save data to localStorage */
-  private saveTodosToStorage(todos: Todo[]): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(todos));
   }
 
   /** Retrieve Todos */
@@ -35,65 +33,115 @@ export class TodoService {
   }
 
   /** Add a new Todo */
-  addTodo(todo: Omit<Todo, "createdAt" | "updatedAt">): Todo[] {
-    const newTodo: Todo = {
-      ...todo,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    const updatedTodos = [...this.todoContext.getTodos(), newTodo];
+  async addTodo(
+    todo: Omit<Todo, "id" | "created_at" | "updated_at">,
+  ): Promise<Todo[]> {
+    try {
+      // Prepare the new todo with dates
+      const newTodoData: Partial<Todo> = {
+        ...todo,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
 
-    this.todoContext.setTodos(updatedTodos);
-    this.saveTodosToStorage(updatedTodos);
-    this.notifyUpdate();
+      // Add to database
+      const addedTodo = await apiAddTodo(newTodoData);
 
-    return updatedTodos;
+      if (addedTodo) {
+        // Update local cache with the returned todo that includes the ID
+        const updatedTodos = [...this.todoContext.getTodos(), addedTodo];
+        this.todoContext.setTodos(updatedTodos);
+      }
+
+      // Refresh from database to ensure consistency
+      return this.refreshTodos();
+    } catch (error) {
+      console.error("Error adding todo:", error);
+      return this.todoContext.getTodos();
+    }
   }
 
-  updateTodo(todo: Omit<Todo, "createdAt" | "updatedAt">): Todo[] {
-    const updatedTodos = this.todoContext
-      .getTodos()
-      .map((t) => (t.id === todo.id ? { ...t, ...todo } : t));
+  /** Update a Todo */
+  async updateTodo(todo: Pick<Todo, "id"> & Partial<Todo>): Promise<Todo[]> {
+    try {
+      // Update the todo with current date
+      const updateData: Partial<Todo> = {
+        ...todo,
+        updated_at: new Date(),
+      };
 
-    this.todoContext.setTodos(updatedTodos);
-    this.saveTodosToStorage(updatedTodos);
-    this.notifyUpdate();
+      // Update in database
+      const success = await apiUpdateTodo(todo.id, updateData);
 
-    return updatedTodos;
+      if (success) {
+        // Update local cache
+        const updatedTodos = this.todoContext
+          .getTodos()
+          .map((t) => (t.id === todo.id ? { ...t, ...updateData } : t));
+        this.todoContext.setTodos(updatedTodos);
+      }
+
+      // Refresh from database to ensure consistency
+      return this.refreshTodos();
+    } catch (error) {
+      console.error("Error updating todo:", error);
+      return this.todoContext.getTodos();
+    }
   }
 
   /** Toggle status of a Todo */
-  toggleTodoStatus(id: string, newStatus: Todo["status"]): Todo[] {
-    const updatedTodos = this.todoContext
-      .getTodos()
-      .map((todo) =>
-        todo.id === id
-          ? { ...todo, status: newStatus, updatedAt: new Date() }
-          : todo,
-      );
+  async toggleTodoStatus(
+    id: string,
+    newStatus: Todo["status"],
+  ): Promise<Todo[]> {
+    try {
+      // Update status in database
+      const success = await apiUpdateTodoStatus(id, newStatus);
 
-    this.todoContext.setTodos(updatedTodos);
-    this.saveTodosToStorage(updatedTodos);
-    this.notifyUpdate();
+      if (success) {
+        // Update local cache
+        const updatedTodos = this.todoContext
+          .getTodos()
+          .map((todo) =>
+            todo.id === id
+              ? { ...todo, status: newStatus, updatedAt: new Date() }
+              : todo,
+          );
+        this.todoContext.setTodos(updatedTodos);
+      }
 
-    return updatedTodos;
+      // Refresh from database to ensure consistency
+      return this.refreshTodos();
+    } catch (error) {
+      console.error("Error toggling todo status:", error);
+      return this.todoContext.getTodos();
+    }
   }
 
   /** Delete a Todo */
-  deleteTodo(id: string): Todo[] {
-    const updatedTodos = this.todoContext
-      .getTodos()
-      .filter((todo) => todo.id !== id);
+  async deleteTodo(id: string): Promise<Todo[]> {
+    try {
+      // Delete from database
+      const success = await apiDeleteTodo(id);
 
-    this.todoContext.setTodos(updatedTodos);
-    this.saveTodosToStorage(updatedTodos);
-    this.notifyUpdate();
-    return updatedTodos;
+      if (success) {
+        // Update local cache
+        const updatedTodos = this.todoContext
+          .getTodos()
+          .filter((todo) => todo.id !== id);
+        this.todoContext.setTodos(updatedTodos);
+      }
+
+      // Refresh from database to ensure consistency
+      return this.refreshTodos();
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+      return this.todoContext.getTodos();
+    }
   }
 
-  private notifyUpdate() {
-    // カスタムイベントをディスパッチ
-    const event = new CustomEvent("todosUpdated");
-    document.dispatchEvent(event);
+  /** Subscribe to todo updates */
+  subscribe(callback: () => void): () => void {
+    return this.todoContext.subscribe(callback);
   }
 }

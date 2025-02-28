@@ -1,12 +1,13 @@
+import { fetchTodos } from "@services/todoApi";
 import type { Todo } from "src/types/todo";
 
 export class TodoContext {
   private static instance: TodoContext;
   private todos: Todo[] = [];
-  private storageKey = "todos"; // Key for localStorage
+  private listeners: (() => void)[] = [];
 
   private constructor() {
-    this.loadTodosFromStorage(); // 🔹 Load existing data when initializing
+    this.loadTodosFromDatabase(); // 🔹 Load existing data from database when initializing
   }
 
   /** 🔹 Get the singleton instance */
@@ -17,17 +18,16 @@ export class TodoContext {
     return TodoContext.instance;
   }
 
-  /** 🔹 Load todos from localStorage */
-  private loadTodosFromStorage(): void {
-    const storedTodos = localStorage.getItem(this.storageKey);
-    if (storedTodos) {
-      this.todos = JSON.parse(storedTodos);
+  /** 🔹 Load todos from Database */
+  async loadTodosFromDatabase(): Promise<void> {
+    try {
+      const todos = await fetchTodos();
+      console.log("Loaded todos from database:", todos);
+      this.todos = todos;
+      this.notifyListeners();
+    } catch (error) {
+      console.error("Error loading todos from database:", error);
     }
-  }
-
-  /** 🔹 Save todos to localStorage */
-  private saveTodosToStorage(): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.todos));
   }
 
   getTodoById(id: string): Todo | undefined {
@@ -39,9 +39,22 @@ export class TodoContext {
     return this.todos;
   }
 
-  /** 🔹 Set todos and persist to localStorage */
+  /** 🔹 Set todos and update local cache */
   setTodos(todos: Todo[]): void {
     this.todos = todos;
-    this.saveTodosToStorage();
+    this.notifyListeners();
+  }
+
+  /** 🔹 Subscribe to changes */
+  subscribe(listener: () => void): () => void {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== listener);
+    };
+  }
+
+  /** 🔹 Notify all listeners of changes */
+  private notifyListeners(): void {
+    this.listeners.forEach((listener) => listener());
   }
 }
