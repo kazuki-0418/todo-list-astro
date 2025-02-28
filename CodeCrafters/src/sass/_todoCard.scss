@@ -98,7 +98,7 @@
     .delete-button {
       background: transparent;
       border: none;
-      
+
       .icon {
         max-width: 1.5em;
         width: auto;
@@ -297,8 +297,6 @@
   color: #ffdab9 !important;
 }
 
-// アニメーション todoCard slideUp
-
 @keyframes slideUp {
   0% {
     transform: translateY(100%);
@@ -309,7 +307,6 @@
     opacity: 1;
   }
 }
-
 
 @keyframes iconHover {
   0% {

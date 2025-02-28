@@ -93,13 +93,13 @@ $checkbox-size: 16px;
 :root {
   --letter-color: black;
   --options-background-color: #ffffff;
-  --option-hover-color:#f3f4f6;
-  --tag-background: #E8ECEF;
+  --option-hover-color: #f3f4f6;
+  --tag-background: #e8ecef;
 }
 
 [data-theme="dark"] {
   --letter-color: white;
   --options-background-color: #333;
   --option-hover-color: grey;
-  --tag-background:#464646;
+  --tag-background: #464646;
 }
