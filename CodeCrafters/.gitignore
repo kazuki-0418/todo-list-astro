@@ -26,5 +26,4 @@ pnpm-debug.log*
 # sass
 src/styles/
 
-
-
+.vercel/output
